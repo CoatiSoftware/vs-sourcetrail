@@ -4,7 +4,7 @@ Currently supports VS2012, VS2013, VS2015 and VS2017.
 ## Links
 * Project Home, News: [www.sourcetrail.com](https://www.sourcetrail.com/) 
 * Documentation: [www.sourcetrail.com/documentation](https://www.sourcetrail.com/documentation/#VisualStudio) 
-* Download, Reviews: Visual Studio Marketplace 
+* Download, Reviews: [Visual Studio Marketplace ](https://marketplace.visualstudio.com/items?itemName=vs-publisher-1208751.SourcetrailExtension)
 * Code, Issues: [GitHub](https://github.com/CoatiSoftware/vs-sourcetrail) 
 
 ## Features
