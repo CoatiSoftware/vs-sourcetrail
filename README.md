@@ -29,7 +29,7 @@ __The great news is:__ This format is independent from the Sourcetrail tool, so 
 ## Building the Extension
 Use Visual Studio to open the `SourcetrailExtension.sln` and build the project called `SourcetrailExtension`. 
 
-__Hint:__ If the build fails try to run the `Reset the Visual Studio 2017 Experimental Instance` command first. 
+__Hint:__ If the build fails with an error that reads `The "GetDeploymentPathFromVsixManifest" task failed unexpectedly.` try to run the `Reset the Visual Studio 2017 Experimental Instance` command first. 
 
 ## Running the Extension in Debug Mode
 In oder to run the Sourcetrail Extension in debug mode, you need to adjust some settings. Open the `Properties` page of the `SourcetrailExtension` project and set the following values:
