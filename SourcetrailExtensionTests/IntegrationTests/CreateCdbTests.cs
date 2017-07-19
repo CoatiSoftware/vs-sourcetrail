@@ -61,7 +61,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			UIThreadInvoker.Initialize();
 			UIThreadInvoker.Invoke(new Action(() =>
 			{
-				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/bin/data/cinder/cinder.sln");
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/cinder/cinder.sln");
 			}));
 		}
 
@@ -72,7 +72,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			UIThreadInvoker.Initialize();
 			UIThreadInvoker.Invoke(new Action(() =>
 			{
-				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/bin/data/all_in_same_folder/test.sln");
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/all_in_same_folder/test.sln");
 			}));
 		}
 
