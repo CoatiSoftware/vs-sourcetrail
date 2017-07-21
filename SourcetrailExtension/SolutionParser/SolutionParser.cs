@@ -179,7 +179,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					foreach (string dir in includeDirectories)
 					{
-						command.Command += " -isystem '" + dir + "' "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
+						command.Command += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
 					}
 
 					foreach (string prepDef in preprocessorDefinitions)
@@ -191,7 +191,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					command.Command += additionalOptions + " ";
 
-					command.Command += "'" + command.File + "'";
+					command.Command += "\"" + command.File + "\"";
 
 					return command;
 				}
