@@ -30,7 +30,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		static private List<Guid> _reloadedProjectGuids = new List<Guid>();
 		static private List<string> _compatibilityFlags = new List<string>() { "-fms-extensions", "-fms-compatibility" };
 		static private string _compatibilityVersionFlagBase = "-fms-compatibility-version="; // We want to get the exact version at runtime for this flag, therefore keeping it seperate from the others makes things easier
-		static private List<string> _sourceExtensionWhiteList = new List<string>() { "c", "cc", "cpp", "cxx" };
+		static private List<string> _cFileExtensions = new List<string>() { "c" };
+		static private List<string> _cppFileExtensions = new List<string>() { "cc", "cpp", "cxx" };
+		static private List<string> _sourceExtensionWhiteList = new List<string>(_cFileExtensions.Concat(_cppFileExtensions));
 		static private List<string> _headerExtensionWhiteList = new List<string>() { "h", "hpp" };
 
 		private string _compatibilityVersionFlag = _compatibilityVersionFlagBase + "19"; // This default version would correspond to VS2015
@@ -147,20 +149,38 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						{
 							additionalOptions = "";
 						}
-
-						// check wheter it's a .c file, we don't want that...
-						// TODO: there is a property for comilation as .c or .cpp file (/TC and /TP), try to retrieve it
-						string extension = item.Properties.Item("Extension").Value.ToString();
-						if (compilerTool.GetCompilesAsC())
-						{
-							vcStandard = "-std=" + cStandard;
-						}
 					}
 
-					// if a language standard was defined in the additional options the 'vcStandard' string is not used
+					string languageStandardOption;
 					if (additionalOptions.Contains("-std="))
 					{
-						vcStandard = "";
+						// if a language standard was defined in the additional options we do not need to set the language standard again.
+						languageStandardOption = "";
+					}
+					else
+					{
+						if (compilerTool.GetCompilesAsC())
+						{
+							languageStandardOption = "-std=" + cStandard;
+						}
+						else if (compilerTool.GetCompilesAsCPlusPlus())
+						{
+							languageStandardOption = "-std=" + vcStandard;
+						}
+						else
+						{
+							// we cannot derive the language from the compiler tool, so we need to check the file extension
+							if (ProjectUtility.HasProperty(item.Properties, "Extension") &&
+								_cFileExtensions.Contains(item.Properties.Item("Extension").Value.ToString().Substring(1)) // extension property starts with "."
+							)
+							{
+								languageStandardOption = "-std=" + cStandard;
+							}
+							else
+							{
+								languageStandardOption = "-std=" + vcStandard;
+							}
+						}
 					}
 
 					string relativeFilePath = item.Properties.Item("RelativePath").Value.ToString();
@@ -193,7 +213,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						command.Command += " -include \"" + file + "\" ";
 					}
 
-					command.Command += vcStandard + " ";
+					command.Command += languageStandardOption + " ";
 
 					command.Command += additionalOptions + " ";
 

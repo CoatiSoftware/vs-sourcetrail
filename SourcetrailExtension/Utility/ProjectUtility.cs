@@ -297,19 +297,19 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			if (versionNumber < 120) // version 11 (2012)
 			{
-				result = "-std=c++11";
+				result = "c++11";
 			}
 			else if (versionNumber < 130) // version 12 (2013)
 			{
-				result = "-std=c++14";
+				result = "c++14";
 			}
 			else if (versionNumber < 150) // version 14 (2015)
 			{
-				result = "-std=c++14";
+				result = "c++14";
 			}
 			else if (versionNumber < 160) // version 15 (2017)
 			{
-				result = "-std=c++14";
+				result = "c++14";
 			}
 
 			return result;

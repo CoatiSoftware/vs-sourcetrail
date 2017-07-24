@@ -67,6 +67,11 @@ namespace VCProjectEngineWrapper
 			return _wrapped.CompileAs == CompileAsOptions.compileAsC;
 		}
 
+		public bool GetCompilesAsCPlusPlus()
+		{
+			return _wrapped.CompileAs == CompileAsOptions.compileAsCPlusPlus;
+		}
+
 		public string GetToolPath()
 		{
 			return _wrapped.ToolPath;

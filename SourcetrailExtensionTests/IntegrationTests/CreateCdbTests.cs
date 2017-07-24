@@ -56,6 +56,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 		[TestMethod]
 		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForAllFilesInSameFolder()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/all_in_same_folder/test.sln");
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForCinderSolution()
 		{
 			UIThreadInvoker.Initialize();
@@ -67,12 +78,12 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 		[TestMethod]
 		[HostType("VS IDE")]
-		public void TestCompilationDatabaseCreationForAllFilesInSameFolder()
+		public void TestCompilationDatabaseCreationForProjectWithCompileAsDefaultOption()
 		{
 			UIThreadInvoker.Initialize();
 			UIThreadInvoker.Invoke(new Action(() =>
 			{
-				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/all_in_same_folder/test.sln");
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/project_with_compile_as_default_option/project_with_compile_as_default_option.sln");
 			}));
 		}
 

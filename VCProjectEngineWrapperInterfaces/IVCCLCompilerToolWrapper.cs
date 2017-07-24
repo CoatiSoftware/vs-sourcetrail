@@ -23,6 +23,7 @@ namespace VCProjectEngineWrapper
 
 		string GetAdditionalOptions();
 		bool GetCompilesAsC();
+		bool GetCompilesAsCPlusPlus();
 		string GetToolPath();
 		string[] GetAdditionalIncludeDirectories();
 		string[] GetPreprocessorDefinitions();
