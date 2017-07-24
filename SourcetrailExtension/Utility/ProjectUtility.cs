@@ -243,6 +243,61 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return preprocessorDefinitions;
 		}
 
+		static public List<string> GetProjectForcedIncludeFiles(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
+		{
+			Logging.Logging.LogInfo("Attempting to retreive Forced Include Files for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
+
+			List<string> forcedIncludeFiles = new List<string>();
+
+			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
+
+			if (vcProjectConfig != null && vcProjectConfig.isValid())
+			{
+				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCompilerTool();
+
+				if (compilerTool != null && compilerTool.isValid())
+				{
+					foreach (string forcedIncludeFile in compilerTool.GetForcedIncludeFiles().Split(';'))
+					{
+						if (forcedIncludeFile.Length <= 0)
+						{
+							continue;
+						}
+
+						string resolvedFiles = pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfig);
+
+						foreach (string resolvedFile in resolvedFiles.Split(';'))
+						{
+							forcedIncludeFiles.Add(resolvedFile);
+						}
+					}
+				}
+			}
+
+			forcedIncludeFiles = forcedIncludeFiles.Distinct().ToList();
+
+			Logging.Logging.LogInfo("Attempting to clean up.");
+
+			for (int i = 0; i < forcedIncludeFiles.Count; i++)
+			{
+				string path = forcedIncludeFiles.ElementAt(i).Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
+
+				if (path.Length == 0)
+				{
+					forcedIncludeFiles.RemoveAt(i);
+					i--;
+				}
+				else
+				{
+					forcedIncludeFiles[i] = path;
+				}
+			}
+
+			Logging.Logging.LogInfo("Found " + forcedIncludeFiles.Count.ToString() + " distinct forced include files.");
+
+			return forcedIncludeFiles;
+		}
+
 		// AFAIK there is no way to programmatically get the c++ standard version supported by any given VS version
 		// instead I'm refearing to the VS docu for that information
 		// https://msdn.microsoft.com/en-us/library/hh567368.aspx

@@ -72,8 +72,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			SetCompatibilityVersionFlag(vcProject, configurationName, platformName);
 
 			// gather include paths and preprocessor definitions of the project
-			List<string> includeDirectories = Utility.ProjectUtility.GetProjectIncludeDirectories(vcProject, configurationName, platformName, _pathResolver);
-			List<string> preprocessorDefinitions = Utility.ProjectUtility.GetProjectPreprocessorDefinitions(vcProject, configurationName, platformName);
+			List<string> includeDirectories = ProjectUtility.GetProjectIncludeDirectories(vcProject, configurationName, platformName, _pathResolver);
+			List<string> preprocessorDefinitions = ProjectUtility.GetProjectPreprocessorDefinitions(vcProject, configurationName, platformName);
+			List<string> forcedIncludeFiles = ProjectUtility.GetProjectForcedIncludeFiles(vcProject, configurationName, platformName, _pathResolver);
 
 			string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject, configurationName, platformName);
 			Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
@@ -81,7 +82,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			// create command objects for all applicable project items
 			foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
 			{
-				CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, cppStandard, cStandard, configurationName, platformName);
+				CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, configurationName, platformName);
 				if (command != null)
 				{
 					result.Add(command);
@@ -98,7 +99,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return result;
 		}
 
-		private CompileCommand CreateCompileCommand(EnvDTE.ProjectItem item, List<string> includeDirectories, List<string> preprocessorDefinitions, string vcStandard, string cStandard, string configurationName, string platformName)
+		private CompileCommand CreateCompileCommand(ProjectItem item, List<string> includeDirectories, List<string> preprocessorDefinitions, List<string> forcedIncludeFiles, string vcStandard, string cStandard, string configurationName, string platformName)
 		{
 			Logging.Logging.LogInfo("Starting to create Command Object from item \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(item.Name) + "\"");
 
@@ -185,6 +186,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					foreach (string prepDef in preprocessorDefinitions)
 					{
 						command.Command += " -D " + prepDef + " ";
+					}
+
+					foreach (string file in forcedIncludeFiles)
+					{
+						command.Command += " -include \"" + file + "\" ";
 					}
 
 					command.Command += vcStandard + " ";

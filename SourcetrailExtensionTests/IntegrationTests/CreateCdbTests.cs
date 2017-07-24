@@ -76,8 +76,21 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForProjectWithForcedInclude()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/project_with_forced_include/project_with_forced_include.sln");
+			}));
+		}
+
 		private void TestCompilationDatabaseForSolution(string solutionPath)
 		{
+			Assert.IsTrue(File.Exists(solutionPath), "solution path does not exist");
+
 			Console.WriteLine("opening solution: " + solutionPath);
 			Helpers.TestUtility.OpenSolution(solutionPath);
 

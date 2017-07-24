@@ -82,5 +82,9 @@ namespace VCProjectEngineWrapper
 			return _wrapped.PreprocessorDefinitions.Split(';');
 		}
 
+		public string GetForcedIncludeFiles()
+		{
+			return _wrapped.ForcedIncludeFiles;
+		}
 	}
 }
