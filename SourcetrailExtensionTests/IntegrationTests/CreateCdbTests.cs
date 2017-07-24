@@ -50,7 +50,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 				}
 
 				Assert.IsNotNull(package);
-				//Assert.IsTrue(package is SourcetrailExtensionPackage);
+				Assert.IsTrue(package is SourcetrailExtensionPackage);
 			}));
 		}
 
