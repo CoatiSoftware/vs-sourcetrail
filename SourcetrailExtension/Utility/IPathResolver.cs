@@ -16,14 +16,15 @@
 
 using VCProjectEngineWrapper;
 using System;
+using System.Collections.Generic;
 
 namespace CoatiSoftware.SourcetrailExtension.Utility
 {
 	public abstract class IPathResolver
 	{
-		public string ResolveVsMacroInPath(string path, IVCConfigurationWrapper vcProjectConfig)
+		public List<string> ResolveVsMacroInPath(string path, IVCConfigurationWrapper vcProjectConfig)
 		{
-			string result = path;
+			string resolvedPaths = path;
 
 			try
 			{
@@ -35,7 +36,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 					string resolvedMacro = ResolveVsMacro(potentialMacro, vcProjectConfig);
 
-					result = path.Substring(0, potentialMacroPosition.Item1) + resolvedMacro + path.Substring(potentialMacroPosition.Item2 + 1);
+					resolvedPaths = path.Substring(0, potentialMacroPosition.Item1) + resolvedMacro + path.Substring(potentialMacroPosition.Item2 + 1);
 				}
 			}
 			catch (Exception e)
@@ -43,21 +44,18 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				Logging.Logging.LogError("Exception: " + e.Message);
 			}
 
-			return result;
-		}
-
-		public string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
-		{
-			if (path.Length > 0 && !System.IO.Path.IsPathRooted(path))
+			List<string> pathList = new List<string>();
+			foreach (string resolvedPath in resolvedPaths.Split(';'))
 			{
-				path = DoGetAsAbsoluteCanonicalPath(path, project);
+				pathList.Add(resolvedPath);
 			}
-			return path;
+
+			return pathList;
 		}
 
 		public abstract string GetCompilationDatabaseFilePath();
 
-		protected abstract string DoGetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project);
+		public abstract string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project);
 
 		protected abstract string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig);
 	}

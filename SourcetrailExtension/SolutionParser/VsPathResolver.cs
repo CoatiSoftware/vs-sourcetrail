@@ -34,10 +34,14 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return _compilationDatabaseFilePath;
 		}
 
-		protected override string DoGetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
+		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			string absolutePath = project.GetProjectDirectory() + path;
-			return new Uri(absolutePath).LocalPath;
+			if (path.Length > 0 && !System.IO.Path.IsPathRooted(path))
+			{
+				path = project.GetProjectDirectory() + path;
+				path = new Uri(path).LocalPath;
+			}
+			return path;
 		}
 
 		protected override string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig)

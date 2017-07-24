@@ -354,13 +354,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				foreach (string directory in platform.GetExecutableDirectories().Split(';'))
 				{
 					IPathResolver resolver = new VsPathResolver("");
-					string resolvedDirectory = resolver.ResolveVsMacroInPath(directory, vcProjectConfig);
-					string[] splitResolvedDirectory = resolvedDirectory.Split(';'); // resolved macros might result in concatenated paths
-
-					foreach (string d in splitResolvedDirectory)
-					{
-						finalDirectories.Add(d);
-					}
+					finalDirectories.AddRange(resolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 				}
 
 				string toolPath = compilerTool.GetToolPath();

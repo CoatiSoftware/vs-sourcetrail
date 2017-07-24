@@ -148,14 +148,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 						{
 							continue;
 						}
-
-						string resolvedDirectories = pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig);
-
-						foreach (string resolvedDirectory in resolvedDirectories.Split(';'))
-						{
-							string dir = pathResolver.GetAsAbsoluteCanonicalPath(resolvedDirectory, project);
-							includeDirectories.Add(dir);
-						}
+						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 					}
 				}
 
@@ -166,11 +159,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					{
 						foreach (string directory in platform.GetIncludeDirectories())
 						{
-							string resolvedDirectories = pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig);
-							foreach (string resolvedDirectory in resolvedDirectories.Split(';'))
-							{
-								includeDirectories.Add(resolvedDirectory);
-							}
+							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 						}
 					}
 				}
@@ -192,7 +181,9 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			for (int i = 0; i < includeDirectories.Count; i++)
 			{
-				string path = includeDirectories.ElementAt(i).Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
+				string path = includeDirectories.ElementAt(i);
+				path = pathResolver.GetAsAbsoluteCanonicalPath(path, project);
+				path = path.Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
 
 				if (path.Length == 0)
 				{
@@ -264,12 +255,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 							continue;
 						}
 
-						string resolvedFiles = pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfig);
-
-						foreach (string resolvedFile in resolvedFiles.Split(';'))
-						{
-							forcedIncludeFiles.Add(resolvedFile);
-						}
+						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfig));
 					}
 				}
 			}

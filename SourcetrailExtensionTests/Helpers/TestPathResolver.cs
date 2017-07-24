@@ -26,9 +26,14 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.Helpers
 			return "<CompilationDatabaseFilePath>";
 		}
 
-		protected override string DoGetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
+		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			return "<ProjectBaseDirectory>/" + path;
+			if (path.Length > 0 && !path.StartsWith("<") && !System.IO.Path.IsPathRooted(path))
+			{
+				path = "<ProjectBaseDirectory>/" + path;
+			}
+
+			return path;
 		}
 
 		protected override string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig)
