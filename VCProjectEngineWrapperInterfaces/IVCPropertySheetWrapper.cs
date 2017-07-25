@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-using System.Collections.Generic;
-
 namespace VCProjectEngineWrapper
 {
-    public interface IVCConfigurationWrapper
-    {
+	public interface IVCPropertySheetWrapper
+	{
 		string GetWrappedVersion();
 		bool isValid();
 
-		string EvaluateMacro(string macro);
+		string getName();
 		IVCCLCompilerToolWrapper GetCLCompilerTool();
-		List<IVCPropertySheetWrapper> GetPropertySheets();
-		IVCPlatformWrapper GetPlatform();
-    }
+	}
 }

@@ -98,6 +98,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForProjectWithPropertySheetUsage()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/project_with_property_sheet_usage/project_with_property_sheet_usage.sln");
+			}));
+		}
+
 		private void TestCompilationDatabaseForSolution(string solutionPath)
 		{
 			Assert.IsTrue(File.Exists(solutionPath), "solution path does not exist");

@@ -138,7 +138,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCompilerTool();
+				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
 
 				if (compilerTool != null && compilerTool.isValid())
 				{
@@ -207,27 +207,57 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			List<string> preprocessorDefinitions = new List<string>();
 
-			IVCCLCompilerToolWrapper compilerTool = null;
 			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				compilerTool = vcProjectConfig.GetCompilerTool();
-			}
-
-			if (compilerTool != null && compilerTool.isValid())
-			{
-				foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
 				{
-					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+					IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
+					if (compilerTool != null && compilerTool.isValid())
+					{
+						foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
+						{
+							preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+						}
+					}
+					else
+					{
+						Logging.Logging.LogWarning("Could not retreive compiler tool.");
+					}
+				}
+
+				foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+				{
+					Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
+
+					IVCCLCompilerToolWrapper compilerTool = vcPropertySheet.GetCLCompilerTool();
+					if (compilerTool != null && compilerTool.isValid())
+					{
+						foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
+						{
+							preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+						}
+					}
+					else
+					{
+						Logging.Logging.LogWarning("Could not retreive compiler tool.");
+					}
 				}
 			}
 			else
 			{
-				Logging.Logging.LogWarning("Could not retreive compiler tool. No preprocessor definitions could be retreived.");
-				return new List<string>();
+				Logging.Logging.LogWarning("Could not retreive project configuration.");
 			}
 
 			preprocessorDefinitions = preprocessorDefinitions.Distinct().ToList();
+
+			for (int i = 0; i < preprocessorDefinitions.Count; i++)
+			{
+				if (preprocessorDefinitions.ElementAt(i).Length == 0)
+				{
+					preprocessorDefinitions.RemoveAt(i);
+					i--;
+				}
+			}
 
 			Logging.Logging.LogInfo("Found " + preprocessorDefinitions.Count.ToString() + " distinct preprocessor definitions.");
 
@@ -244,7 +274,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCompilerTool();
+				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
 
 				if (compilerTool != null && compilerTool.isValid())
 				{

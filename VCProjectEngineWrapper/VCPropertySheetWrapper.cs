@@ -18,38 +18,36 @@ using CoatiSoftware.SourcetrailExtension.Logging;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Remoting;
 
 namespace VCProjectEngineWrapper
 {
 	public class
 #if (VS2012)
-		VCConfigurationWrapperVs2012
+		VCPropertySheetWrapperVs2012
 #elif (VS2013)
-		VCConfigurationWrapperVs2013
+		VCPropertySheetWrapperVs2013
 #elif (VS2015)
-		VCConfigurationWrapperVs2015
+		VCPropertySheetWrapperVs2015
 #elif (VS2017)
-		VCConfigurationWrapperVs2017
+		VCPropertySheetWrapperVs2017
 #endif
-		: IVCConfigurationWrapper
+		: IVCPropertySheetWrapper
 	{
-		private VCConfiguration _wrapped = null;
+		private VCPropertySheet _wrapped = null;
 
 		public
 #if (VS2012)
-			VCConfigurationWrapperVs2012
+			VCPropertySheetWrapperVs2012
 #elif (VS2013)
-			VCConfigurationWrapperVs2013
+			VCPropertySheetWrapperVs2013
 #elif (VS2015)
-			VCConfigurationWrapperVs2015
+			VCPropertySheetWrapperVs2015
 #elif (VS2017)
-			VCConfigurationWrapperVs2017
+			VCPropertySheetWrapperVs2017
 #endif
 			(object wrapped)
 		{
-			_wrapped = wrapped as VCConfiguration;
+			_wrapped = wrapped as VCPropertySheet;
 		}
 
 		public bool isValid()
@@ -62,14 +60,14 @@ namespace VCProjectEngineWrapper
 			return Utility.GetWrappedVersion();
 		}
 
-		public string EvaluateMacro(string macro)
+		public string getName()
 		{
-			return _wrapped.Evaluate(macro);
+			return _wrapped.Name;
 		}
 
 		public IVCCLCompilerToolWrapper GetCLCompilerTool()
 		{
-			try
+			try 
 			{
 				IEnumerable tools = _wrapped.Tools as IEnumerable;
 				foreach (Object tool in tools)
@@ -93,7 +91,7 @@ namespace VCProjectEngineWrapper
 			}
 			catch (Exception e)
 			{
-				Logging.LogError("Configuration failed to retreive compiler tool: " + e.Message);
+				Logging.LogError("Property Sheet failed to retreive compiler tool: " + e.Message);
 			}
 			return new
 #if (VS2012)
@@ -107,59 +105,5 @@ namespace VCProjectEngineWrapper
 #endif
 				(null);
 		}
-
-		public List<IVCPropertySheetWrapper> GetPropertySheets()
-		{
-			List<IVCPropertySheetWrapper> propertySheetsWrappers = new List<IVCPropertySheetWrapper>();
-			try
-			{
-				IEnumerable wrappedPropertySheets = _wrapped.PropertySheets;
-				foreach (Object wrappedPropertySheet in wrappedPropertySheets)
-				{
-					VCPropertySheet vcPropertySheet = wrappedPropertySheet as VCPropertySheet;
-					if (vcPropertySheet != null)
-					{
-						IVCPropertySheetWrapper wrapper = new
-#if (VS2012)
-							VCPropertySheetWrapperVs2012
-#elif (VS2013)
-							VCPropertySheetWrapperVs2013
-#elif (VS2015)
-							VCPropertySheetWrapperVs2015
-#elif (VS2017)
-							VCPropertySheetWrapperVs2017
-#endif
-							(vcPropertySheet);
-
-						if (wrapper != null && wrapper.isValid())
-						{
-							propertySheetsWrappers.Add(wrapper);
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				Logging.LogError("Configuration failed to retreive property sheets: " + e.Message);
-			}
-
-			return propertySheetsWrappers;
-		}
-
-		public IVCPlatformWrapper GetPlatform()
-		{
-			return new 
-#if (VS2012)
-				VCPlatformWrapperVs2012
-#elif (VS2013)
-				VCPlatformWrapperVs2013
-#elif (VS2015)
-				VCPlatformWrapperVs2015
-#elif (VS2017)
-				VCPlatformWrapperVs2017
-#endif
-				(_wrapped.Platform);
-		}
 	}
 }
-

@@ -63,6 +63,7 @@
     <Compile Include="VCFileWrapper.cs" />
     <Compile Include="VCPlatformWrapper.cs" />
     <Compile Include="VCProjectWrapper.cs" />
+    <Compile Include="VCPropertySheetWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyVs2017.snk" />

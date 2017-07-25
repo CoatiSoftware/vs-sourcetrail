@@ -29,13 +29,24 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			try
 			{
 				Tuple<int, int> potentialMacroPosition = Utility.StringUtility.FindFirstRange(path, "$(", ")");
-
 				if (potentialMacroPosition != null)
 				{
 					string potentialMacro = path.Substring(potentialMacroPosition.Item1, potentialMacroPosition.Item2 - potentialMacroPosition.Item1 + 1);
-
 					string resolvedMacro = ResolveVsMacro(potentialMacro, vcProjectConfig);
-
+					resolvedPaths = path.Substring(0, potentialMacroPosition.Item1) + resolvedMacro + path.Substring(potentialMacroPosition.Item2 + 1);
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.Logging.LogError("Exception: " + e.Message);
+			}
+			try
+			{
+				Tuple<int, int> potentialMacroPosition = Utility.StringUtility.FindFirstRange(path, "%(", ")");
+				if (potentialMacroPosition != null)
+				{
+					string potentialMacro = path.Substring(potentialMacroPosition.Item1, potentialMacroPosition.Item2 - potentialMacroPosition.Item1 + 1);
+					string resolvedMacro = ResolveVsMacro(potentialMacro, vcProjectConfig);
 					resolvedPaths = path.Substring(0, potentialMacroPosition.Item1) + resolvedMacro + path.Substring(potentialMacroPosition.Item2 + 1);
 				}
 			}

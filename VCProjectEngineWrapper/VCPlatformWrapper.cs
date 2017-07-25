@@ -66,6 +66,5 @@ namespace VCProjectEngineWrapper
 		{
 			return _wrapped.IncludeDirectories.Split(';');
 		}
-
 	}
 }

@@ -53,6 +53,7 @@
     <Compile Include="IVCFileWrapper.cs" />
     <Compile Include="IVCPlatformWrapper.cs" />
     <Compile Include="IVCProjectWrapper.cs" />
+    <Compile Include="IVCPropertySheetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

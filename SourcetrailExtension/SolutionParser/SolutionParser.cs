@@ -341,7 +341,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
 
-			IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCompilerTool();
+			IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
 
 			if (compilerTool != null && compilerTool.isValid())
 			{
