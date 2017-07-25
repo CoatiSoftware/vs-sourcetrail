@@ -74,9 +74,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			SetCompatibilityVersionFlag(vcProject, configurationName, platformName);
 
 			// gather include paths and preprocessor definitions of the project
-			List<string> includeDirectories = ProjectUtility.GetProjectIncludeDirectories(vcProject, configurationName, platformName, _pathResolver);
-			List<string> preprocessorDefinitions = ProjectUtility.GetProjectPreprocessorDefinitions(vcProject, configurationName, platformName);
-			List<string> forcedIncludeFiles = ProjectUtility.GetProjectForcedIncludeFiles(vcProject, configurationName, platformName, _pathResolver);
+			List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, configurationName, platformName, _pathResolver);
+			List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, configurationName, platformName);
+			List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, configurationName, platformName, _pathResolver);
 
 			string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject, configurationName, platformName);
 			Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");

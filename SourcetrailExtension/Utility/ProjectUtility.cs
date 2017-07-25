@@ -125,7 +125,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return item;
 		}
 
-		static public List<string> GetProjectIncludeDirectories(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
+		static public List<string> GetIncludeDirectories(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
 		{
 			// get additional include directories
 			// source: http://www.mztools.com/articles/2014/MZ2014005.aspx
@@ -201,7 +201,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return includeDirectories;
 		}
 
-		static public List<string> GetProjectPreprocessorDefinitions(IVCProjectWrapper project, string configurationName, string platformName)
+		static public List<string> GetPreprocessorDefinitions(IVCProjectWrapper project, string configurationName, string platformName)
 		{
 			Logging.Logging.LogInfo("Attempting to retreive Preprocessor Definitions for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
@@ -210,37 +210,13 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				{
-					IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
-					if (compilerTool != null && compilerTool.isValid())
-					{
-						foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
-						{
-							preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
-						}
-					}
-					else
-					{
-						Logging.Logging.LogWarning("Could not retreive compiler tool.");
-					}
-				}
+				preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcProjectConfig.GetCLCompilerTool()));
 
 				foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
 				{
 					Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
-
-					IVCCLCompilerToolWrapper compilerTool = vcPropertySheet.GetCLCompilerTool();
-					if (compilerTool != null && compilerTool.isValid())
-					{
-						foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
-						{
-							preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
-						}
-					}
-					else
-					{
-						Logging.Logging.LogWarning("Could not retreive compiler tool.");
-					}
+					preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetCLCompilerTool()));
+					preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetResourceCompilerTool()));
 				}
 			}
 			else
@@ -252,7 +228,8 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			for (int i = 0; i < preprocessorDefinitions.Count; i++)
 			{
-				if (preprocessorDefinitions.ElementAt(i).Length == 0)
+				string preprocessorDefinition = preprocessorDefinitions.ElementAt(i);
+				if (preprocessorDefinition.Length == 0 || preprocessorDefinition.Equals("$(NOINHERIT)"))
 				{
 					preprocessorDefinitions.RemoveAt(i);
 					i--;
@@ -263,8 +240,42 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			return preprocessorDefinitions;
 		}
+		
+		static private List<string> GetPreprocessorDefinitions(IVCCLCompilerToolWrapper compilerTool)
+		{
+			List<string> preprocessorDefinitions = new List<string>();
+			if (compilerTool != null && compilerTool.isValid())
+			{
+				foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
+				{
+					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+				}
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No CL Compiler Tool provided");
+			}
+			return preprocessorDefinitions;
+		}
 
-		static public List<string> GetProjectForcedIncludeFiles(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
+		static private List<string> GetPreprocessorDefinitions(IVCResourceCompilerToolWrapper compilerTool)
+		{
+			List<string> preprocessorDefinitions = new List<string>();
+			if (compilerTool != null && compilerTool.isValid())
+			{
+				foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
+				{
+					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+				}
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No Resource Compiler Tool provided");
+			}
+			return preprocessorDefinitions;
+		}
+
+		static public List<string> GetForcedIncludeFiles(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
 		{
 			Logging.Logging.LogInfo("Attempting to retreive Forced Include Files for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 

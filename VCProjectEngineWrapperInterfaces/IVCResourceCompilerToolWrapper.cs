@@ -16,13 +16,12 @@
 
 namespace VCProjectEngineWrapper
 {
-	public interface IVCPropertySheetWrapper
+	public interface IVCResourceCompilerToolWrapper
 	{
 		string GetWrappedVersion();
 		bool isValid();
-
-		string getName();
-		IVCCLCompilerToolWrapper GetCLCompilerTool();
-		IVCResourceCompilerToolWrapper GetResourceCompilerTool();
+		
+		string[] GetAdditionalIncludeDirectories();
+		string[] GetPreprocessorDefinitions();
 	}
 }

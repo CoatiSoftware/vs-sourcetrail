@@ -91,7 +91,7 @@ namespace VCProjectEngineWrapper
 			}
 			catch (Exception e)
 			{
-				Logging.LogError("Property Sheet failed to retreive compiler tool: " + e.Message);
+				Logging.LogError("Property Sheet failed to retreive cl compiler tool: " + e.Message);
 			}
 			return new
 #if (VS2012)
@@ -105,5 +105,47 @@ namespace VCProjectEngineWrapper
 #endif
 				(null);
 		}
+
+		public IVCResourceCompilerToolWrapper GetResourceCompilerTool()
+		{
+			try
+			{
+				IEnumerable tools = _wrapped.Tools as IEnumerable;
+				foreach (Object tool in tools)
+				{
+					VCResourceCompilerTool compilerTool = tool as VCResourceCompilerTool;
+					if (compilerTool != null)
+					{
+						return new
+#if (VS2012)
+							VCResourceCompilerToolWrapperVs2012
+#elif (VS2013)
+							VCResourceCompilerToolWrapperVs2013
+#elif (VS2015)
+							VCResourceCompilerToolWrapperVs2015
+#elif (VS2017)
+							VCResourceCompilerToolWrapperVs2017
+#endif
+							(compilerTool);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.LogError("Property Sheet failed to retreive resource compiler tool: " + e.Message);
+			}
+			return new
+#if (VS2012)
+				VCResourceCompilerToolWrapperVs2012
+#elif (VS2013)
+				VCResourceCompilerToolWrapperVs2013
+#elif (VS2015)
+				VCResourceCompilerToolWrapperVs2015
+#elif (VS2017)
+				VCResourceCompilerToolWrapperVs2017
+#endif
+				(null);
+		}
+
 	}
 }

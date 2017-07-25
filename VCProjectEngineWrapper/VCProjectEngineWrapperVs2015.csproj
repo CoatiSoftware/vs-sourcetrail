@@ -64,6 +64,7 @@
     <Compile Include="VCPlatformWrapper.cs" />
     <Compile Include="VCProjectWrapper.cs" />
     <Compile Include="VCPropertySheetWrapper.cs" />
+    <Compile Include="VCResourceCompilerToolWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyVs2015.snk" />
