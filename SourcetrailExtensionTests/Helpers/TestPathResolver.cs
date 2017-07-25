@@ -38,6 +38,10 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.Helpers
 
 		protected override string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig)
 		{
+			if (potentialMacro.Equals("$(NOINHERIT)"))
+			{
+				return "";
+			}
 			return "<Macro " + potentialMacro + ">";
 		}
 	}

@@ -138,18 +138,24 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
-
-				if (compilerTool != null && compilerTool.isValid())
+				GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()).ForEach(delegate (string directory)
 				{
-					foreach (string directory in compilerTool.GetAdditionalIncludeDirectories())
+					includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+				});
+
+				foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+				{
+					Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
+
+					GetIncludeDirectories(vcPropertySheet.GetCLCompilerTool()).ForEach(delegate (string directory)
 					{
-						if (directory.Length <= 0)
-						{
-							continue;
-						}
 						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-					}
+					});
+
+					GetIncludeDirectories(vcPropertySheet.GetResourceCompilerTool()).ForEach(delegate (string directory)
+					{
+						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+					});
 				}
 
 				try
@@ -185,7 +191,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				path = pathResolver.GetAsAbsoluteCanonicalPath(path, project);
 				path = path.Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
 
-				if (path.Length == 0)
+				if (path.Length == 0 || path.Equals("$(NOINHERIT)"))
 				{
 					includeDirectories.RemoveAt(i);
 					i--;
@@ -198,6 +204,48 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			Logging.Logging.LogInfo("Found " + includeDirectories.Count.ToString() + " distinct include directories.");
 
+			return includeDirectories;
+		}
+
+		static private List<string> GetIncludeDirectories(IVCCLCompilerToolWrapper compilerTool)
+		{
+			List<string> includeDirectories = new List<string>();
+			if (compilerTool != null && compilerTool.isValid())
+			{
+				foreach (string directory in compilerTool.GetAdditionalIncludeDirectories())
+				{
+					if (directory.Length <= 0)
+					{
+						continue;
+					}
+					includeDirectories.Add(directory);
+				}
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No CL Compiler Tool provided");
+			}
+			return includeDirectories;
+		}
+
+		static private List<string> GetIncludeDirectories(IVCResourceCompilerToolWrapper compilerTool)
+		{
+			List<string> includeDirectories = new List<string>();
+			if (compilerTool != null && compilerTool.isValid())
+			{
+				foreach (string directory in compilerTool.GetAdditionalIncludeDirectories())
+				{
+					if (directory.Length <= 0)
+					{
+						continue;
+					}
+					includeDirectories.Add(directory);
+				}
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No Resource Compiler Tool provided");
+			}
 			return includeDirectories;
 		}
 
