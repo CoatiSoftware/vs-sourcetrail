@@ -138,24 +138,34 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
+				bool inspectPropertySheets = true;
+
 				GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()).ForEach(delegate (string directory)
 				{
+					if (directory.Equals("$(NOINHERIT)"))
+					{
+						inspectPropertySheets = false;
+					}
+
 					includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 				});
 
-				foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+				if (inspectPropertySheets)
 				{
-					Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
-
-					GetIncludeDirectories(vcPropertySheet.GetCLCompilerTool()).ForEach(delegate (string directory)
+					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
 					{
-						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-					});
+						Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
 
-					GetIncludeDirectories(vcPropertySheet.GetResourceCompilerTool()).ForEach(delegate (string directory)
-					{
-						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-					});
+						GetIncludeDirectories(vcPropertySheet.GetCLCompilerTool()).ForEach(delegate (string directory)
+						{
+							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+						});
+
+						GetIncludeDirectories(vcPropertySheet.GetResourceCompilerTool()).ForEach(delegate (string directory)
+						{
+							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+						});
+					}
 				}
 
 				try
@@ -212,14 +222,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			List<string> includeDirectories = new List<string>();
 			if (compilerTool != null && compilerTool.isValid())
 			{
-				foreach (string directory in compilerTool.GetAdditionalIncludeDirectories())
-				{
-					if (directory.Length <= 0)
-					{
-						continue;
-					}
-					includeDirectories.Add(directory);
-				}
+				includeDirectories.AddRange(compilerTool.GetAdditionalIncludeDirectories());
 			}
 			else
 			{
@@ -233,14 +236,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			List<string> includeDirectories = new List<string>();
 			if (compilerTool != null && compilerTool.isValid())
 			{
-				foreach (string directory in compilerTool.GetAdditionalIncludeDirectories())
-				{
-					if (directory.Length <= 0)
-					{
-						continue;
-					}
-					includeDirectories.Add(directory);
-				}
+				includeDirectories.AddRange(compilerTool.GetAdditionalIncludeDirectories());
 			}
 			else
 			{
@@ -258,13 +254,26 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcProjectConfig.GetCLCompilerTool()));
+				bool inspectPropertySheets = true;
 
-				foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+				GetPreprocessorDefinitions(vcProjectConfig.GetCLCompilerTool()).ForEach(delegate (string directory)
 				{
-					Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
-					preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetCLCompilerTool()));
-					preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetResourceCompilerTool()));
+					if (directory.Equals("$(NOINHERIT)"))
+					{
+						inspectPropertySheets = false;
+					}
+
+					preprocessorDefinitions.Add(directory);
+				});
+
+				if (inspectPropertySheets)
+				{ 
+					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+					{
+						Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
+						preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetCLCompilerTool()));
+						preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetResourceCompilerTool()));
+					}
 				}
 			}
 			else
