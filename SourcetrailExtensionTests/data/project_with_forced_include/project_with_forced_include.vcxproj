@@ -106,6 +106,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>forced_include.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +139,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>forced_include.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

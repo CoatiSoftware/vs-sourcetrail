@@ -83,7 +83,7 @@ namespace VCProjectEngineWrapper
 				{
 					wrapper = modules.Peek().Create(wrapped);
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					wrapper = null;
 				}

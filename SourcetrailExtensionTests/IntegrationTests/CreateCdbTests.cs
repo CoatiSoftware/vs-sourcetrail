@@ -127,7 +127,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			{
 				Console.WriteLine("Exception: " + e.Message);
 				Console.WriteLine("Stack Trace: " + e.StackTrace);
-				Assert.Fail("Caught and exception while creating compilation database.");
+				Assert.Fail("Caught an exception while creating compilation database.");
 			}
 
 			Assert.IsNotNull(output);

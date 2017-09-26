@@ -62,6 +62,22 @@ namespace VCProjectEngineWrapper
 			return Utility.GetWrappedVersion();
 		}
 
+		public bool isMakefileConfiguration()
+		{
+			ConfigurationTypes configurationType = _wrapped.ConfigurationType;
+			if (configurationType == ConfigurationTypes.typeGeneric)
+			{
+				return true;
+			}
+
+			if (configurationType == ConfigurationTypes.typeUnknown && GetNMakeTool() != null && GetNMakeTool().isValid())
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public string EvaluateMacro(string macro)
 		{
 			return _wrapped.Evaluate(macro);
@@ -93,7 +109,7 @@ namespace VCProjectEngineWrapper
 			}
 			catch (Exception e)
 			{
-				Logging.LogError("Configuration failed to retreive compiler tool: " + e.Message);
+				Logging.LogError("Configuration failed to retreive cl compiler tool: " + e.Message);
 			}
 			return new
 #if (VS2012)
@@ -104,6 +120,48 @@ namespace VCProjectEngineWrapper
 				VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCCLCompilerToolWrapperVs2017
+#endif
+				(null);
+		}
+
+		public IVCNMakeToolWrapper GetNMakeTool()
+		{
+			try
+			{
+				IEnumerable tools = _wrapped.Tools as IEnumerable;
+
+				foreach (Object tool in tools)
+				{
+					VCNMakeTool compilerTool = tool as VCNMakeTool;
+					if (compilerTool != null)
+					{
+						return new
+#if (VS2012)
+							VCNMakeToolWrapperVs2012
+#elif (VS2013)
+                            VCNMakeToolWrapperVs2013
+#elif (VS2015)
+							VCNMakeToolWrapperVs2015
+#elif (VS2017)
+							VCNMakeToolWrapperVs2017
+#endif
+							(compilerTool);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.LogError("Configuration failed to retreive nmake tool: " + e.Message);
+			}
+			return new
+#if (VS2012)
+				VCNMakeToolWrapperVs2012
+#elif (VS2013)
+                VCNMakeToolWrapperVs2013
+#elif (VS2015)
+				VCNMakeToolWrapperVs2015
+#elif (VS2017)
+				VCNMakeToolWrapperVs2017
 #endif
 				(null);
 		}

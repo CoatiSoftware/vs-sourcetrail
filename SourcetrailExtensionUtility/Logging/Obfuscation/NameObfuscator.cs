@@ -132,7 +132,7 @@ namespace CoatiSoftware.SourcetrailExtension.Logging.Obfuscation
 				writer.WriteLine(message.ToString());
 				writer.Close();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				// well...file is still in use
 				_messageBacklog.Enqueue(message.ToString());

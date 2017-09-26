@@ -51,6 +51,7 @@
     <Compile Include="IVCConfigurationWrapper.cs" />
     <Compile Include="IVCFileConfigurationWrapper.cs" />
     <Compile Include="IVCFileWrapper.cs" />
+    <Compile Include="IVCNMakeToolWrapper.cs" />
     <Compile Include="IVCPlatformWrapper.cs" />
     <Compile Include="IVCProjectWrapper.cs" />
     <Compile Include="IVCPropertySheetWrapper.cs" />

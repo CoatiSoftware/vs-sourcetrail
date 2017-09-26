@@ -72,19 +72,23 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			}
 
 			SetCompatibilityVersionFlag(vcProject, configurationName, platformName);
+			
+			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(configurationName, platformName);
 
 			// gather include paths and preprocessor definitions of the project
-			List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, configurationName, platformName, _pathResolver);
-			List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, configurationName, platformName);
-			List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, configurationName, platformName, _pathResolver);
+			List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
+			List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
+			List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
 
-			string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject, configurationName, platformName);
+			string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
 			Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
+			
+			bool isMakefileProject = vcProjectConfiguration.isMakefileConfiguration();
 
 			// create command objects for all applicable project items
 			foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
 			{
-				CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, configurationName, platformName);
+				CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, isMakefileProject);
 				if (command != null)
 				{
 					result.Add(command);
@@ -101,7 +105,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return result;
 		}
 
-		private CompileCommand CreateCompileCommand(ProjectItem item, List<string> includeDirectories, List<string> preprocessorDefinitions, List<string> forcedIncludeFiles, string vcStandard, string cStandard, string configurationName, string platformName)
+		private CompileCommand CreateCompileCommand(ProjectItem item, List<string> includeDirectories, List<string> preprocessorDefinitions, List<string> forcedIncludeFiles, string vcStandard, string cStandard, bool isMakefileProject)
 		{
 			Logging.Logging.LogInfo("Starting to create Command Object from item \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(item.Name) + "\"");
 
@@ -114,28 +118,33 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					Logging.Logging.LogError("Failed to retreive DTE object. Abort creating command object.");
 				}
 
-				IVCCLCompilerToolWrapper compilerTool = null;
-
 				IVCFileWrapper vcFile = VCFileWrapperFactory.create(item.Object);
-				List<IVCFileConfigurationWrapper> vcFileConfigurations = vcFile.GetFileConfigurations();
-				foreach (IVCFileConfigurationWrapper vcFileConfiguration in vcFileConfigurations)
+
+				IVCCLCompilerToolWrapper compilerTool = null;
+				if (!isMakefileProject)
 				{
-					if (vcFileConfiguration != null && vcFileConfiguration.isValid())
+					List<IVCFileConfigurationWrapper> vcFileConfigurations = vcFile.GetFileConfigurations();
+					foreach (IVCFileConfigurationWrapper vcFileConfiguration in vcFileConfigurations)
 					{
-						compilerTool = vcFileConfiguration.GetTool();
-						if (compilerTool != null && compilerTool.isValid())
+						if (vcFileConfiguration != null && vcFileConfiguration.isValid())
 						{
-							break;
+							compilerTool = vcFileConfiguration.GetCLCompilerTool();
+							if (compilerTool != null && compilerTool.isValid())
+							{
+								break;
+							}
 						}
 					}
 				}
 
+				bool onlyCheckExtension = false;
 				if (compilerTool == null || !compilerTool.isValid())
 				{
 					Logging.Logging.LogInfo("Unable to retrieve build tool. Using extension white-list to determine file type.");
+					onlyCheckExtension = true;
 				}
 
-				if (CheckIsSourceFile(item, compilerTool))
+				if (CheckIsSourceFile(item, onlyCheckExtension))
 				{
 					CompileCommand command = new CompileCommand();
 					command.File = item.Name;
@@ -159,11 +168,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					}
 					else
 					{
-						if (compilerTool.GetCompilesAsC())
+						if (compilerTool != null && compilerTool.isValid() && compilerTool.GetCompilesAsC())
 						{
 							languageStandardOption = "-std=" + cStandard;
 						}
-						else if (compilerTool.GetCompilesAsCPlusPlus())
+						else if (compilerTool != null && compilerTool.isValid() && compilerTool.GetCompilesAsCPlusPlus())
 						{
 							languageStandardOption = "-std=" + vcStandard;
 						}
@@ -221,7 +230,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					return command;
 				}
-				else if (CheckIsHeaderFile(item, compilerTool))
+				else if (CheckIsHeaderFile(item, onlyCheckExtension))
 				{
 					if (ProjectUtility.HasProperty(item.Properties, "FullPath"))
 					{
@@ -250,9 +259,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return null;
 		}
 
-		static private bool CheckIsSourceFile(ProjectItem item, IVCCLCompilerToolWrapper tool)
+		static private bool CheckIsSourceFile(ProjectItem item, bool onlyCheckExtension)
 		{
-			if (tool != null && tool.isValid()) // if the tool is null it's probably not a normal VC project, indicating that the file code model is unavailable
+			if (!onlyCheckExtension)
 			{
 				try
 				{
@@ -285,9 +294,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return false;
 		}
 
-		static private bool CheckIsHeaderFile(EnvDTE.ProjectItem item, IVCCLCompilerToolWrapper tool)
+		static private bool CheckIsHeaderFile(EnvDTE.ProjectItem item, bool onlyCheckExtension)
 		{
-			if (tool != null && tool.isValid()) // if the tool is null it's probably not a normal VC project, indicating that the file code model is unavailable
+			if (!onlyCheckExtension) // if the tool is null it's probably not a normal VC project, indicating that the file code model is unavailable
 			{
 				try
 				{
@@ -339,21 +348,23 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		{
 			Logging.Logging.LogInfo("Determining CL.exe (C++ compiler) version");
 
-			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
+            int majorCompilerVersion = -1;
 
-			IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
-
-			if (compilerTool != null && compilerTool.isValid())
 			{
-				int majorCompilerVersion = GetCLMajorVersion(compilerTool, vcProjectConfig);
-
-				if (majorCompilerVersion > -1)
+				IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
+				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
+				if (compilerTool != null && compilerTool.isValid())
 				{
-					Logging.Logging.LogInfo("Found compiler version " + majorCompilerVersion.ToString());
-
-					_compatibilityVersionFlag = _compatibilityVersionFlagBase + majorCompilerVersion.ToString();
-					return;
+					majorCompilerVersion = GetCLMajorVersion(compilerTool, vcProjectConfig);
 				}
+			}
+
+			if (majorCompilerVersion > -1)
+			{
+				Logging.Logging.LogInfo("Found compiler version " + majorCompilerVersion.ToString());
+
+				_compatibilityVersionFlag = _compatibilityVersionFlagBase + majorCompilerVersion.ToString();
+				return;
 			}
 		}
 

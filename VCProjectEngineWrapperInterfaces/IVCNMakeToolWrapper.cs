@@ -16,11 +16,14 @@
 
 namespace VCProjectEngineWrapper
 {
-	public interface IVCFileConfigurationWrapper
+	public interface IVCNMakeToolWrapper
 	{
 		string GetWrappedVersion();
 		bool isValid();
 
-		IVCCLCompilerToolWrapper GetCLCompilerTool();
+		string GetToolPath();
+		string[] GetIncludeSearchPaths();
+		string[] GetPreprocessorDefinitions();
+		string GetForcedIncludes();
 	}
 }

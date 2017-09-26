@@ -75,7 +75,7 @@ namespace CoatiSoftware.SourcetrailExtension.Logging
 							}
 						}
 					}
-					catch (Exception e)
+					catch (Exception)
 					{
 						// don't log here, otherwise we create an infinite loop ;)
 					}

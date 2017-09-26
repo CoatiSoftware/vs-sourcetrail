@@ -23,8 +23,10 @@ namespace VCProjectEngineWrapper
 		string GetWrappedVersion();
 		bool isValid();
 
+		bool isMakefileConfiguration();
 		string EvaluateMacro(string macro);
 		IVCCLCompilerToolWrapper GetCLCompilerTool();
+		IVCNMakeToolWrapper GetNMakeTool();
 		List<IVCPropertySheetWrapper> GetPropertySheets();
 		IVCPlatformWrapper GetPlatform();
     }

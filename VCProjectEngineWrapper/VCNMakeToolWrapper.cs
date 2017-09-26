@@ -15,37 +15,36 @@
  */
 
 using Microsoft.VisualStudio.VCProjectEngine;
-using System;
 
 namespace VCProjectEngineWrapper
 {
 	public class
 #if (VS2012)
-		VCFileConfigurationWrapperVs2012
+		VCNMakeToolWrapperVs2012
 #elif (VS2013)
-		VCFileConfigurationWrapperVs2013
+        VCNMakeToolWrapperVs2013
 #elif (VS2015)
-		VCFileConfigurationWrapperVs2015
+		VCNMakeToolWrapperVs2015
 #elif (VS2017)
-		VCFileConfigurationWrapperVs2017
+		VCNMakeToolWrapperVs2017
 #endif
-		: IVCFileConfigurationWrapper
+        : IVCNMakeToolWrapper
 	{
-		private VCFileConfiguration _wrapped = null;
+		private VCNMakeTool _wrapped = null;
 
 		public
 #if (VS2012)
-			VCFileConfigurationWrapperVs2012
+			VCNMakeToolWrapperVs2012
 #elif (VS2013)
-			VCFileConfigurationWrapperVs2013
+            VCNMakeToolWrapperVs2013
 #elif (VS2015)
-			VCFileConfigurationWrapperVs2015
+			VCNMakeToolWrapperVs2015
 #elif (VS2017)
-			VCFileConfigurationWrapperVs2017
+			VCNMakeToolWrapperVs2017
 #endif
-			(object wrapped)
+            (object wrapped)
 		{
-			_wrapped = wrapped as VCFileConfiguration;
+			_wrapped = wrapped as VCNMakeTool;
 		}
 
 		public bool isValid()
@@ -58,29 +57,25 @@ namespace VCProjectEngineWrapper
 			return Utility.GetWrappedVersion();
 		}
 
-		public IVCCLCompilerToolWrapper GetCLCompilerTool()
+		public string GetToolPath()
 		{
-			object tool;
-			try
-			{
-				tool = _wrapped.Tool;
-			}
-			catch (Exception)
-			{
-				tool = null;
-			}
-
-			return new
-#if (VS2012)
-				VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-				VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
-				VCCLCompilerToolWrapperVs2015
-#elif (VS2017)
-				VCCLCompilerToolWrapperVs2017
-#endif
-				(tool);
+			return _wrapped.ToolPath;
 		}
+
+		public string[] GetIncludeSearchPaths()
+		{
+			return _wrapped.IncludeSearchPath.Split(';');
+		}
+
+		public string[] GetPreprocessorDefinitions()
+		{
+			return _wrapped.PreprocessorDefinitions.Split(';');
+		}
+
+		public string GetForcedIncludes()
+		{
+			return _wrapped.ForcedIncludes;
+		}
+
 	}
 }

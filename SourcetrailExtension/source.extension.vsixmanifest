@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="acf15780-03b5-440e-a41e-db79b7043fc2" Version="1.0.4" Language="en-US" Publisher="Coati Software" />
-    <DisplayName>Sourcetrail Extension</DisplayName>
-    <Description xml:space="preserve">This extension allows Visual Studio to communicate with Sourcetrail, a Clang based source code exploration tool. Additionally it can generate a Clang Compilation Database for any Visual Studio solution which can be used to run various Clang based tools.</Description>
-    <MoreInfo>https://www.sourcetrail.com/</MoreInfo>
-    <License>LICENSE.txt</License>
-    <GettingStartedGuide>https://www.sourcetrail.com/documentation/#VisualStudio</GettingStartedGuide>
-    <ReleaseNotes>https://github.com/CoatiSoftware/vs-sourcetrail/blob/master/CHANGELOG.md</ReleaseNotes>
-    <Icon>sourcetrail.ico</Icon>
-    <Tags>C, C++, Navigation, diagram, graph, visualization, clang, Compilation Database</Tags>
-  </Metadata>
-  <Installation InstalledByMsi="false">
-    <InstallationTarget Version="[14.0,16.0)" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[11.0,16.0)" Id="Microsoft.VisualStudio.Pro" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.6" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
-  </Prerequisites>
+    <Metadata>
+        <Identity Id="acf15780-03b5-440e-a41e-db79b7043fc2" Version="1.0.4" Language="en-US" Publisher="Coati Software" />
+        <DisplayName>Sourcetrail Extension</DisplayName>
+        <Description xml:space="preserve">This extension allows Visual Studio to communicate with Sourcetrail, a Clang based source code exploration tool. Additionally it can generate a Clang Compilation Database for any Visual Studio solution which can be used to run various Clang based tools.</Description>
+        <MoreInfo>https://www.sourcetrail.com/</MoreInfo>
+        <License>LICENSE.txt</License>
+        <GettingStartedGuide>https://www.sourcetrail.com/documentation/#VisualStudio</GettingStartedGuide>
+        <ReleaseNotes>https://github.com/CoatiSoftware/vs-sourcetrail/blob/master/CHANGELOG.md</ReleaseNotes>
+        <Icon>sourcetrail.ico</Icon>
+        <Tags>C, C++, Navigation, diagram, graph, visualization, clang, Compilation Database</Tags>
+    </Metadata>
+    <Installation InstalledByMsi="false">
+        <InstallationTarget Version="[14.0,16.0)" Id="Microsoft.VisualStudio.Community" />
+        <InstallationTarget Version="[11.0,16.0)" Id="Microsoft.VisualStudio.Pro" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.6" />
+        <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
 </PackageManifest>

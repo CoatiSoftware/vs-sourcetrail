@@ -40,7 +40,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				{
 					value = propertiy.Value.ToString();
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					value = "Error occurred while converting value to string.";
 				}
@@ -125,7 +125,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return item;
 		}
 
-		static public List<string> GetIncludeDirectories(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
+		static public List<string> GetIncludeDirectories(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfig, IPathResolver pathResolver)
 		{
 			// get additional include directories
 			// source: http://www.mztools.com/articles/2014/MZ2014005.aspx
@@ -134,21 +134,31 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			List<string> includeDirectories = new List<string>();
 
-			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
-
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
 				bool inspectPropertySheets = true;
 
-				GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()).ForEach(delegate (string directory)
 				{
-					if (directory.Equals("$(NOINHERIT)"))
+					List<string> directIncludeDirectories = new List<string>();
+					if (vcProjectConfig.GetCLCompilerTool() != null && vcProjectConfig.GetCLCompilerTool().isValid())
 					{
-						inspectPropertySheets = false;
+						directIncludeDirectories = GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool());
+					}
+					else if (vcProjectConfig.GetNMakeTool() != null && vcProjectConfig.GetNMakeTool().isValid())
+					{
+						directIncludeDirectories = GetIncludeDirectories(vcProjectConfig.GetNMakeTool());
 					}
 
-					includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-				});
+					directIncludeDirectories.ForEach(delegate (string directory)
+					{
+						if (directory.Equals("$(NOINHERIT)"))
+						{
+							inspectPropertySheets = false;
+						}
+
+						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+					});
+				}
 
 				if (inspectPropertySheets)
 				{
@@ -198,6 +208,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			for (int i = 0; i < includeDirectories.Count; i++)
 			{
 				string path = includeDirectories.ElementAt(i);
+				path = path.Replace("\\\"", "");
 				path = pathResolver.GetAsAbsoluteCanonicalPath(path, project);
 				path = path.Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
 
@@ -231,6 +242,20 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return includeDirectories;
 		}
 
+		static private List<string> GetIncludeDirectories(IVCNMakeToolWrapper nmakeTool)
+		{
+			List<string> includeDirectories = new List<string>();
+			if (nmakeTool != null && nmakeTool.isValid())
+			{
+				includeDirectories.AddRange(nmakeTool.GetIncludeSearchPaths());
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No NMake Tool provided");
+			}
+			return includeDirectories;
+		}
+
 		static private List<string> GetIncludeDirectories(IVCResourceCompilerToolWrapper compilerTool)
 		{
 			List<string> includeDirectories = new List<string>();
@@ -245,30 +270,41 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return includeDirectories;
 		}
 
-		static public List<string> GetPreprocessorDefinitions(IVCProjectWrapper project, string configurationName, string platformName)
+		static public List<string> GetPreprocessorDefinitions(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfiguration)
 		{
 			Logging.Logging.LogInfo("Attempting to retreive Preprocessor Definitions for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> preprocessorDefinitions = new List<string>();
-
-			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
-			if (vcProjectConfig != null && vcProjectConfig.isValid())
+			
+			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
 			{
 				bool inspectPropertySheets = true;
 
-				GetPreprocessorDefinitions(vcProjectConfig.GetCLCompilerTool()).ForEach(delegate (string directory)
 				{
-					if (directory.Equals("$(NOINHERIT)"))
+					List<string> directPreprocessorDefinitions = new List<string>();
+					if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
 					{
-						inspectPropertySheets = false;
+						directPreprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetCLCompilerTool());
+					}
+					else if (vcProjectConfiguration.GetNMakeTool() != null && vcProjectConfiguration.GetNMakeTool().isValid())
+					{
+						directPreprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetNMakeTool());
 					}
 
-					preprocessorDefinitions.Add(directory);
-				});
+					directPreprocessorDefinitions.ForEach(delegate (string directory)
+					{
+						if (directory.Equals("$(NOINHERIT)"))
+						{
+							inspectPropertySheets = false;
+						}
+
+						preprocessorDefinitions.Add(directory);
+					});
+				}
 
 				if (inspectPropertySheets)
 				{ 
-					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
+					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfiguration.GetPropertySheets())
 					{
 						Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
 						preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetCLCompilerTool()));
@@ -297,7 +333,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 			return preprocessorDefinitions;
 		}
-		
+
 		static private List<string> GetPreprocessorDefinitions(IVCCLCompilerToolWrapper compilerTool)
 		{
 			List<string> preprocessorDefinitions = new List<string>();
@@ -311,6 +347,23 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			else
 			{
 				Logging.Logging.LogWarning("No CL Compiler Tool provided");
+			}
+			return preprocessorDefinitions;
+		}
+
+		static private List<string> GetPreprocessorDefinitions(IVCNMakeToolWrapper nmakeTool)
+		{
+			List<string> preprocessorDefinitions = new List<string>();
+			if (nmakeTool != null && nmakeTool.isValid())
+			{
+				foreach (string preprocessorDefinition in nmakeTool.GetPreprocessorDefinitions())
+				{
+					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
+				}
+			}
+			else
+			{
+				Logging.Logging.LogWarning("No NMake Tool provided");
 			}
 			return preprocessorDefinitions;
 		}
@@ -332,28 +385,34 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return preprocessorDefinitions;
 		}
 
-		static public List<string> GetForcedIncludeFiles(IVCProjectWrapper project, string configurationName, string platformName, IPathResolver pathResolver)
+		static public List<string> GetForcedIncludeFiles(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfiguration, IPathResolver pathResolver)
 		{
 			Logging.Logging.LogInfo("Attempting to retreive Forced Include Files for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> forcedIncludeFiles = new List<string>();
 
-			IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
-
-			if (vcProjectConfig != null && vcProjectConfig.isValid())
+			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
 			{
-				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
-
-				if (compilerTool != null && compilerTool.isValid())
+				if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
 				{
-					foreach (string forcedIncludeFile in compilerTool.GetForcedIncludeFiles().Split(';'))
+					foreach (string forcedIncludeFile in vcProjectConfiguration.GetCLCompilerTool().GetForcedIncludeFiles().Split(';'))
 					{
 						if (forcedIncludeFile.Length <= 0)
 						{
 							continue;
 						}
-
-						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfig));
+						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfiguration));
+					}
+				}
+				else if(vcProjectConfiguration.GetNMakeTool() != null && vcProjectConfiguration.GetNMakeTool().isValid())
+				{
+					foreach (string forcedIncludeFile in vcProjectConfiguration.GetNMakeTool().GetForcedIncludes().Split(';'))
+					{
+						if (forcedIncludeFile.Length <= 0)
+						{
+							continue;
+						}
+						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfiguration));
 					}
 				}
 			}
@@ -385,7 +444,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 		// AFAIK there is no way to programmatically get the c++ standard version supported by any given VS version
 		// instead I'm refearing to the VS docu for that information
 		// https://msdn.microsoft.com/en-us/library/hh567368.aspx
-		static public string GetCppStandardForProject(IVCProjectWrapper project, string configurationName, string platformName)
+		static public string GetCppStandardForProject(IVCProjectWrapper project)
 		{
 			string result = "";
 
