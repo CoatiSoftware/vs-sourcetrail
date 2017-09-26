@@ -289,10 +289,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				{
 					foreach (SolutionConfiguration2 solutionConfiguration in solutionBuild.SolutionConfigurations)
 					{
-						foreach (SolutionContext context in solutionConfiguration.SolutionContexts)
-						{
-							configurationNames.Add(context.ConfigurationName);
-						}
+						configurationNames.Add(solutionConfiguration.Name);
 					}
 					configurationNames = configurationNames.Distinct().ToList();
 				}
@@ -317,10 +314,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				{
 					foreach (SolutionConfiguration2 solutionConfiguration in solutionBuild.SolutionConfigurations)
 					{
-						foreach (SolutionContext context in solutionConfiguration.SolutionContexts)
-						{
-							platformNames.Add(context.PlatformName);
-						}
+						platformNames.Add(solutionConfiguration.PlatformName);
 					}
 					platformNames = platformNames.Distinct().ToList();
 				}

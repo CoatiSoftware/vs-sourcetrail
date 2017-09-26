@@ -24,5 +24,6 @@ namespace VCProjectEngineWrapper
 		IVCConfigurationWrapper getConfiguration(string configurationName, string platformName);
 		string GetProjectDirectory();
 		string GetName();
+		string GetProjectFile();
 	}
 }

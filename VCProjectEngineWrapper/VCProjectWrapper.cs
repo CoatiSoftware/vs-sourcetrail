@@ -115,5 +115,10 @@ namespace VCProjectEngineWrapper
 		{
 			return _wrapped.Name;
 		}
+
+		public string GetProjectFile()
+		{
+			return _wrapped.ProjectFile;
+		}
 	}
 }

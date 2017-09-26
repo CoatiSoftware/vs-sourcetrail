@@ -142,6 +142,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForSolutionWithCustomNamedProjectConfiguration()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/solution_with_custom_named_project_configuration/solution_with_custom_named_project_configuration.sln");
+			}));
+		}
+
 		private void TestCompilationDatabaseForSolution(string solutionPath)
 		{
 			Assert.IsTrue(File.Exists(solutionPath), "solution path does not exist");

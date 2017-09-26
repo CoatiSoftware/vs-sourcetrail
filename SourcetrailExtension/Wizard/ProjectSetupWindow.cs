@@ -92,12 +92,14 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				if(_cdb != null)
 				{
 					int index = comboBoxConfiguration.Items.IndexOf(_cdb.ConfigurationName);
-					comboBoxConfiguration.SelectedIndex = index;
+					if (index > -1)
+					{
+						comboBoxConfiguration.SelectedIndex = index;
+						return;
+					}
 				}
-				else
-				{
-					comboBoxConfiguration.SelectedIndex = 0;
-				}
+
+				comboBoxConfiguration.SelectedIndex = 0;
 			}
 		}
 
@@ -115,12 +117,14 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				if(_cdb != null)
 				{
 					int index = comboBoxPlatform.Items.IndexOf(_cdb.PlatformName);
-					comboBoxPlatform.SelectedIndex = index;
+					if (index > -1)
+					{
+						comboBoxPlatform.SelectedIndex = index;
+						return;
+					}
 				}
-				else
-				{
-					comboBoxPlatform.SelectedIndex = 0;
-				}
+
+				comboBoxPlatform.SelectedIndex = 0;
 			}
 		}
 

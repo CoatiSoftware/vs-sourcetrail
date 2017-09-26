@@ -16,6 +16,7 @@
 
 using CoatiSoftware.SourcetrailExtension.Utility;
 using EnvDTE;
+using EnvDTE80;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,7 +52,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public List<CompileCommand> CreateCompileCommands(Project project, string configurationName, string platformName, string cStandard)
+		public List<CompileCommand> CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -71,36 +72,68 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				return result;
 			}
 
-			SetCompatibilityVersionFlag(vcProject, configurationName, platformName);
-			
-			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(configurationName, platformName);
+			string projectConfigurationName = "";
+			string projectPlatformName = "";
 
-			// gather include paths and preprocessor definitions of the project
-			List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
-			List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
-			List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
-
-			string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
-			Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
-			
-			bool isMakefileProject = vcProjectConfiguration.isMakefileConfiguration();
-
-			// create command objects for all applicable project items
-			foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
+			foreach (SolutionConfiguration2 solutionConfiguration in SolutionUtility.GetSolutionBuild2(dte).SolutionConfigurations)
 			{
-				CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, isMakefileProject);
-				if (command != null)
+				if (solutionConfiguration.Name == solutionConfigurationName && solutionConfiguration.PlatformName == solutionPlatformName)
 				{
-					result.Add(command);
+					foreach (SolutionContext solutionContext in solutionConfiguration.SolutionContexts)
+					{
+						if (vcProject.GetProjectFile().EndsWith(solutionContext.ProjectName))
+						{
+							projectConfigurationName = solutionContext.ConfigurationName;
+							projectPlatformName = solutionContext.PlatformName;
+						}
+					}
 				}
 			}
 
-			if (projectGuid != Guid.Empty)
+			if (projectConfigurationName.Length == 0 || projectPlatformName.Length == 0)
 			{
-				Utility.ProjectUtility.UnloadProject(projectGuid, dte);
+				Logging.Logging.LogWarning("No project configuration found for solution configuration, trying to use solution configuration on project.");
+				projectConfigurationName = solutionConfigurationName;
+				projectPlatformName = solutionPlatformName;
 			}
 
-			_headerDirectories = _headerDirectories.Distinct().ToList();
+			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(projectConfigurationName, projectPlatformName);
+
+			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
+			{
+				SetCompatibilityVersionFlag(vcProject, vcProjectConfiguration);
+
+				// gather include paths and preprocessor definitions of the project
+				List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
+				List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
+				List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
+
+				string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
+				Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
+
+				bool isMakefileProject = vcProjectConfiguration.isMakefileConfiguration();
+
+				// create command objects for all applicable project items
+				foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
+				{
+					CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, isMakefileProject);
+					if (command != null)
+					{
+						result.Add(command);
+					}
+				}
+
+				if (projectGuid != Guid.Empty)
+				{
+					Utility.ProjectUtility.UnloadProject(projectGuid, dte);
+				}
+
+				_headerDirectories = _headerDirectories.Distinct().ToList();
+			}
+			else
+			{
+				Logging.Logging.LogError("No project configuration found. Skipping this project");
+			}
 
 			return result;
 		}
@@ -344,18 +377,17 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			}
 		}
 
-		private void SetCompatibilityVersionFlag(IVCProjectWrapper project, string configurationName, string platformName)
+		private void SetCompatibilityVersionFlag(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfiguration)
 		{
 			Logging.Logging.LogInfo("Determining CL.exe (C++ compiler) version");
 
             int majorCompilerVersion = -1;
 
 			{
-				IVCConfigurationWrapper vcProjectConfig = project.getConfiguration(configurationName, platformName);
-				IVCCLCompilerToolWrapper compilerTool = vcProjectConfig.GetCLCompilerTool();
+				IVCCLCompilerToolWrapper compilerTool = vcProjectConfiguration.GetCLCompilerTool();
 				if (compilerTool != null && compilerTool.isValid())
 				{
-					majorCompilerVersion = GetCLMajorVersion(compilerTool, vcProjectConfig);
+					majorCompilerVersion = GetCLMajorVersion(compilerTool, vcProjectConfiguration);
 				}
 			}
 
