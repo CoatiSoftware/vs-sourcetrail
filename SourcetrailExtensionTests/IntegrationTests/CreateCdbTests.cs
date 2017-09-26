@@ -78,6 +78,39 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 		[TestMethod]
 		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForNMakeProjectWithForcedInclude()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/nmake_project_with_forced_include/nmake_project_with_forced_include.sln");
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForNMakeProjectWithIncludeSearchPath()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/nmake_project_with_include_search_path/nmake_project_with_include_search_path.sln");
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForNMakeProjectWithPreprocessorDefinition()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/nmake_project_with_preprocessor_definition/nmake_project_with_preprocessor_definition.sln");
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForProjectWithCompileAsDefaultOption()
 		{
 			UIThreadInvoker.Initialize();
