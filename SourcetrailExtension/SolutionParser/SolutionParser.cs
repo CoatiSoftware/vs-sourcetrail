@@ -103,10 +103,35 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			{
 				SetCompatibilityVersionFlag(vcProject, vcProjectConfiguration);
 
-				// gather include paths and preprocessor definitions of the project
-				List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
-				List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
-				List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
+				string commandFlags = "";
+				{
+					// gather include paths and preprocessor definitions of the project
+					List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
+					List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
+					List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
+
+					foreach (string flag in _compatibilityFlags)
+					{
+						commandFlags += flag + " ";
+					}
+
+					commandFlags += _compatibilityVersionFlag + " ";
+
+					foreach (string dir in includeDirectories)
+					{
+						commandFlags += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
+					}
+
+					foreach (string prepDef in preprocessorDefinitions)
+					{
+						commandFlags += " -D " + prepDef + " ";
+					}
+
+					foreach (string file in forcedIncludeFiles)
+					{
+						commandFlags += " -include \"" + file + "\" ";
+					}
+				}
 
 				string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
 				Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
@@ -116,7 +141,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				// create command objects for all applicable project items
 				foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
 				{
-					CompileCommand command = CreateCompileCommand(item, includeDirectories, preprocessorDefinitions, forcedIncludeFiles, cppStandard, cStandard, isMakefileProject);
+					CompileCommand command = CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
 					if (command != null)
 					{
 						result.Add(command);
@@ -138,10 +163,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return result;
 		}
 
-		private CompileCommand CreateCompileCommand(ProjectItem item, List<string> includeDirectories, List<string> preprocessorDefinitions, List<string> forcedIncludeFiles, string vcStandard, string cStandard, bool isMakefileProject)
+		private CompileCommand CreateCompileCommand(ProjectItem item, string commandFlags, string vcStandard, string cStandard, bool isMakefileProject)
 		{
 			Logging.Logging.LogInfo("Starting to create Command Object from item \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(item.Name) + "\"");
-
 			try
 			{
 				DTE dte = item.DTE;
@@ -179,9 +203,6 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 				if (CheckIsSourceFile(item, onlyCheckExtension))
 				{
-					CompileCommand command = new CompileCommand();
-					command.File = item.Name;
-
 					string additionalOptions = "";
 					if (compilerTool != null && compilerTool.isValid())
 					{
@@ -225,35 +246,15 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						}
 					}
 
+					CompileCommand command = new CompileCommand();
+
 					string relativeFilePath = item.Properties.Item("RelativePath").Value.ToString();
 					command.File = _pathResolver.GetAsAbsoluteCanonicalPath(relativeFilePath, vcFile.GetProject());
 					command.File = command.File.Replace('\\', '/');
 
 					command.Directory = _pathResolver.GetCompilationDatabaseFilePath();
 
-					command.Command = "clang-tool ";
-
-					foreach (string flag in _compatibilityFlags)
-					{
-						command.Command += flag + " ";
-					}
-
-					command.Command += _compatibilityVersionFlag + " ";
-
-					foreach (string dir in includeDirectories)
-					{
-						command.Command += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
-					}
-
-					foreach (string prepDef in preprocessorDefinitions)
-					{
-						command.Command += " -D " + prepDef + " ";
-					}
-
-					foreach (string file in forcedIncludeFiles)
-					{
-						command.Command += " -include \"" + file + "\" ";
-					}
+					command.Command = "clang-tool " + commandFlags;
 
 					command.Command += languageStandardOption + " ";
 
