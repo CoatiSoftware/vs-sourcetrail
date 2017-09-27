@@ -144,6 +144,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 		[TestMethod]
 		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForProjectWithDifferentItemTypes()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/project_with_different_item_types/project_with_different_item_types.sln");
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForSolutionWithCustomNamedProjectConfiguration()
 		{
 			UIThreadInvoker.Initialize();

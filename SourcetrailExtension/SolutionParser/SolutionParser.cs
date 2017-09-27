@@ -201,7 +201,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					onlyCheckExtension = true;
 				}
 
-				if (CheckIsSourceFile(item, onlyCheckExtension))
+				if (CheckIsSourceFile(item))
 				{
 					string additionalOptions = "";
 					if (compilerTool != null && compilerTool.isValid())
@@ -293,35 +293,48 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			return null;
 		}
 
-		static private bool CheckIsSourceFile(ProjectItem item, bool onlyCheckExtension)
+		static private bool CheckIsSourceFile(ProjectItem item)
 		{
-			if (!onlyCheckExtension)
+			try
 			{
-				try
+				string itemType = "";
+				if (ProjectUtility.HasProperty(item.Properties, "ItemType"))
 				{
-					if (ProjectUtility.HasProperty(item.Properties, "ContentType") && item.Properties.Item("ContentType").Value.ToString() == "CppCode")
-					{
-						Logging.Logging.LogInfo("Accepting item because of its \"ContentType\" property");
-						return true;
-					}
-					else if(ProjectUtility.HasProperty(item.Properties, "ItemType") && item.Properties.Item("ItemType").Value.ToString() == "ClCompile")
-					{
-						Logging.Logging.LogInfo("Accepting item because of its \"ItemType\" property");
-						return true;
-					}
-				}
-				catch (Exception e)
-				{
-					Logging.Logging.LogError("Exception: " + e.Message);
+					itemType = item.Properties.Item("ItemType").Value.ToString();
 				}
 
-				if (item.FileCodeModel != null && item.FileCodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC)
+				if (itemType == "ClCompile")
 				{
+					Logging.Logging.LogInfo("Accepting item because of its \"ItemType\" property");
+					return true;
+				}
+
+				if (itemType == "None")
+				{
+					Logging.Logging.LogInfo("Discarding item because \"ItemType\" has been set to \"Does not participate in build\"");
+					return false;
+				}
+
+				string contentType = "";
+				if (ProjectUtility.HasProperty(item.Properties, "ContentType"))
+				{
+					contentType = item.Properties.Item("ContentType").Value.ToString();
+				}
+
+				if (contentType == "CppCode")
+				{
+					Logging.Logging.LogInfo("Accepting item because of its \"ContentType\" property");
 					return true;
 				}
 			}
-			else if (_sourceExtensionWhiteList.Contains(GetFileExtension(item).ToLower()))
+			catch (Exception e)
 			{
+				Logging.Logging.LogError("Exception: " + e.Message);
+			}
+			
+			if (_sourceExtensionWhiteList.Contains(GetFileExtension(item).ToLower()))
+			{
+				Logging.Logging.LogInfo("Accepting item because of its file extension");
 				return true;
 			}
 
