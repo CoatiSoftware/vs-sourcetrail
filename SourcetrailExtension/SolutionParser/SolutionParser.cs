@@ -38,25 +38,16 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 		private string _compatibilityVersionFlag = _compatibilityVersionFlagBase + "19"; // This default version would correspond to VS2015
 
-		private List<string> _headerDirectories = new List<string>();
-
 		private IPathResolver _pathResolver = null;
-
-		public List<string> HeaderDirectories
-		{
-			get { return _headerDirectories; }
-		}
 
 		public SolutionParser(IPathResolver pathResolver)
 		{
 			_pathResolver = pathResolver;
 		}
 
-		public List<CompileCommand> CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, Action<CompileCommand> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
-
-			List<CompileCommand> result = new List<CompileCommand>();
 
 			DTE dte = project.DTE;
 			Guid projectGuid = Utility.ProjectUtility.ReloadProject(project);
@@ -69,7 +60,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			else
 			{
 				Logging.Logging.LogWarning("Project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\" could not be converted to VCProject, skipping.");
-				return result;
+				return;
 			}
 
 			string projectConfigurationName = "";
@@ -144,7 +135,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					CompileCommand command = CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
 					if (command != null)
 					{
-						result.Add(command);
+						lambda(command);
 					}
 				}
 
@@ -152,15 +143,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				{
 					Utility.ProjectUtility.UnloadProject(projectGuid, dte);
 				}
-
-				_headerDirectories = _headerDirectories.Distinct().ToList();
 			}
 			else
 			{
 				Logging.Logging.LogError("No project configuration found. Skipping this project");
 			}
-
-			return result;
 		}
 
 		private CompileCommand CreateCompileCommand(ProjectItem item, string commandFlags, string vcStandard, string cStandard, bool isMakefileProject)
@@ -192,13 +179,6 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 							}
 						}
 					}
-				}
-
-				bool onlyCheckExtension = false;
-				if (compilerTool == null || !compilerTool.isValid())
-				{
-					Logging.Logging.LogInfo("Unable to retrieve build tool. Using extension white-list to determine file type.");
-					onlyCheckExtension = true;
 				}
 
 				if (CheckIsSourceFile(item))
@@ -264,24 +244,6 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					return command;
 				}
-				else if (CheckIsHeaderFile(item, onlyCheckExtension))
-				{
-					if (ProjectUtility.HasProperty(item.Properties, "FullPath"))
-					{
-						string propValue = item.Properties.Item("FullPath").Value.ToString();
-
-						int i = propValue.LastIndexOf('\\');
-
-						propValue = propValue.Substring(0, i);
-
-						_headerDirectories.Add(propValue);
-					}
-					return null;
-				}
-				else
-				{
-					Logging.Logging.LogInfo("Item discarded, wrong code model");
-				}
 			}
 			catch (Exception e)
 			{
@@ -338,31 +300,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				return true;
 			}
 
-			return false;
-		}
-
-		static private bool CheckIsHeaderFile(EnvDTE.ProjectItem item, bool onlyCheckExtension)
-		{
-			if (!onlyCheckExtension) // if the tool is null it's probably not a normal VC project, indicating that the file code model is unavailable
-			{
-				try
-				{
-					if (ProjectUtility.HasProperty(item.Properties, "ItemType") && item.Properties.Item("ItemType").Value.ToString() == "ClInclude")
-					{
-						Logging.Logging.LogInfo("Accepting item because of its \"ItemType\" property");
-						return true;
-					}
-				}
-				catch (Exception e)
-				{
-					Logging.Logging.LogError("Exception: " + e.Message);
-				}
-			}
-			else if (_headerExtensionWhiteList.Contains(GetFileExtension(item).ToLower()))
-			{
-				return true;
-			}
-			
+			Logging.Logging.LogInfo("Discarding item because of wrong code model");
 			return false;
 		}
 

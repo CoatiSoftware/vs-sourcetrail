@@ -112,7 +112,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return message;
 		}
 
-		public static string CreateCreateProjectMessage(string cdbPath, List<string> headerPaths)
+		public static string CreateCreateProjectMessage(string cdbPath)
 		{
 			string message = s_createCdbProjectPrefix;
 
@@ -121,13 +121,6 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			message += cdbPath;
 
 			message += s_divider;
-
-			foreach(string path in headerPaths)
-			{
-				message += path;
-
-				message += s_divider;
-			}
 
 			message += s_ideId;
 

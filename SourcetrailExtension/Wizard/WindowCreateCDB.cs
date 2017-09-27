@@ -32,7 +32,6 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			public SolutionParser.CompilationDatabaseSettings _cdbSettings;
 			public string _cdbDirectory;
 			public string _cdbName;
-			public List<string> _headerDirectories;
 		}
 
 		public delegate void OnFinishedCreatingCdb(CreationResult result);
@@ -47,7 +46,6 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private string _fileName = "";
 		private string _cStandard = "";
 		private string _solutionDir = "";
-		private List<string> _headerDirectories;
 
 		private SolutionParser.CompilationDatabaseSettings _cdb = null;
 
@@ -141,12 +139,10 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			result._cdbSettings = null;
 			result._cdbDirectory = "";
 			result._cdbName = "";
-			result._headerDirectories = new List<string>();
 
 			Logging.Logging.LogInfo("Starting to create CDB");
 
 			SolutionParser.CompilationDatabaseSettings cdbSettings = null;
-			_headerDirectories = new List<string>();
 
 			try
 			{
@@ -179,7 +175,6 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			result._cdbSettings = cdbSettings;
 			result._cdbDirectory = _targetDir;
 			result._cdbName = _fileName;
-			result._headerDirectories = _headerDirectories;
 
 			Logging.Logging.LogInfo("Done creating CDB");
 
@@ -211,29 +206,28 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 						{
 							SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
 
-							List<CompileCommand> commands = solutionParser.CreateCompileCommands(project, _configurationName, _platformName, _cStandard);
+							solutionParser.CreateCompileCommands(
+								project, _configurationName, _platformName, _cStandard,
+								(CompileCommand command) => {
+									string serializedCommand = "";
+									foreach (string line in command.SerializeToJson().Split('\n'))
+									{
+										serializedCommand += "  " + line + "\n";
+									}
+									serializedCommand = serializedCommand.TrimEnd('\n');
+
+									fileWriter.PushMessage(serializedCommand + ",\n");
+								}
+							);
 
 							lock (_lockObject)
 							{
 								projectsProcessed++;
-								_headerDirectories.AddRange(solutionParser.HeaderDirectories);
 							}
 
 							float relativProgress = (float)projectsProcessed / (float)_projects.Count;
 							Logging.Logging.LogInfo("Processing project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\"");
 							backgroundWorker1.ReportProgress((int)(relativProgress * 100), "Processing project \"" + project.Name + "\"");
-
-							foreach (CompileCommand command in commands)
-							{
-								string serializedCommand = "";
-								foreach (string line in command.SerializeToJson().Split('\n'))
-								{
-									serializedCommand += "  " + line + "\n";
-								}
-								serializedCommand = serializedCommand.TrimEnd('\n');
-
-								fileWriter.PushMessage(serializedCommand + ",\n");
-							}
 						}
 						catch (Exception e)
 						{

@@ -53,7 +53,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 		private void button_import_Click(object sender, EventArgs e)
 		{
-			string message = Utility.NetworkProtocolUtility.CreateCreateProjectMessage(_creationResult._cdbDirectory + "\\" + _creationResult._cdbName + ".json", _creationResult._headerDirectories);
+			string message = Utility.NetworkProtocolUtility.CreateCreateProjectMessage(_creationResult._cdbDirectory + "\\" + _creationResult._cdbName + ".json");
 
 			Utility.AsynchronousClient.Send(message);
 
