@@ -1,6 +1,14 @@
 # Changelog
 
 
+## 1.0.6
+
+**2017-10-01**
+
+* Fixes
+	* Avoids writing a trailing comma to the clang compilation database ([issue #10](https://github.com/CoatiSoftware/vs-sourcetrail/issues/10)).
+
+
 ## 1.0.5
 
 **2017-09-27**
