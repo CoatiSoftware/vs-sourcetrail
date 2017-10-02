@@ -45,7 +45,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, Action<CompileCommand, bool> lambda)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, Action<CompileCommand, bool> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -108,6 +108,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					commandFlags += _compatibilityVersionFlag + " ";
 
+					if (!string.IsNullOrWhiteSpace(additionalClangOptions))
+					{
+						commandFlags += additionalClangOptions;
+					}
+
 					foreach (string dir in includeDirectories)
 					{
 						commandFlags += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
@@ -162,7 +167,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 				if (dte == null)
 				{
-					Logging.Logging.LogError("Failed to retreive DTE object. Abort creating command object.");
+					Logging.Logging.LogError("Failed to retrieve DTE object. Abort creating command object.");
 				}
 
 				IVCFileWrapper vcFile = VCFileWrapperFactory.create(item.Object);

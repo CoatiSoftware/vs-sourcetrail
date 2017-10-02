@@ -36,7 +36,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 		}
 
-		public delegate void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard);
+		public delegate void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions);
 
 		// public List<SolutionProject> m_projects = new List<SolutionProject>();
 		public Utility.SolutionUtility.SolutionStructure _projectStructure = new Utility.SolutionUtility.SolutionStructure();
@@ -76,6 +76,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			InitTextBoxTargetDirectory();
 			InitTextBoxFileName();
 			InitComboBoxCStandard();
+			InitTextBoxAdditionalClangOptions();
 		}
 
 		private void InitComboBoxConfigurations()
@@ -241,6 +242,20 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 		}
 
+		private void InitTextBoxAdditionalClangOptions()
+		{
+			if (_cdb == null)
+			{
+				Logging.Logging.LogInfo("Setting additional clang options to default empty string");
+				textBoxAdditionalClangOptions.Text = "";
+			}
+			else
+			{
+				Logging.Logging.LogInfo("Setting additional clang options to recent: '" + _cdb.AdditionalClangOptions + "'");
+				textBoxAdditionalClangOptions.Text = _cdb.AdditionalClangOptions;
+			}
+		}
+
 		private void buttonCancel_Click(object sender, EventArgs e)
 		{
 			Logging.Logging.LogInfo("Close button pressed. Aborting.");
@@ -292,8 +307,12 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 					}
 
 					Logging.Logging.LogInfo("Setting C standard flag to " + cStandard);
+					
+					string additionalClangOptions = textBoxAdditionalClangOptions.Text.Trim();
 
-					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard);
+					Logging.Logging.LogInfo("Additional clang options: " + additionalClangOptions);
+
+					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions);
 					Close();
 				}
 				else

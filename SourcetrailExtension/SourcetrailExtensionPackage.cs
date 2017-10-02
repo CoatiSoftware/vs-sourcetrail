@@ -343,7 +343,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			Utility.AsynchronousClient.Send(message);
 		}
 
-		private void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard)
+		private void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions)
 		{
 			DTE dte = (DTE)GetService(typeof(DTE));
 
@@ -356,6 +356,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			createCdbWindow.CStandard = cStandard;
 			createCdbWindow.ThreadCount = (int)ThreadCount;
 			createCdbWindow.SolutionDir = Utility.SolutionUtility.GetSolutionPath(dte);
+			createCdbWindow.AdditionalClangOptions = additionalClangOptions;
 
 			createCdbWindow.Cdb = _recentSettingsList.GetCdbForSolution(createCdbWindow.SolutionDir, targetDir + "\\" + fileName + ".json");
 
