@@ -27,6 +27,6 @@ namespace VCProjectEngineWrapper
 		string GetToolPath();
 		string[] GetAdditionalIncludeDirectories();
 		string[] GetPreprocessorDefinitions();
-		string GetForcedIncludeFiles();
+		string[] GetForcedIncludeFiles();
 	}
 }
