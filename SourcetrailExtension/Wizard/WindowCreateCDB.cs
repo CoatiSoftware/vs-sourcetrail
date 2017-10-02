@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2017 Coati Software OG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -181,6 +181,43 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			return result;
 		}
 
+		private void CreateCompilationCommands(Utility.QueuedFileWriter fileWriter, EnvDTE.Project project, ref int projectsProcessed, bool lastProject = false)
+		{
+			try
+			{
+				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
+
+				solutionParser.CreateCompileCommands(
+					project, _configurationName, _platformName, _cStandard,
+					(CompileCommand command, bool lastFile) => {
+						string serializedCommand = "";
+						foreach (string line in command.SerializeToJson().Split('\n'))
+						{
+							serializedCommand += "  " + line + "\n";
+						}
+						serializedCommand = serializedCommand.TrimEnd('\n');
+
+						fileWriter.PushMessage(serializedCommand + (lastProject && lastFile ? "\n" : ",\n"));
+					}
+				);
+
+				lock (_lockObject)
+				{
+					projectsProcessed++;
+				}
+
+				float relativProgress = (float)projectsProcessed / (float)_projects.Count;
+				Logging.Logging.LogInfo("Processing project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\"");
+				backgroundWorker1.ReportProgress((int)(relativProgress * 100), "Processing project \"" + project.Name + "\"");
+			}
+			catch (Exception e)
+			{
+				Logging.Logging.LogError("Failed to create CDB for project with exception: " + e.Message);
+				Logging.Logging.LogError("Stack Trace: " + e.StackTrace);
+				throw (e);
+			}
+		}
+
 		private void CreateCompilationDatabase()
 		{
 			File.WriteAllText(_targetDir + "\\" + _fileName + ".json", "");
@@ -196,45 +233,13 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				List<Task> tasks = new List<Task>();
 
 				int projectsProcessed = 0;
-				foreach (EnvDTE.Project project in _projects)
+				foreach (EnvDTE.Project project in _projects.GetRange(0, _projects.Count - 1))
 				{
 					Logging.Logging.LogInfo("Scheduling project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\" for parsing.");
 
 					Task task = factory.StartNew(() =>
 					{
-						try
-						{
-							SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
-
-							solutionParser.CreateCompileCommands(
-								project, _configurationName, _platformName, _cStandard,
-								(CompileCommand command) => {
-									string serializedCommand = "";
-									foreach (string line in command.SerializeToJson().Split('\n'))
-									{
-										serializedCommand += "  " + line + "\n";
-									}
-									serializedCommand = serializedCommand.TrimEnd('\n');
-
-									fileWriter.PushMessage(serializedCommand + ",\n");
-								}
-							);
-
-							lock (_lockObject)
-							{
-								projectsProcessed++;
-							}
-
-							float relativProgress = (float)projectsProcessed / (float)_projects.Count;
-							Logging.Logging.LogInfo("Processing project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\"");
-							backgroundWorker1.ReportProgress((int)(relativProgress * 100), "Processing project \"" + project.Name + "\"");
-						}
-						catch (Exception e)
-						{
-							Logging.Logging.LogError("Failed to create CDB for project with exception: " + e.Message);
-							Logging.Logging.LogError("Stack Trace: " + e.StackTrace);
-							throw (e);
-						}
+						CreateCompilationCommands(fileWriter, project, ref projectsProcessed);
 					});
 
 					tasks.Add(task);
@@ -243,6 +248,8 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				int threadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
 
 				Task.WaitAll(tasks.ToArray());
+
+				CreateCompilationCommands(fileWriter, _projects[_projects.Count - 1], ref projectsProcessed, true);
 
 				fileWriter.StopWorking();
 

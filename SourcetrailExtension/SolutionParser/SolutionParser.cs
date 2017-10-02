@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2017 Coati Software OG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, Action<CompileCommand> lambda)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, Action<CompileCommand, bool> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -130,12 +130,15 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				bool isMakefileProject = vcProjectConfiguration.isMakefileConfiguration();
 
 				// create command objects for all applicable project items
-				foreach (EnvDTE.ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
 				{
-					CompileCommand command = CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
-					if (command != null)
+					List<CompileCommand> compileCommands = Utility.ProjectUtility.GetProjectItems(project).Select(item =>
 					{
-						lambda(command);
+						return CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
+					}).Where(command => command != null).ToList();
+
+					for (int i = 0; i < compileCommands.Count; i++)
+					{
+						lambda(compileCommands[i], i == compileCommands.Count - 1);
 					}
 				}
 
@@ -333,7 +336,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		{
 			Logging.Logging.LogInfo("Determining CL.exe (C++ compiler) version");
 
-            int majorCompilerVersion = -1;
+			int majorCompilerVersion = -1;
 
 			{
 				IVCCLCompilerToolWrapper compilerTool = vcProjectConfiguration.GetCLCompilerTool();
