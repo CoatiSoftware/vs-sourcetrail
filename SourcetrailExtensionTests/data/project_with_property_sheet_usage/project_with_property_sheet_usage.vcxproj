@@ -57,19 +57,8 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="include_property_sheet.props" />
-    <Import Project="preprocessor_property_sheet.props" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="include_property_sheet.props" />
-    <Import Project="preprocessor_property_sheet.props" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="include_property_sheet.props" />
-    <Import Project="preprocessor_property_sheet.props" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), TestProjectSettings.props))\TestProjectSettings.props" Label="TestProjectSettings" />
     <Import Project="include_property_sheet.props" />
     <Import Project="preprocessor_property_sheet.props" />
   </ImportGroup>
