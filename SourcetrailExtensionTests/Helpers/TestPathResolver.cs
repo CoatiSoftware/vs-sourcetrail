@@ -15,25 +15,26 @@
  */
 
 using CoatiSoftware.SourcetrailExtension.Utility;
+using System;
 using VCProjectEngineWrapper;
 
 namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.Helpers
 {
 	class TestPathResolver : IPathResolver
 	{
-		public override string GetCompilationDatabaseFilePath()
+		public override string GetAsRelativeCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			return "<CompilationDatabaseFilePath>";
+			if (path.Length > 0 && !path.StartsWith("<") && System.IO.Path.IsPathRooted(path))
+			{
+				string projectDirectory = new Uri(project.GetProjectDirectory()).LocalPath;
+				path = new Uri(projectDirectory).MakeRelativeUri(new Uri(path)).OriginalString.Replace('/', '\\');
+			}
+			return path;
 		}
 
-		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
+		public override string GetProjectDirectory(IVCProjectWrapper project)
 		{
-			if (path.Length > 0 && !path.StartsWith("<") && !System.IO.Path.IsPathRooted(path))
-			{
-				path = "<ProjectBaseDirectory>/" + path;
-			}
-
-			return path;
+			return "<ProjectBaseDirectory>/";
 		}
 
 		protected override string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig)

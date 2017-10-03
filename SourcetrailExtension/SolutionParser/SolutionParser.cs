@@ -237,10 +237,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					CompileCommand command = new CompileCommand();
 
 					string relativeFilePath = item.Properties.Item("RelativePath").Value.ToString();
-					command.File = _pathResolver.GetAsAbsoluteCanonicalPath(relativeFilePath, vcFile.GetProject());
-					command.File = command.File.Replace('\\', '/');
+					command.File = _pathResolver.GetAsRelativeCanonicalPath(relativeFilePath, vcFile.GetProject()).Replace('\\', '/');
 
-					command.Directory = _pathResolver.GetCompilationDatabaseFilePath();
+					command.Directory = _pathResolver.GetProjectDirectory(vcFile.GetProject()).Replace('\\', '/');
 
 					command.Command = "clang-tool " + commandFlags;
 
@@ -376,7 +375,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				List<string> finalDirectories = new List<string>();
 				foreach (string directory in platform.GetExecutableDirectories().Split(';'))
 				{
-					IPathResolver resolver = new VsPathResolver("");
+					IPathResolver resolver = new VsPathResolver();
 					finalDirectories.AddRange(resolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 				}
 

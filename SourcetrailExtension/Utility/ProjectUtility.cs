@@ -145,6 +145,11 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					{
 						includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetNMakeTool()));
 					}
+
+					includeDirectories = includeDirectories
+						.Select(x => x.Replace("\\\"", ""))
+						.Select(x => pathResolver.GetAsRelativeCanonicalPath(x, project))
+						.ToList();
 				}
 
 				try
@@ -154,7 +159,8 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					{
 						foreach (string directory in platform.GetIncludeDirectories())
 						{
-							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig)
+								.Select(x => x.Replace("\\\"", "")));
 						}
 					}
 				}
@@ -173,8 +179,6 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			Logging.Logging.LogInfo("Attempting to clean up.");
 
 			includeDirectories = includeDirectories
-				.Select(x => x.Replace("\\\"", ""))
-				.Select(x => pathResolver.GetAsAbsoluteCanonicalPath(x, project))
 				.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
 				.Where(x => !string.IsNullOrWhiteSpace(x))
 				.Distinct()

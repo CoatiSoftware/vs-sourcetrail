@@ -193,7 +193,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		{
 			try
 			{
-				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
+				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver());
 
 				solutionParser.CreateCompileCommands(
 					project, _configurationName, _platformName, _cStandard, _additionalClangOptions,

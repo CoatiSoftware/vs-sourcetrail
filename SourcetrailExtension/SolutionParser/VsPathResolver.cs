@@ -22,26 +22,19 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 {
 	public class VsPathResolver : IPathResolver
 	{
-		private string _compilationDatabaseFilePath = "";
-
-		public VsPathResolver(string compilationDatabaseFilePath)
+		public override string GetAsRelativeCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			_compilationDatabaseFilePath = compilationDatabaseFilePath.Replace('\\', '/');
-		}
-
-		public override string GetCompilationDatabaseFilePath()
-		{
-			return _compilationDatabaseFilePath;
-		}
-
-		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
-		{
-			if (path.Length > 0 && !System.IO.Path.IsPathRooted(path))
+			if (path.Length > 0 && System.IO.Path.IsPathRooted(path))
 			{
-				path = project.GetProjectDirectory() + path;
-				path = new Uri(path).LocalPath;
+				string projectDirectory = GetProjectDirectory(project);
+				path = new Uri(projectDirectory).MakeRelativeUri(new Uri(path)).OriginalString.Replace('/', '\\');
 			}
 			return path;
+		}
+
+		public override string GetProjectDirectory(IVCProjectWrapper project)
+		{
+			return new Uri(project.GetProjectDirectory()).LocalPath;
 		}
 
 		protected override string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig)
