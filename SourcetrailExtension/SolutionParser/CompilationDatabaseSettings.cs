@@ -32,6 +32,8 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		private string _configurationName = "";
 		private string _platformName = "";
 
+		private string _additionalClangOptions = "";
+
 		public string Name
 		{
 			get { return _name; }
@@ -72,6 +74,12 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		{
 			get { return _platformName; }
 			set { _platformName = value; }
+		}
+
+		public string AdditionalClangOptions
+		{
+			get { return _additionalClangOptions; }
+			set { _additionalClangOptions = value; }
 		}
 
 		public bool CheckCdbExists()
@@ -129,6 +137,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			XmlElement platform = doc.CreateElement("platform");
 			platform.InnerText = _platformName;
 
+			XmlElement additionalClangOptions = doc.CreateElement("additionalClangOptions");
+			additionalClangOptions.InnerText = _additionalClangOptions;
+
 			root.AppendChild(name);
 			root.AppendChild(sourceProject);
 			root.AppendChild(directory);
@@ -136,6 +147,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			root.AppendChild(includedProjects);
 			root.AppendChild(configuration);
 			root.AppendChild(platform);
+			root.AppendChild(additionalClangOptions);
 
 			return root;
 		}
@@ -209,8 +221,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			XmlNode platformNode = node.SelectSingleNode("platform");
 			string platform = platformNode.InnerText;
 
+			XmlNode additionalClangOptionsNode = node.SelectSingleNode("additionalClangOptions");
+			string additionalClangOptions = additionalClangOptionsNode.InnerText;
+
 			// if cdb file is not there anymore, set the modified date back so that a full update will be performed
-			if(System.IO.File.Exists(directory + "\\" + name + ".json") == false)
+			if (System.IO.File.Exists(directory + "\\" + name + ".json") == false)
 			{
 				updatedDate = System.DateTime.MinValue;
 			}
@@ -222,6 +237,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			cdb.IncludedProjects = includedProjectsList;
 			cdb.ConfigurationName = configuration;
 			cdb.PlatformName = platform;
+			cdb.AdditionalClangOptions = additionalClangOptions;
 
 			return cdb;
 		}

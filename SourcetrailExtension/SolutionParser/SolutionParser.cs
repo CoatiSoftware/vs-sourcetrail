@@ -45,7 +45,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, Action<CompileCommand, bool> lambda)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, Action<CompileCommand, bool> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -108,6 +108,11 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 					commandFlags += _compatibilityVersionFlag + " ";
 
+					if (!string.IsNullOrWhiteSpace(additionalClangOptions))
+					{
+						commandFlags += additionalClangOptions;
+					}
+
 					foreach (string dir in includeDirectories)
 					{
 						commandFlags += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
@@ -162,7 +167,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 				if (dte == null)
 				{
-					Logging.Logging.LogError("Failed to retreive DTE object. Abort creating command object.");
+					Logging.Logging.LogError("Failed to retrieve DTE object. Abort creating command object.");
 				}
 
 				IVCFileWrapper vcFile = VCFileWrapperFactory.create(item.Object);
@@ -232,10 +237,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					CompileCommand command = new CompileCommand();
 
 					string relativeFilePath = item.Properties.Item("RelativePath").Value.ToString();
-					command.File = _pathResolver.GetAsAbsoluteCanonicalPath(relativeFilePath, vcFile.GetProject());
-					command.File = command.File.Replace('\\', '/');
+					command.File = _pathResolver.GetAsRelativeCanonicalPath(relativeFilePath, vcFile.GetProject()).Replace('\\', '/');
 
-					command.Directory = _pathResolver.GetCompilationDatabaseFilePath();
+					command.Directory = _pathResolver.GetProjectDirectory(vcFile.GetProject()).Replace('\\', '/');
 
 					command.Command = "clang-tool " + commandFlags;
 
@@ -371,7 +375,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				List<string> finalDirectories = new List<string>();
 				foreach (string directory in platform.GetExecutableDirectories().Split(';'))
 				{
-					IPathResolver resolver = new VsPathResolver("");
+					IPathResolver resolver = new VsPathResolver();
 					finalDirectories.AddRange(resolver.ResolveVsMacroInPath(directory, vcProjectConfig));
 				}
 

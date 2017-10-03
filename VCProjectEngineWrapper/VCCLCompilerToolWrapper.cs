@@ -31,6 +31,7 @@ namespace VCProjectEngineWrapper
 		: IVCCLCompilerToolWrapper
 	{
 		private VCCLCompilerTool _wrapped = null;
+		private IVCRulePropertyStorage _wrappedRules = null;
 
 		public
 #if (VS2012)
@@ -45,11 +46,12 @@ namespace VCProjectEngineWrapper
 			(object wrapped)
 		{
 			_wrapped = wrapped as VCCLCompilerTool;
+			_wrappedRules = wrapped as IVCRulePropertyStorage;
 		}
 
 		public bool isValid()
 		{
-			return (_wrapped != null);
+			return (_wrapped != null && _wrappedRules != null);
 		}
 
 		public string GetWrappedVersion()
@@ -79,17 +81,17 @@ namespace VCProjectEngineWrapper
 
 		public string[] GetAdditionalIncludeDirectories()
 		{
-			return _wrapped.AdditionalIncludeDirectories.Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("AdditionalIncludeDirectories").Split(';');
 		}
 
 		public string[] GetPreprocessorDefinitions()
 		{
-			return _wrapped.PreprocessorDefinitions.Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("PreprocessorDefinitions").Split(';');
 		}
 
-		public string GetForcedIncludeFiles()
+		public string[] GetForcedIncludeFiles()
 		{
-			return _wrapped.ForcedIncludeFiles;
+			return _wrappedRules.GetEvaluatedPropertyValue("ForcedIncludeFiles").Split(';');
 		}
 	}
 }

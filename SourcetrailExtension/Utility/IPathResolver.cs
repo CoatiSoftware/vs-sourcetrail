@@ -64,9 +64,9 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return pathList;
 		}
 
-		public abstract string GetCompilationDatabaseFilePath();
+		public abstract string GetAsRelativeCanonicalPath(string path, IVCProjectWrapper project);
 
-		public abstract string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project);
+		public abstract string GetProjectDirectory(IVCProjectWrapper project);
 
 		protected abstract string ResolveVsMacro(string potentialMacro, IVCConfigurationWrapper vcProjectConfig);
 	}
