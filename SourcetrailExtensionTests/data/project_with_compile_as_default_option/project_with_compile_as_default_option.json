@@ -1,22 +1,22 @@
 [
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c11  \"<ProjectBaseDirectory>/source/source_file.c\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c11  \"<ProjectBaseDirectory>/source/source_file.c\"",
     "file": "<ProjectBaseDirectory>/source/source_file.c"
   },
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cc\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cc\"",
     "file": "<ProjectBaseDirectory>/source/source_file.cc"
   },
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cpp\"",
     "file": "<ProjectBaseDirectory>/source/source_file.cpp"
   },
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cxx\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/source_file.cxx\"",
     "file": "<ProjectBaseDirectory>/source/source_file.cxx"
   }
 ]

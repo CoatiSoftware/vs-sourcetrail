@@ -1,12 +1,12 @@
 [
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/ClCompile.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/ClCompile.cpp\"",
     "file": "<ProjectBaseDirectory>/source/ClCompile.cpp"
   },
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/CustomBuild.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/source/CustomBuild.cpp\"",
     "file": "<ProjectBaseDirectory>/source/CustomBuild.cpp"
   }
 ]
