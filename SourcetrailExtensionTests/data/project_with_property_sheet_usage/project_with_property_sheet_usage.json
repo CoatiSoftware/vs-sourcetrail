@@ -1,12 +1,12 @@
 [
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(ProjectDir)>include_folder_from_property_sheet\"  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D PREPROCESSOR_DEFINITION_FROM_PROPERTY_SHEET  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(ProjectDir)>custom_include_folder\"  -isystem \"<Macro $(ProjectDir)>debug_include_folder_from_property_sheet\"  -isystem \"<Macro $(ProjectDir)>include_folder_from_property_sheet\"  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D CUSTOM_PREPROCESSOR_DEFINITION  -D DEBUG_PREPROCESSOR_DEFINITION_FROM_PROPERTY_SHEET  -D PREPROCESSOR_DEFINITION_FROM_PROPERTY_SHEET  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
     "file": "<ProjectBaseDirectory>/main.cpp"
   },
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(ProjectDir)>custom_include_folder\"  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(ProjectDir)>custom_include_folder\"  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _CONSOLE  -D CUSTOM_PREPROCESSOR_DEFINITION -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
     "file": "<ProjectBaseDirectory>/main.cpp"
   }
 ]

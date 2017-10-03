@@ -22,34 +22,36 @@ namespace VCProjectEngineWrapper
 #if (VS2012)
 		VCNMakeToolWrapperVs2012
 #elif (VS2013)
-        VCNMakeToolWrapperVs2013
+		VCNMakeToolWrapperVs2013
 #elif (VS2015)
 		VCNMakeToolWrapperVs2015
 #elif (VS2017)
 		VCNMakeToolWrapperVs2017
 #endif
-        : IVCNMakeToolWrapper
+		: IVCNMakeToolWrapper
 	{
 		private VCNMakeTool _wrapped = null;
+		private IVCRulePropertyStorage _wrappedRules = null;
 
 		public
 #if (VS2012)
 			VCNMakeToolWrapperVs2012
 #elif (VS2013)
-            VCNMakeToolWrapperVs2013
+			VCNMakeToolWrapperVs2013
 #elif (VS2015)
 			VCNMakeToolWrapperVs2015
 #elif (VS2017)
 			VCNMakeToolWrapperVs2017
 #endif
-            (object wrapped)
+			(object wrapped)
 		{
 			_wrapped = wrapped as VCNMakeTool;
+			_wrappedRules = wrapped as IVCRulePropertyStorage;
 		}
 
 		public bool isValid()
 		{
-			return (_wrapped != null);
+			return (_wrapped != null && _wrappedRules != null);
 		}
 
 		public string GetWrappedVersion()
@@ -64,17 +66,17 @@ namespace VCProjectEngineWrapper
 
 		public string[] GetIncludeSearchPaths()
 		{
-			return _wrapped.IncludeSearchPath.Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("NMakeIncludeSearchPath").Split(';');
 		}
 
 		public string[] GetPreprocessorDefinitions()
 		{
-			return _wrapped.PreprocessorDefinitions.Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("NMakePreprocessorDefinitions").Split(';');
 		}
 
-		public string GetForcedIncludes()
+		public string[] GetForcedIncludes()
 		{
-			return _wrapped.ForcedIncludes;
+			return _wrappedRules.GetEvaluatedPropertyValue("NMakeForcedIncludes").Split(';');
 		}
 
 	}

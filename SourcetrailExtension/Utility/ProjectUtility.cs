@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -130,51 +130,20 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			// get additional include directories
 			// source: http://www.mztools.com/articles/2014/MZ2014005.aspx
 
-			Logging.Logging.LogInfo("Attempting to retreive Include Directories for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
+			Logging.Logging.LogInfo("Attempting to retrieve Include Directories for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> includeDirectories = new List<string>();
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
-				bool inspectPropertySheets = true;
-
 				{
-					List<string> directIncludeDirectories = new List<string>();
 					if (vcProjectConfig.GetCLCompilerTool() != null && vcProjectConfig.GetCLCompilerTool().isValid())
 					{
-						directIncludeDirectories = GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool());
+						includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()));
 					}
 					else if (vcProjectConfig.GetNMakeTool() != null && vcProjectConfig.GetNMakeTool().isValid())
 					{
-						directIncludeDirectories = GetIncludeDirectories(vcProjectConfig.GetNMakeTool());
-					}
-
-					directIncludeDirectories.ForEach(delegate (string directory)
-					{
-						if (directory.Equals("$(NOINHERIT)"))
-						{
-							inspectPropertySheets = false;
-						}
-
-						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-					});
-				}
-
-				if (inspectPropertySheets)
-				{
-					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfig.GetPropertySheets())
-					{
-						Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
-
-						GetIncludeDirectories(vcPropertySheet.GetCLCompilerTool()).ForEach(delegate (string directory)
-						{
-							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-						});
-
-						GetIncludeDirectories(vcPropertySheet.GetResourceCompilerTool()).ForEach(delegate (string directory)
-						{
-							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-						});
+						includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetNMakeTool()));
 					}
 				}
 
@@ -191,37 +160,25 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				}
 				catch (Exception e)
 				{
-					Logging.Logging.LogError("Failed to retreive platform include directories: " + e.Message);
+					Logging.Logging.LogError("Failed to retrieve platform include directories: " + e.Message);
 					return new List<string>();
 				}
 			}
 			else
 			{
-				Logging.Logging.LogWarning("Could not retreive Project Configuration. No include directories could be retreived.");
+				Logging.Logging.LogWarning("Could not retrieve Project Configuration. No include directories could be retreived.");
 				return new List<string>();
 			}
 
-			includeDirectories = includeDirectories.Distinct().ToList();
-
 			Logging.Logging.LogInfo("Attempting to clean up.");
 
-			for (int i = 0; i < includeDirectories.Count; i++)
-			{
-				string path = includeDirectories.ElementAt(i);
-				path = path.Replace("\\\"", "");
-				path = pathResolver.GetAsAbsoluteCanonicalPath(path, project);
-				path = path.Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
-
-				if (path.Length == 0 || path.Equals("$(NOINHERIT)"))
-				{
-					includeDirectories.RemoveAt(i);
-					i--;
-				}
-				else
-				{
-					includeDirectories[i] = path;
-				}
-			}
+			includeDirectories = includeDirectories
+				.Select(x => x.Replace("\\\"", ""))
+				.Select(x => pathResolver.GetAsAbsoluteCanonicalPath(x, project))
+				.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
+				.Where(x => !string.IsNullOrWhiteSpace(x))
+				.Distinct()
+				.ToList();
 
 			Logging.Logging.LogInfo("Found " + includeDirectories.Count.ToString() + " distinct include directories.");
 
@@ -272,61 +229,24 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 		static public List<string> GetPreprocessorDefinitions(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfiguration)
 		{
-			Logging.Logging.LogInfo("Attempting to retreive Preprocessor Definitions for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
+			Logging.Logging.LogInfo("Attempting to retrieve Preprocessor Definitions for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> preprocessorDefinitions = new List<string>();
-			
+
 			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
 			{
-				bool inspectPropertySheets = true;
-
+				if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
 				{
-					List<string> directPreprocessorDefinitions = new List<string>();
-					if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
-					{
-						directPreprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetCLCompilerTool());
-					}
-					else if (vcProjectConfiguration.GetNMakeTool() != null && vcProjectConfiguration.GetNMakeTool().isValid())
-					{
-						directPreprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetNMakeTool());
-					}
-
-					directPreprocessorDefinitions.ForEach(delegate (string directory)
-					{
-						if (directory.Equals("$(NOINHERIT)"))
-						{
-							inspectPropertySheets = false;
-						}
-
-						preprocessorDefinitions.Add(directory);
-					});
+					preprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetCLCompilerTool());
 				}
-
-				if (inspectPropertySheets)
-				{ 
-					foreach (IVCPropertySheetWrapper vcPropertySheet in vcProjectConfiguration.GetPropertySheets())
-					{
-						Logging.Logging.LogInfo("Processing property sheet: " + vcPropertySheet.getName());
-						preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetCLCompilerTool()));
-						preprocessorDefinitions.AddRange(GetPreprocessorDefinitions(vcPropertySheet.GetResourceCompilerTool()));
-					}
+				else if (vcProjectConfiguration.GetNMakeTool() != null && vcProjectConfiguration.GetNMakeTool().isValid())
+				{
+					preprocessorDefinitions = GetPreprocessorDefinitions(vcProjectConfiguration.GetNMakeTool());
 				}
 			}
 			else
 			{
-				Logging.Logging.LogWarning("Could not retreive project configuration.");
-			}
-
-			preprocessorDefinitions = preprocessorDefinitions.Distinct().ToList();
-
-			for (int i = 0; i < preprocessorDefinitions.Count; i++)
-			{
-				string preprocessorDefinition = preprocessorDefinitions.ElementAt(i);
-				if (preprocessorDefinition.Length == 0 || preprocessorDefinition.Equals("$(NOINHERIT)"))
-				{
-					preprocessorDefinitions.RemoveAt(i);
-					i--;
-				}
+				Logging.Logging.LogWarning("Could not retrieve project configuration.");
 			}
 
 			Logging.Logging.LogInfo("Found " + preprocessorDefinitions.Count.ToString() + " distinct preprocessor definitions.");
@@ -339,10 +259,11 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			List<string> preprocessorDefinitions = new List<string>();
 			if (compilerTool != null && compilerTool.isValid())
 			{
-				foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
-				{
-					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
-				}
+				preprocessorDefinitions = compilerTool.GetPreprocessorDefinitions()
+					.Select(x => x.Replace("\\\"", "\""))
+					.Where(x => !string.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
 			}
 			else
 			{
@@ -356,10 +277,11 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			List<string> preprocessorDefinitions = new List<string>();
 			if (nmakeTool != null && nmakeTool.isValid())
 			{
-				foreach (string preprocessorDefinition in nmakeTool.GetPreprocessorDefinitions())
-				{
-					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
-				}
+				preprocessorDefinitions = nmakeTool.GetPreprocessorDefinitions()
+					.Select(x => x.Replace("\\\"", "\""))
+					.Where(x => !string.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
 			}
 			else
 			{
@@ -373,10 +295,11 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			List<string> preprocessorDefinitions = new List<string>();
 			if (compilerTool != null && compilerTool.isValid())
 			{
-				foreach (string preprocessorDefinition in compilerTool.GetPreprocessorDefinitions())
-				{
-					preprocessorDefinitions.Add(preprocessorDefinition.Replace("\\\"", "\""));
-				}
+				preprocessorDefinitions = compilerTool.GetPreprocessorDefinitions()
+					.Select(x => x.Replace("\\\"", "\""))
+					.Where(x => !string.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
 			}
 			else
 			{
@@ -387,7 +310,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 		static public List<string> GetForcedIncludeFiles(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfiguration, IPathResolver pathResolver)
 		{
-			Logging.Logging.LogInfo("Attempting to retreive Forced Include Files for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
+			Logging.Logging.LogInfo("Attempting to retrieve Forced Include Files for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> forcedIncludeFiles = new List<string>();
 
@@ -395,44 +318,19 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			{
 				if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
 				{
-					foreach (string forcedIncludeFile in vcProjectConfiguration.GetCLCompilerTool().GetForcedIncludeFiles().Split(';'))
-					{
-						if (forcedIncludeFile.Length <= 0)
-						{
-							continue;
-						}
-						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfiguration));
-					}
+					forcedIncludeFiles = vcProjectConfiguration.GetCLCompilerTool().GetForcedIncludeFiles()
+						.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
+						.Where(x => !string.IsNullOrWhiteSpace(x))
+						.Distinct()
+						.ToList();
 				}
 				else if(vcProjectConfiguration.GetNMakeTool() != null && vcProjectConfiguration.GetNMakeTool().isValid())
 				{
-					foreach (string forcedIncludeFile in vcProjectConfiguration.GetNMakeTool().GetForcedIncludes().Split(';'))
-					{
-						if (forcedIncludeFile.Length <= 0)
-						{
-							continue;
-						}
-						forcedIncludeFiles.AddRange(pathResolver.ResolveVsMacroInPath(forcedIncludeFile, vcProjectConfiguration));
-					}
-				}
-			}
-
-			forcedIncludeFiles = forcedIncludeFiles.Distinct().ToList();
-
-			Logging.Logging.LogInfo("Attempting to clean up.");
-
-			for (int i = 0; i < forcedIncludeFiles.Count; i++)
-			{
-				string path = forcedIncludeFiles.ElementAt(i).Replace("\\", "/"); // backslashes would cause some string-escaping hassles...
-
-				if (path.Length == 0)
-				{
-					forcedIncludeFiles.RemoveAt(i);
-					i--;
-				}
-				else
-				{
-					forcedIncludeFiles[i] = path;
+					forcedIncludeFiles = vcProjectConfiguration.GetNMakeTool().GetForcedIncludes()
+						.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
+						.Where(x => !string.IsNullOrWhiteSpace(x))
+						.Distinct()
+						.ToList();
 				}
 			}
 
@@ -518,7 +416,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					}
 					else
 					{
-						Logging.Logging.LogError("Failed to retreive IVsHierarchy. Can't load project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "'");
+						Logging.Logging.LogError("Failed to retrieve IVsHierarchy. Can't load project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "'");
 					}
 				}
 				else
