@@ -28,9 +28,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.Helpers
 
 		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			if (path.Length > 0 && !path.StartsWith("<") && !System.IO.Path.IsPathRooted(path))
+			if (path.Length > 0 && !path.StartsWith("<"))
 			{
-				path = "<ProjectBaseDirectory>/" + path;
+				if (!System.IO.Path.IsPathRooted(path))
+				{
+					path = "<ProjectBaseDirectory>/" + path;
+				}
+				else if (path.StartsWith(project.GetProjectDirectory(), System.StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Work-around for paths Visual Studio already resolved for us
+					path = ResolveVsMacro("$(ProjectDir)", null) + path.Substring(project.GetProjectDirectory().Length);
+				}
 			}
 
 			return path;
