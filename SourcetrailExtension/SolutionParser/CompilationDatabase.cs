@@ -137,5 +137,26 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		{
 			_compileCommands.Clear();
 		}
+
+		public override bool Equals(object obj)
+		{
+			var database = obj as CompilationDatabase;
+			if (ReferenceEquals(this, database))
+			{
+				return true;
+			}
+
+			return database != null &&
+				   EqualityComparer<List<CompileCommand>>.Default.Equals(_compileCommands, database._compileCommands) &&
+				   CompileCommandCount == database.CompileCommandCount;
+		}
+
+		public override int GetHashCode()
+		{
+			var hashCode = 548601099;
+			hashCode = hashCode * -1521134295 + EqualityComparer<List<CompileCommand>>.Default.GetHashCode(_compileCommands);
+			hashCode = hashCode * -1521134295 + CompileCommandCount.GetHashCode();
+			return hashCode;
+		}
 	}
 }

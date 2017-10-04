@@ -1,0 +1,9 @@
+# Set default behavior to automatically normalize line endings.
+* text eol=crlf
+
+# Binary files
+*.[Dd][Ll][Ll] binary
+*.[Ii][Cc][Oo] binary
+*.[Pp][Nn][Gg] binary
+*.[Ss][Nn][Kk] binary
+

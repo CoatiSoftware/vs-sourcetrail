@@ -15,6 +15,7 @@
  */
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 {
@@ -95,6 +96,29 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				command = JsonConvert.DeserializeObject<CompileCommand>(serialized);
 			}
 			return command;
+		}
+
+		public override bool Equals(object obj)
+		{
+			var command = obj as CompileCommand;
+			if (ReferenceEquals(this, command))
+			{
+				return true;
+			}
+
+			return command != null &&
+				   Directory == command.Directory &&
+				   Command == command.Command &&
+				   File == command.File;
+		}
+
+		public override int GetHashCode()
+		{
+			var hashCode = -1659665107;
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Directory);
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Command);
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(File);
+			return hashCode;
 		}
 	}
 }
