@@ -31,14 +31,14 @@ Use Visual Studio to open the `SourcetrailExtension.sln` and build the project c
 
 __Hint:__ If the build fails with an error that reads `The "GetDeploymentPathFromVsixManifest" task failed unexpectedly.` try to run the `Reset the Visual Studio 2017 Experimental Instance` command first. 
 
-## Running the Extension in Debug Mode
-In oder to run the Sourcetrail Extension in debug mode, you need to adjust some settings. Open the `Properties` page of the `SourcetrailExtension` project and set the following values:
-* Under `Debug` -> `Start action` select `Start external program` and point the path to `path\to\vs\Common7\IDE\devenv.exe`
-* Under `Debug` -> `Start options` add `/rootsuffix Exp` as `Command line arguments`
-
 ## Running the Tests
 The `SourcetrailExtensionTests` project contains both, unit tests and integration tests. When running an integration test it will automatically fire up a new instance of Visual Studio (called Experimental Instance) and simulate calls to the extension inside this instance. To make this work you need to point Visual Studio the the appropriate .testsettings file: 
 * From the menu bar choose `Test` -> `Test Settings` -> `Select Test Settings File` and pick the `IntegrationTests.testsettings` file located at the root of this repository.
+
+## Contributing
+We really appreciate every possible kind of contributions. Pull-requests are greatly appreciated. If you want to submit one, please try to keep it as small as possible, so that we don't have to consider too many independent changes in the reviews. Better issue many small pull requests than one big one. That would let us pull smaller changes more quickly.
+
+Thanks to [Dakota Hawkins](https://github.com/dakotahawkins) for contributions.
 
 ## Project Structure
 The `SourcetrailExtension` solution contains several different projects. This section should explain their purpose.
