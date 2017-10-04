@@ -1,22 +1,22 @@
 ﻿namespace CoatiSoftware.SourcetrailExtension.Wizard
 {
-    partial class ProjectSetupWindow
-    {
-        private System.ComponentModel.IContainer components = null;
+	partial class ProjectSetupWindow
+	{
+		private System.ComponentModel.IContainer components = null;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        private void InitializeComponent()
-        {
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectSetupWindow));
 			this.buttonCancel = new System.Windows.Forms.Button();
@@ -39,12 +39,14 @@
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.labelCStandard = new System.Windows.Forms.Label();
 			this.treeViewProjects = new System.Windows.Forms.TreeView();
+			this.labelAdditionalClangOptions = new System.Windows.Forms.Label();
+			this.textBoxAdditionalClangOptions = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// buttonCancel
 			// 
 			this.helpProvider1.SetHelpString(this.buttonCancel, "Abort creation of the Compilation Database");
-			this.buttonCancel.Location = new System.Drawing.Point(12, 413);
+			this.buttonCancel.Location = new System.Drawing.Point(12, 441);
 			this.buttonCancel.Name = "buttonCancel";
 			this.helpProvider1.SetShowHelp(this.buttonCancel, true);
 			this.buttonCancel.Size = new System.Drawing.Size(92, 23);
@@ -57,7 +59,7 @@
 			// buttonCreate
 			// 
 			this.helpProvider1.SetHelpString(this.buttonCreate, "Start creation of the Compilation Database");
-			this.buttonCreate.Location = new System.Drawing.Point(178, 413);
+			this.buttonCreate.Location = new System.Drawing.Point(178, 441);
 			this.buttonCreate.Name = "buttonCreate";
 			this.helpProvider1.SetShowHelp(this.buttonCreate, true);
 			this.buttonCreate.Size = new System.Drawing.Size(92, 23);
@@ -73,28 +75,28 @@
 			this.comboBoxConfiguration.FormattingEnabled = true;
 			this.helpProvider1.SetHelpKeyword(this.comboBoxConfiguration, "Build configuration for Compilation Database");
 			this.helpProvider1.SetHelpString(this.comboBoxConfiguration, "The selected build configuration determines the compile flags for the Compilation" +
-        " Database");
+		" Database");
 			this.comboBoxConfiguration.Location = new System.Drawing.Point(87, 277);
 			this.comboBoxConfiguration.Name = "comboBoxConfiguration";
 			this.helpProvider1.SetShowHelp(this.comboBoxConfiguration, true);
 			this.comboBoxConfiguration.Size = new System.Drawing.Size(183, 21);
 			this.comboBoxConfiguration.TabIndex = 3;
 			this.toolTip1.SetToolTip(this.comboBoxConfiguration, "The selected build configuration determines the compile flags for the Compilation" +
-        " Database");
+		" Database");
 			// 
 			// comboBoxPlatform
 			// 
 			this.comboBoxPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxPlatform.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxPlatform, "The target platform determines some compiler flags included in the Compilation Da" +
-        "tabase");
+		"tabase");
 			this.comboBoxPlatform.Location = new System.Drawing.Point(87, 304);
 			this.comboBoxPlatform.Name = "comboBoxPlatform";
 			this.helpProvider1.SetShowHelp(this.comboBoxPlatform, true);
 			this.comboBoxPlatform.Size = new System.Drawing.Size(183, 21);
 			this.comboBoxPlatform.TabIndex = 4;
 			this.toolTip1.SetToolTip(this.comboBoxPlatform, "The target platform determines some compiler flags included in the Compilation Da" +
-        "tabase");
+		"tabase");
 			// 
 			// labelConfiguration
 			// 
@@ -192,14 +194,14 @@
 			this.comboBoxCStandard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxCStandard.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
-        "used for building.");
+		"used for building.");
 			this.comboBoxCStandard.Location = new System.Drawing.Point(87, 386);
 			this.comboBoxCStandard.Name = "comboBoxCStandard";
 			this.helpProvider1.SetShowHelp(this.comboBoxCStandard, true);
 			this.comboBoxCStandard.Size = new System.Drawing.Size(183, 21);
 			this.comboBoxCStandard.TabIndex = 7;
 			this.toolTip1.SetToolTip(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
-        "used for building.");
+		"used for building.");
 			// 
 			// labelCStandard
 			// 
@@ -220,12 +222,31 @@
 			this.treeViewProjects.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProjects_NodeCheckChanged);
 			this.treeViewProjects.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProjectCheckList_MouseUp);
 			// 
+			// labelAdditionalClangOptions
+			// 
+			this.labelAdditionalClangOptions.AutoSize = true;
+			this.labelAdditionalClangOptions.Location = new System.Drawing.Point(12, 416);
+			this.labelAdditionalClangOptions.Name = "labelAdditionalClangOptions";
+			this.labelAdditionalClangOptions.Size = new System.Drawing.Size(73, 13);
+			this.labelAdditionalClangOptions.TabIndex = 18;
+			this.labelAdditionalClangOptions.Text = "Clang Options";
+			// 
+			// textBoxAdditionalClangOptions
+			// 
+			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
+			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
+			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(183, 20);
+			this.textBoxAdditionalClangOptions.TabIndex = 19;
+			this.textBoxAdditionalClangOptions.WordWrap = false;
+			// 
 			// ProjectSetupWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(282, 443);
+			this.ClientSize = new System.Drawing.Size(282, 475);
+			this.Controls.Add(this.textBoxAdditionalClangOptions);
+			this.Controls.Add(this.labelAdditionalClangOptions);
 			this.Controls.Add(this.treeViewProjects);
 			this.Controls.Add(this.labelCStandard);
 			this.Controls.Add(this.comboBoxCStandard);
@@ -254,28 +275,30 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        #endregion
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonCreate;
-        private System.Windows.Forms.ComboBox comboBoxConfiguration;
-        private System.Windows.Forms.ComboBox comboBoxPlatform;
-        private System.Windows.Forms.Label labelConfiguration;
-        private System.Windows.Forms.Label labelPlatform;
-        private System.Windows.Forms.Button buttonSelectAll;
-        private System.Windows.Forms.Label labelSelectProject;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserTargetDirectory;
-        private System.Windows.Forms.TextBox textBoxTargetDirectory;
-        private System.Windows.Forms.Button buttonSelect;
-        private System.Windows.Forms.TextBox textBoxFileName;
-        private System.Windows.Forms.Label labelFileName;
-        private System.Windows.Forms.Label labelFileNameExtension;
-        private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.ToolTip toolTip1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.ComboBox comboBoxCStandard;
-        private System.Windows.Forms.Label labelCStandard;
-        private System.Windows.Forms.TreeView treeViewProjects;
-    }
+		#endregion
+		private System.Windows.Forms.Button buttonCancel;
+		private System.Windows.Forms.Button buttonCreate;
+		private System.Windows.Forms.ComboBox comboBoxConfiguration;
+		private System.Windows.Forms.ComboBox comboBoxPlatform;
+		private System.Windows.Forms.Label labelConfiguration;
+		private System.Windows.Forms.Label labelPlatform;
+		private System.Windows.Forms.Button buttonSelectAll;
+		private System.Windows.Forms.Label labelSelectProject;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserTargetDirectory;
+		private System.Windows.Forms.TextBox textBoxTargetDirectory;
+		private System.Windows.Forms.Button buttonSelect;
+		private System.Windows.Forms.TextBox textBoxFileName;
+		private System.Windows.Forms.Label labelFileName;
+		private System.Windows.Forms.Label labelFileNameExtension;
+		private System.Windows.Forms.HelpProvider helpProvider1;
+		private System.Windows.Forms.ToolTip toolTip1;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.ComboBox comboBoxCStandard;
+		private System.Windows.Forms.Label labelCStandard;
+		private System.Windows.Forms.TreeView treeViewProjects;
+		private System.Windows.Forms.Label labelAdditionalClangOptions;
+		private System.Windows.Forms.TextBox textBoxAdditionalClangOptions;
+	}
 }

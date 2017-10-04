@@ -46,6 +46,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private string _fileName = "";
 		private string _cStandard = "";
 		private string _solutionDir = "";
+		private string _additionalClangOptions = "";
 
 		private SolutionParser.CompilationDatabaseSettings _cdb = null;
 
@@ -110,6 +111,12 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			set { _solutionDir = value; }
 		}
 
+		public string AdditionalClangOptions
+		{
+			get { return _additionalClangOptions; }
+			set { _additionalClangOptions = value; }
+		}
+
 		public SolutionParser.CompilationDatabaseSettings Cdb
 		{
 			get { return _cdb; }
@@ -160,6 +167,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				cdbSettings.LastUpdated = DateTime.Now;
 				cdbSettings.ConfigurationName = _configurationName;
 				cdbSettings.PlatformName = _platformName;
+				cdbSettings.AdditionalClangOptions = _additionalClangOptions;
 
 				cdbSettings.IncludedProjects = new List<string>();
 				foreach (EnvDTE.Project p in _projects)
@@ -188,7 +196,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
 
 				solutionParser.CreateCompileCommands(
-					project, _configurationName, _platformName, _cStandard,
+					project, _configurationName, _platformName, _cStandard, _additionalClangOptions,
 					(CompileCommand command, bool lastFile) => {
 						string serializedCommand = "";
 						foreach (string line in command.SerializeToJson().Split('\n'))
