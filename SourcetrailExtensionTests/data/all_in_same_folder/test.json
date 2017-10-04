@@ -1,7 +1,7 @@
 [
   {
     "directory": "<CompilationDatabaseFilePath>",
-    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D WIN32  -D _DEBUG  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
+    "command": "clang-tool -fms-extensions -fms-compatibility -fms-compatibility-version=19  -isystem \"<Macro $(VC_IncludePath)>\"  -isystem \"<Macro $(WindowsSDK_IncludePath)>\"  -D _DEBUG  -D _MT  -D _DLL  -D WIN32  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++14  \"<ProjectBaseDirectory>/main.cpp\"",
     "file": "<ProjectBaseDirectory>/main.cpp"
   }
 ]

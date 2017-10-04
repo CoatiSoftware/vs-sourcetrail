@@ -86,7 +86,24 @@ namespace VCProjectEngineWrapper
 
 		public string[] GetPreprocessorDefinitions()
 		{
-			return _wrappedRules.GetEvaluatedPropertyValue("PreprocessorDefinitions").Split(';');
+			string additionalDefines = "";
+			switch (_wrapped.RuntimeLibrary)
+			{
+			case runtimeLibraryOption.rtMultiThreaded:
+				additionalDefines += "_MT;";
+				break;
+			case runtimeLibraryOption.rtMultiThreadedDebug:
+				additionalDefines += "_DEBUG;_MT;";
+				break;
+			case runtimeLibraryOption.rtMultiThreadedDLL:
+				additionalDefines += "_MT;_DLL;";
+				break;
+			case runtimeLibraryOption.rtMultiThreadedDebugDLL:
+				additionalDefines += "_DEBUG;_MT;_DLL;";
+				break;
+			}
+
+			return (additionalDefines + _wrappedRules.GetEvaluatedPropertyValue("PreprocessorDefinitions")).Split(';');
 		}
 
 		public string[] GetForcedIncludeFiles()
