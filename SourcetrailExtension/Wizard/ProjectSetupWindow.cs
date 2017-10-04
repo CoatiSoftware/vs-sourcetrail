@@ -531,5 +531,14 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 			buttonCreate.Enabled = anythingChecked;
 		}
+
+		private void buttonClangOptionsHelp_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(
+				"Optional: Specify clang options that will be added to each compile command in your compilation database. " +
+				"\nFor example add \"-ferror-limit=0\" to disable clang's error limit for emitting diagnostics.", 
+				"Help: Clang Options"
+			);
+		}
 	}
 }

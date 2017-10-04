@@ -35,12 +35,13 @@
 			this.labelFileNameExtension = new System.Windows.Forms.Label();
 			this.helpProvider1 = new System.Windows.Forms.HelpProvider();
 			this.comboBoxCStandard = new System.Windows.Forms.ComboBox();
+			this.textBoxAdditionalClangOptions = new System.Windows.Forms.TextBox();
+			this.buttonClangOptionsHelp = new System.Windows.Forms.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.labelCStandard = new System.Windows.Forms.Label();
 			this.treeViewProjects = new System.Windows.Forms.TreeView();
 			this.labelAdditionalClangOptions = new System.Windows.Forms.Label();
-			this.textBoxAdditionalClangOptions = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// buttonCancel
@@ -203,6 +204,29 @@
 			this.toolTip1.SetToolTip(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
 		"used for building.");
 			// 
+			// textBoxAdditionalClangOptions
+			// 
+			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
+			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
+			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
+			this.helpProvider1.SetShowHelp(this.textBoxAdditionalClangOptions, true);
+			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(148, 20);
+			this.textBoxAdditionalClangOptions.TabIndex = 19;
+			this.toolTip1.SetToolTip(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
+			this.textBoxAdditionalClangOptions.WordWrap = false;
+			// 
+			// buttonClangOptionsHelp
+			// 
+			this.helpProvider1.SetHelpString(this.buttonClangOptionsHelp, "");
+			this.buttonClangOptionsHelp.Location = new System.Drawing.Point(241, 411);
+			this.buttonClangOptionsHelp.Name = "buttonClangOptionsHelp";
+			this.helpProvider1.SetShowHelp(this.buttonClangOptionsHelp, false);
+			this.buttonClangOptionsHelp.Size = new System.Drawing.Size(29, 23);
+			this.buttonClangOptionsHelp.TabIndex = 20;
+			this.buttonClangOptionsHelp.Text = "?";
+			this.buttonClangOptionsHelp.UseVisualStyleBackColor = true;
+			this.buttonClangOptionsHelp.Click += new System.EventHandler(this.buttonClangOptionsHelp_Click);
+			// 
 			// labelCStandard
 			// 
 			this.labelCStandard.AutoSize = true;
@@ -231,23 +255,13 @@
 			this.labelAdditionalClangOptions.TabIndex = 18;
 			this.labelAdditionalClangOptions.Text = "Clang Options";
 			// 
-			// textBoxAdditionalClangOptions
-			// 
-			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
-			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
-			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
-			this.helpProvider1.SetShowHelp(this.textBoxAdditionalClangOptions, true);
-			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(183, 20);
-			this.textBoxAdditionalClangOptions.TabIndex = 19;
-			this.toolTip1.SetToolTip(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
-			this.textBoxAdditionalClangOptions.WordWrap = false;
-			// 
 			// ProjectSetupWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(282, 475);
+			this.Controls.Add(this.buttonClangOptionsHelp);
 			this.Controls.Add(this.textBoxAdditionalClangOptions);
 			this.Controls.Add(this.labelAdditionalClangOptions);
 			this.Controls.Add(this.treeViewProjects);
@@ -303,5 +317,6 @@
 		private System.Windows.Forms.TreeView treeViewProjects;
 		private System.Windows.Forms.Label labelAdditionalClangOptions;
 		private System.Windows.Forms.TextBox textBoxAdditionalClangOptions;
+		private System.Windows.Forms.Button buttonClangOptionsHelp;
 	}
 }
