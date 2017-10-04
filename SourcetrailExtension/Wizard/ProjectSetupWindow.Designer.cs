@@ -233,10 +233,13 @@
 			// 
 			// textBoxAdditionalClangOptions
 			// 
+			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
 			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
 			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
+			this.helpProvider1.SetShowHelp(this.textBoxAdditionalClangOptions, true);
 			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(183, 20);
 			this.textBoxAdditionalClangOptions.TabIndex = 19;
+			this.toolTip1.SetToolTip(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
 			this.textBoxAdditionalClangOptions.WordWrap = false;
 			// 
 			// ProjectSetupWindow
