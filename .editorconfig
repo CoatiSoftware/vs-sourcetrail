@@ -1,3 +1,12 @@
+## Reference:
+#   - http://editorconfig.org/
+#   - https://docs.microsoft.com/en-us/visualstudio/ide/create-portable-custom-editor-options
+## Visual Studio IDE support for editing .editorconfig files:
+#   - https://marketplace.visualstudio.com/items?itemName=EditorConfigTeam.EditorConfig
+
+root = true
+
 [*]
 end_of_line = crlf
 indent_style = tab
+
