@@ -67,6 +67,17 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 		[TestMethod]
 		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForCinderSolution_NonSystemIncludes()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/cinder/cinder.sln", false);
+			}));
+		}
+
+		[TestMethod]
+		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForCinderSolution()
 		{
 			UIThreadInvoker.Initialize();
@@ -164,7 +175,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		private void TestCompilationDatabaseForSolution(string solutionPath)
+		private void TestCompilationDatabaseForSolution(string solutionPath, bool nonSystemIncludesUseAngleBrackets = true)
 		{
 			Assert.IsTrue(File.Exists(solutionPath), "solution path does not exist");
 
@@ -176,7 +187,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			CompilationDatabase output = null;
 			try
 			{
-				output = CreateCompilationDatabaseForCurrentSolution();
+				output = CreateCompilationDatabaseForCurrentSolution(nonSystemIncludesUseAngleBrackets);
 			}
 			catch (Exception e)
 			{
@@ -188,6 +199,11 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			Assert.IsNotNull(output);
 
 			string cdbPath = Path.ChangeExtension(solutionPath, "json");
+			if (!nonSystemIncludesUseAngleBrackets)
+			{
+				cdbPath = Path.GetDirectoryName(cdbPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(cdbPath) + "_non-system_includes.json";
+			}
+
 			if (_updateExpectedOutput)
 			{
 				output.SortAlphabetically();
@@ -209,7 +225,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			Helpers.TestUtility.CloseCurrentSolution();
 		}
 
-		private static CompilationDatabase CreateCompilationDatabaseForCurrentSolution()
+		private static CompilationDatabase CreateCompilationDatabaseForCurrentSolution(bool nonSystemIncludesUseAngleBrackets)
 		{
 			DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 			Assert.IsNotNull(dte);
@@ -225,7 +241,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new TestPathResolver());
 				solutionParser.CreateCompileCommands(
-					project, configurationNames[0], platformNames[0], "c11", null,
+					project, configurationNames[0], platformNames[0], "c11", null, nonSystemIncludesUseAngleBrackets,
 					(CompileCommand command, bool lastFile) => {
 						cdb.AddCompileCommand(command);
 					}

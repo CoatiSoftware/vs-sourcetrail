@@ -45,7 +45,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, Action<CompileCommand, bool> lambda)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets, Action<CompileCommand, bool> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -97,7 +97,8 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				string commandFlags = "";
 				{
 					// gather include paths and preprocessor definitions of the project
-					List<string> includeDirectories = ProjectUtility.GetIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
+					List<string> projectIncludeDirectories = ProjectUtility.GetProjectIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
+					List<string> systemIncludeDirectories = ProjectUtility.GetSystemIncludeDirectories(vcProject, vcProjectConfiguration, _pathResolver);
 					List<string> preprocessorDefinitions = ProjectUtility.GetPreprocessorDefinitions(vcProject, vcProjectConfiguration);
 					List<string> forcedIncludeFiles = ProjectUtility.GetForcedIncludeFiles(vcProject, vcProjectConfiguration, _pathResolver);
 
@@ -113,9 +114,20 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						commandFlags += additionalClangOptions;
 					}
 
-					foreach (string dir in includeDirectories)
+					if (nonSystemIncludesUseAngleBrackets)
 					{
-						commandFlags += " -isystem \"" + dir + "\" "; // using '-isystem' because it allows for use of quotes and pointy brackets in source files. In other words it's more robust. It's slower than '-I' though
+						systemIncludeDirectories.InsertRange(0, projectIncludeDirectories);
+						projectIncludeDirectories.Clear();
+					}
+
+					foreach (string dir in projectIncludeDirectories)
+					{
+						commandFlags += " -I \"" + dir + "\" ";
+					}
+
+					foreach (string dir in systemIncludeDirectories)
+					{
+						commandFlags += " -isystem \"" + dir + "\" ";
 					}
 
 					foreach (string prepDef in preprocessorDefinitions)

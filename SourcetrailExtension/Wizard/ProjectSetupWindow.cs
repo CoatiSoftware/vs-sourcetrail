@@ -36,7 +36,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 		}
 
-		public delegate void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions);
+		public delegate void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets);
 
 		// public List<SolutionProject> m_projects = new List<SolutionProject>();
 		public Utility.SolutionUtility.SolutionStructure _projectStructure = new Utility.SolutionUtility.SolutionStructure();
@@ -77,6 +77,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			InitTextBoxFileName();
 			InitComboBoxCStandard();
 			InitTextBoxAdditionalClangOptions();
+			InitCheckBoxNonSystemIncludesUseAngleBrackets();
 		}
 
 		private void InitComboBoxConfigurations()
@@ -256,6 +257,20 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 		}
 
+		private void InitCheckBoxNonSystemIncludesUseAngleBrackets()
+		{
+			if (_cdb == null)
+			{
+				Logging.Logging.LogInfo("Setting non-system includes use angle brackets to default false value.");
+				checkBoxNonSystemIncludesUseAngleBrackets.Checked = false;
+			}
+			else
+			{
+				Logging.Logging.LogInfo("Setting non-system includes use angle brackets to recent: '" + _cdb.AdditionalClangOptions + "'");
+				checkBoxNonSystemIncludesUseAngleBrackets.Checked = _cdb.NonSystemIncludesUseAngleBrackets;
+			}
+		}
+
 		private void buttonCancel_Click(object sender, EventArgs e)
 		{
 			Logging.Logging.LogInfo("Close button pressed. Aborting.");
@@ -312,7 +327,11 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 					Logging.Logging.LogInfo("Additional clang options: " + additionalClangOptions);
 
-					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions);
+					bool nonSystemIncludesUseAngleBrackets = checkBoxNonSystemIncludesUseAngleBrackets.Checked;
+
+					Logging.Logging.LogInfo("Non-system Includes Use Angle Brackets: " + nonSystemIncludesUseAngleBrackets.ToString());
+
+					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions, nonSystemIncludesUseAngleBrackets);
 					Close();
 				}
 				else
@@ -535,9 +554,18 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private void buttonClangOptionsHelp_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(
-				"Optional: Specify clang options that will be added to each compile command in your compilation database. " +
-				"\nFor example add \"-ferror-limit=0\" to disable clang's error limit for emitting diagnostics.", 
+				"Optional: Specify clang options that will be added to each compile command in your compilation database.\n\n" +
+				"For example add \"-ferror-limit=0\" to disable clang's error limit for emitting diagnostics.", 
 				"Help: Clang Options"
+			);
+		}
+
+		private void buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(
+				"If checked, projects' additional include directories will be added to the compilation database as system include paths.\n\n" +
+				"This may be necessary if your style guide or coding standard requires angle brackets instead of double quotes for all include directives.",
+				"Help: Non-system Includes Use Angle Brackets"
 			);
 		}
 	}
