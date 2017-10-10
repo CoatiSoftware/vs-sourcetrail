@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,15 @@ using System;
 
 namespace CoatiSoftware.SourcetrailExtension.Utility
 {
-	class SystemUtility
+	public class SystemUtility
 	{
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		static extern bool SetForegroundWindow(IntPtr hWnd);
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		static extern IntPtr SetActiveWindow(IntPtr hWnd);
+		private static class NativeMethods
+		{
+			[System.Runtime.InteropServices.DllImport("user32.dll")]
+			public static extern bool SetForegroundWindow(IntPtr hWnd);
+			[System.Runtime.InteropServices.DllImport("user32.dll")]
+			public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+		}
 
 		public static void GetWindowFocus()
 		{
@@ -34,8 +37,8 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 				if (windowHandle != null)
 				{
-					SetForegroundWindow(windowHandle);
-					SetActiveWindow(windowHandle);
+					NativeMethods.SetForegroundWindow(windowHandle);
+					NativeMethods.SetActiveWindow(windowHandle);
 				}
 			}
 			catch (Exception e)

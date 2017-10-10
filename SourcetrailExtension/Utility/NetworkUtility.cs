@@ -194,8 +194,6 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				if (!connectDone.WaitOne(2000))
 				{
 					client.EndConnect(ar);
-					client.Shutdown(SocketShutdown.Both);
-					client.Close();
 
 					Logging.Logging.LogWarning("Connection timed out, message was not sent");
 
@@ -211,7 +209,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			}
 			finally
 			{
-				if(client.Connected)
+				if (client.Connected)
 				{
 					client.Shutdown(SocketShutdown.Both);
 					client.Close();

@@ -222,7 +222,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			{
 				Logging.Logging.LogError("Failed to create CDB for project with exception: " + e.Message);
 				Logging.Logging.LogError("Stack Trace: " + e.StackTrace);
-				throw (e);
+				throw;
 			}
 		}
 
