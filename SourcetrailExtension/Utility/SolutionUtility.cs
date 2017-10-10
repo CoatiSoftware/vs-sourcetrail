@@ -26,10 +26,13 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 {
 	public class SolutionUtility
 	{
-		[DllImport("ole32.dll")]
-		private static extern void CreateBindCtx(int reserved, out IBindCtx bindCtx);
-		[DllImport("ole32.dll")]
-		private static extern void GetRunningObjectTable(int reserved, out IRunningObjectTable runningObjectTable);
+		private static class NativeMethods
+		{
+			[DllImport("ole32.dll")]
+			public static extern int CreateBindCtx(uint reserved, out IBindCtx bindCtx);
+			[DllImport("ole32.dll")]
+			public static extern int GetRunningObjectTable(uint reserved, out IRunningObjectTable runningObjectTable);
+		}
 
 		public class SolutionStructure
 		{
@@ -273,7 +276,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			{
 				Logging.Logging.LogError("Exception: " + e.Message);
 
-				throw e;
+				throw;
 			}
 		}
 
@@ -334,7 +337,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				List<DTE2> dte2List = new List<DTE2>();
 
 				IRunningObjectTable runningObjectTable = null;
-				GetRunningObjectTable(0, out runningObjectTable);
+				NativeMethods.GetRunningObjectTable(0, out runningObjectTable);
 
 				IEnumMoniker enumMoniker = null;
 				runningObjectTable.EnumRunning(out enumMoniker);
@@ -346,7 +349,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				while (enumMoniker.Next(1, moniker, fetched) == 0)
 				{
 					IBindCtx bindCtx = null;
-					CreateBindCtx(0, out bindCtx);
+					NativeMethods.CreateBindCtx(0, out bindCtx);
 
 					string displayName = "";
 					moniker[0].GetDisplayName(bindCtx, null, out displayName);
