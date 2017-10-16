@@ -33,7 +33,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		private string _platformName = "";
 
 		private string _additionalClangOptions = "";
-		private bool _nonSystemIncludesUseAngleBrackets = false;
+		private bool _nonSystemIncludesUseAngleBrackets = true;
 
 		public string Name
 		{
@@ -236,7 +236,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			string additionalClangOptions = additionalClangOptionsNode.InnerText;
 
 			XmlNode nonSystemIncludesUseAngleBracketsNode = node.SelectSingleNode("nonSystemIncludesUseAngleBrackets");
-			bool nonSystemIncludesUseAngleBrackets = false;
+			bool nonSystemIncludesUseAngleBrackets = true;
 			System.Boolean.TryParse(nonSystemIncludesUseAngleBracketsNode.InnerText, out nonSystemIncludesUseAngleBrackets);
 
 			// if cdb file is not there anymore, set the modified date back so that a full update will be performed

@@ -47,7 +47,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private string _cStandard = "";
 		private string _solutionDir = "";
 		private string _additionalClangOptions = "";
-		private bool _nonSystemIncludesUseAngleBrackets = false;
+		private bool _nonSystemIncludesUseAngleBrackets = true;
 
 		private SolutionParser.CompilationDatabaseSettings _cdb = null;
 

@@ -5,7 +5,7 @@
 **2017-10-07**
 
 * Features
-	* By default, compilation database generation will use `-isystem` for platform include diretories and `-I` for project additional include directories. A checkbox was added to optionally enable using `-isystem` for all include directories.
+	* New option to allow compilation database generation to use `-isystem` for platform include diretories and `-I` for project additional include directories. A checkbox was added to optionally enable using `-isystem` for all include directories.
 
 
 ## 1.0.7

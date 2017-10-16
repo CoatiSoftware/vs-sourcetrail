@@ -35,21 +35,21 @@
 			this.labelFileNameExtension = new System.Windows.Forms.Label();
 			this.helpProvider1 = new System.Windows.Forms.HelpProvider();
 			this.comboBoxCStandard = new System.Windows.Forms.ComboBox();
+			this.labelAdditionalClangOptions = new System.Windows.Forms.Label();
 			this.textBoxAdditionalClangOptions = new System.Windows.Forms.TextBox();
 			this.buttonClangOptionsHelp = new System.Windows.Forms.Button();
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp = new System.Windows.Forms.Button();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.checkBoxNonSystemIncludesUseAngleBrackets = new System.Windows.Forms.CheckBox();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.labelCStandard = new System.Windows.Forms.Label();
 			this.treeViewProjects = new System.Windows.Forms.TreeView();
-			this.labelAdditionalClangOptions = new System.Windows.Forms.Label();
-			this.checkBoxNonSystemIncludesUseAngleBrackets = new System.Windows.Forms.CheckBox();
-			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			//
 			// buttonCancel
 			//
 			this.helpProvider1.SetHelpString(this.buttonCancel, "Abort creation of the Compilation Database");
-			this.buttonCancel.Location = new System.Drawing.Point(12, 465);
+			this.buttonCancel.Location = new System.Drawing.Point(15, 474);
 			this.buttonCancel.Name = "buttonCancel";
 			this.helpProvider1.SetShowHelp(this.buttonCancel, true);
 			this.buttonCancel.Size = new System.Drawing.Size(92, 23);
@@ -62,7 +62,7 @@
 			// buttonCreate
 			//
 			this.helpProvider1.SetHelpString(this.buttonCreate, "Start creation of the Compilation Database");
-			this.buttonCreate.Location = new System.Drawing.Point(178, 465);
+			this.buttonCreate.Location = new System.Drawing.Point(217, 474);
 			this.buttonCreate.Name = "buttonCreate";
 			this.helpProvider1.SetShowHelp(this.buttonCreate, true);
 			this.buttonCreate.Size = new System.Drawing.Size(92, 23);
@@ -79,7 +79,7 @@
 			this.helpProvider1.SetHelpKeyword(this.comboBoxConfiguration, "Build configuration for Compilation Database");
 			this.helpProvider1.SetHelpString(this.comboBoxConfiguration, "The selected build configuration determines the compile flags for the Compilation" +
 		" Database");
-			this.comboBoxConfiguration.Location = new System.Drawing.Point(87, 277);
+			this.comboBoxConfiguration.Location = new System.Drawing.Point(126, 280);
 			this.comboBoxConfiguration.Name = "comboBoxConfiguration";
 			this.helpProvider1.SetShowHelp(this.comboBoxConfiguration, true);
 			this.comboBoxConfiguration.Size = new System.Drawing.Size(183, 21);
@@ -93,7 +93,7 @@
 			this.comboBoxPlatform.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxPlatform, "The target platform determines some compiler flags included in the Compilation Da" +
 		"tabase");
-			this.comboBoxPlatform.Location = new System.Drawing.Point(87, 304);
+			this.comboBoxPlatform.Location = new System.Drawing.Point(126, 307);
 			this.comboBoxPlatform.Name = "comboBoxPlatform";
 			this.helpProvider1.SetShowHelp(this.comboBoxPlatform, true);
 			this.comboBoxPlatform.Size = new System.Drawing.Size(183, 21);
@@ -104,7 +104,7 @@
 			// labelConfiguration
 			//
 			this.labelConfiguration.AutoSize = true;
-			this.labelConfiguration.Location = new System.Drawing.Point(12, 280);
+			this.labelConfiguration.Location = new System.Drawing.Point(12, 283);
 			this.labelConfiguration.Name = "labelConfiguration";
 			this.labelConfiguration.Size = new System.Drawing.Size(69, 13);
 			this.labelConfiguration.TabIndex = 6;
@@ -113,7 +113,7 @@
 			// labelPlatform
 			//
 			this.labelPlatform.AutoSize = true;
-			this.labelPlatform.Location = new System.Drawing.Point(12, 307);
+			this.labelPlatform.Location = new System.Drawing.Point(12, 310);
 			this.labelPlatform.Name = "labelPlatform";
 			this.labelPlatform.Size = new System.Drawing.Size(45, 13);
 			this.labelPlatform.TabIndex = 7;
@@ -122,7 +122,7 @@
 			// buttonSelectAll
 			//
 			this.helpProvider1.SetHelpString(this.buttonSelectAll, "Select all projects if not all are ticked. Deselect all otherwise");
-			this.buttonSelectAll.Location = new System.Drawing.Point(178, 248);
+			this.buttonSelectAll.Location = new System.Drawing.Point(217, 251);
 			this.buttonSelectAll.Name = "buttonSelectAll";
 			this.helpProvider1.SetShowHelp(this.buttonSelectAll, true);
 			this.buttonSelectAll.Size = new System.Drawing.Size(92, 23);
@@ -135,7 +135,7 @@
 			// labelSelectProject
 			//
 			this.labelSelectProject.AutoSize = true;
-			this.labelSelectProject.Location = new System.Drawing.Point(9, 9);
+			this.labelSelectProject.Location = new System.Drawing.Point(12, 9);
 			this.labelSelectProject.Name = "labelSelectProject";
 			this.labelSelectProject.Size = new System.Drawing.Size(78, 13);
 			this.labelSelectProject.TabIndex = 9;
@@ -145,17 +145,17 @@
 			// textBoxTargetDirectory
 			//
 			this.helpProvider1.SetHelpString(this.textBoxTargetDirectory, "Target directory where the Compilation Database will be stored");
-			this.textBoxTargetDirectory.Location = new System.Drawing.Point(12, 333);
+			this.textBoxTargetDirectory.Location = new System.Drawing.Point(15, 336);
 			this.textBoxTargetDirectory.Name = "textBoxTargetDirectory";
 			this.helpProvider1.SetShowHelp(this.textBoxTargetDirectory, true);
-			this.textBoxTargetDirectory.Size = new System.Drawing.Size(177, 20);
+			this.textBoxTargetDirectory.Size = new System.Drawing.Size(213, 20);
 			this.textBoxTargetDirectory.TabIndex = 10;
 			this.toolTip1.SetToolTip(this.textBoxTargetDirectory, "Target directory where the Compilation Database will be stored");
 			//
 			// buttonSelect
 			//
 			this.helpProvider1.SetHelpString(this.buttonSelect, "Pick a target directory via folder browser");
-			this.buttonSelect.Location = new System.Drawing.Point(195, 331);
+			this.buttonSelect.Location = new System.Drawing.Point(234, 334);
 			this.buttonSelect.Name = "buttonSelect";
 			this.helpProvider1.SetShowHelp(this.buttonSelect, true);
 			this.buttonSelect.Size = new System.Drawing.Size(75, 23);
@@ -167,9 +167,9 @@
 			//
 			// textBoxFileName
 			//
-			this.textBoxFileName.Location = new System.Drawing.Point(87, 360);
+			this.textBoxFileName.Location = new System.Drawing.Point(91, 363);
 			this.textBoxFileName.Name = "textBoxFileName";
-			this.textBoxFileName.Size = new System.Drawing.Size(148, 20);
+			this.textBoxFileName.Size = new System.Drawing.Size(183, 20);
 			this.textBoxFileName.TabIndex = 6;
 			this.textBoxFileName.TextChanged += new System.EventHandler(this.textBoxFileName_TextChanged);
 			this.textBoxFileName.Leave += new System.EventHandler(this.textBoxFileName_Leave);
@@ -177,7 +177,7 @@
 			// labelFileName
 			//
 			this.labelFileName.AutoSize = true;
-			this.labelFileName.Location = new System.Drawing.Point(12, 363);
+			this.labelFileName.Location = new System.Drawing.Point(12, 366);
 			this.labelFileName.Name = "labelFileName";
 			this.labelFileName.Size = new System.Drawing.Size(49, 13);
 			this.labelFileName.TabIndex = 13;
@@ -186,7 +186,7 @@
 			// labelFileNameExtension
 			//
 			this.labelFileNameExtension.AutoSize = true;
-			this.labelFileNameExtension.Location = new System.Drawing.Point(241, 363);
+			this.labelFileNameExtension.Location = new System.Drawing.Point(280, 366);
 			this.labelFileNameExtension.Name = "labelFileNameExtension";
 			this.labelFileNameExtension.Size = new System.Drawing.Size(29, 13);
 			this.labelFileNameExtension.TabIndex = 14;
@@ -198,51 +198,33 @@
 			this.comboBoxCStandard.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
 		"used for building.");
-			this.comboBoxCStandard.Location = new System.Drawing.Point(87, 386);
+			this.comboBoxCStandard.Location = new System.Drawing.Point(91, 389);
 			this.comboBoxCStandard.Name = "comboBoxCStandard";
 			this.helpProvider1.SetShowHelp(this.comboBoxCStandard, true);
-			this.comboBoxCStandard.Size = new System.Drawing.Size(183, 21);
+			this.comboBoxCStandard.Size = new System.Drawing.Size(218, 21);
 			this.comboBoxCStandard.TabIndex = 7;
 			this.toolTip1.SetToolTip(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
 		"used for building.");
 			//
-			// labelCStandard
-			//
-			this.labelCStandard.AutoSize = true;
-			this.labelCStandard.Location = new System.Drawing.Point(12, 389);
-			this.labelCStandard.Name = "labelCStandard";
-			this.labelCStandard.Size = new System.Drawing.Size(60, 13);
-			this.labelCStandard.TabIndex = 16;
-			this.labelCStandard.Text = "C Standard";
-			//
-			// treeViewProjects
-			//
-			this.treeViewProjects.CheckBoxes = true;
-			this.treeViewProjects.Location = new System.Drawing.Point(12, 26);
-			this.treeViewProjects.Name = "treeViewProjects";
-			this.treeViewProjects.Size = new System.Drawing.Size(258, 216);
-			this.treeViewProjects.TabIndex = 17;
-			this.treeViewProjects.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProjects_NodeCheckChanged);
-			this.treeViewProjects.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProjectCheckList_MouseUp);
-			//
 			// labelAdditionalClangOptions
 			//
-			this.helpProvider1.SetHelpString(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
 			this.labelAdditionalClangOptions.AutoSize = true;
-			this.labelAdditionalClangOptions.Location = new System.Drawing.Point(12, 416);
+			this.helpProvider1.SetHelpString(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
+			this.labelAdditionalClangOptions.Location = new System.Drawing.Point(12, 421);
 			this.labelAdditionalClangOptions.Name = "labelAdditionalClangOptions";
+			this.helpProvider1.SetShowHelp(this.labelAdditionalClangOptions, true);
 			this.labelAdditionalClangOptions.Size = new System.Drawing.Size(73, 13);
 			this.labelAdditionalClangOptions.TabIndex = 18;
-			this.toolTip1.SetToolTip(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
 			this.labelAdditionalClangOptions.Text = "Clang Options";
+			this.toolTip1.SetToolTip(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
 			//
 			// textBoxAdditionalClangOptions
 			//
-			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
-			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
+			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Treat project additional include directories as system include directories");
+			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(91, 418);
 			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
 			this.helpProvider1.SetShowHelp(this.textBoxAdditionalClangOptions, true);
-			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(148, 20);
+			this.textBoxAdditionalClangOptions.Size = new System.Drawing.Size(187, 20);
 			this.textBoxAdditionalClangOptions.TabIndex = 19;
 			this.toolTip1.SetToolTip(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
 			this.textBoxAdditionalClangOptions.WordWrap = false;
@@ -250,7 +232,7 @@
 			// buttonClangOptionsHelp
 			//
 			this.helpProvider1.SetHelpString(this.buttonClangOptionsHelp, "");
-			this.buttonClangOptionsHelp.Location = new System.Drawing.Point(241, 411);
+			this.buttonClangOptionsHelp.Location = new System.Drawing.Point(280, 416);
 			this.buttonClangOptionsHelp.Name = "buttonClangOptionsHelp";
 			this.helpProvider1.SetShowHelp(this.buttonClangOptionsHelp, false);
 			this.buttonClangOptionsHelp.Size = new System.Drawing.Size(29, 23);
@@ -259,22 +241,10 @@
 			this.buttonClangOptionsHelp.UseVisualStyleBackColor = true;
 			this.buttonClangOptionsHelp.Click += new System.EventHandler(this.buttonClangOptionsHelp_Click);
 			//
-			// checkBoxNonSystemIncludesUseAngleBrackets
-			//
-			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Treat project additional include directories as system include directories");
-			this.checkBoxNonSystemIncludesUseAngleBrackets.AutoSize = true;
-			this.checkBoxNonSystemIncludesUseAngleBrackets.Location = new System.Drawing.Point(15, 441);
-			this.checkBoxNonSystemIncludesUseAngleBrackets.Name = "checkBoxNonSystemIncludesUseAngleBrackets";
-			this.checkBoxNonSystemIncludesUseAngleBrackets.Size = new System.Drawing.Size(221, 17);
-			this.checkBoxNonSystemIncludesUseAngleBrackets.TabIndex = 21;
-			this.checkBoxNonSystemIncludesUseAngleBrackets.Text = "Non-system Includes Use Angle Brackets";
-			this.toolTip1.SetToolTip(this.checkBoxNonSystemIncludesUseAngleBrackets, "Treat project additional include directories as system include directories");
-			this.checkBoxNonSystemIncludesUseAngleBrackets.UseVisualStyleBackColor = true;
-			//
 			// buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp
 			//
 			this.helpProvider1.SetHelpString(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp, "");
-			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Location = new System.Drawing.Point(241, 437);
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Location = new System.Drawing.Point(280, 445);
 			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Name = "buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp";
 			this.helpProvider1.SetShowHelp(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp, false);
 			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Size = new System.Drawing.Size(29, 23);
@@ -283,12 +253,42 @@
 			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.UseVisualStyleBackColor = true;
 			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Click += new System.EventHandler(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp_Click);
 			//
+			// checkBoxNonSystemIncludesUseAngleBrackets
+			//
+			this.checkBoxNonSystemIncludesUseAngleBrackets.AutoSize = true;
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Location = new System.Drawing.Point(15, 449);
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Name = "checkBoxNonSystemIncludesUseAngleBrackets";
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Size = new System.Drawing.Size(244, 17);
+			this.checkBoxNonSystemIncludesUseAngleBrackets.TabIndex = 21;
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Text = "Non-system Includes May Use Angle Brackets";
+			this.toolTip1.SetToolTip(this.checkBoxNonSystemIncludesUseAngleBrackets, "Treat project additional include directories as system include directories");
+			this.checkBoxNonSystemIncludesUseAngleBrackets.UseVisualStyleBackColor = true;
+			//
+			// labelCStandard
+			//
+			this.labelCStandard.AutoSize = true;
+			this.labelCStandard.Location = new System.Drawing.Point(12, 392);
+			this.labelCStandard.Name = "labelCStandard";
+			this.labelCStandard.Size = new System.Drawing.Size(60, 13);
+			this.labelCStandard.TabIndex = 16;
+			this.labelCStandard.Text = "C Standard";
+			//
+			// treeViewProjects
+			//
+			this.treeViewProjects.CheckBoxes = true;
+			this.treeViewProjects.Location = new System.Drawing.Point(15, 26);
+			this.treeViewProjects.Name = "treeViewProjects";
+			this.treeViewProjects.Size = new System.Drawing.Size(294, 216);
+			this.treeViewProjects.TabIndex = 17;
+			this.treeViewProjects.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProjects_NodeCheckChanged);
+			this.treeViewProjects.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProjectCheckList_MouseUp);
+			//
 			// ProjectSetupWindow
 			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(282, 498);
+			this.ClientSize = new System.Drawing.Size(321, 508);
 			this.Controls.Add(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp);
 			this.Controls.Add(this.checkBoxNonSystemIncludesUseAngleBrackets);
 			this.Controls.Add(this.buttonClangOptionsHelp);
@@ -321,10 +321,10 @@
 			this.toolTip1.SetToolTip(this, "Create a Compilation Database from the current C/C++ solution.");
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 
-		#endregion
+		#endregion Windows Form Designer generated code
+
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonCreate;
 		private System.Windows.Forms.ComboBox comboBoxConfiguration;

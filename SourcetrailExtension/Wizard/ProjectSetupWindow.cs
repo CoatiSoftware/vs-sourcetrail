@@ -262,7 +262,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			if (_cdb == null)
 			{
 				Logging.Logging.LogInfo("Setting non-system includes use angle brackets to default false value.");
-				checkBoxNonSystemIncludesUseAngleBrackets.Checked = false;
+				checkBoxNonSystemIncludesUseAngleBrackets.Checked = true;
 			}
 			else
 			{
