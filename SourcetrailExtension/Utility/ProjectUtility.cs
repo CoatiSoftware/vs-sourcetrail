@@ -125,63 +125,77 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			return item;
 		}
 
-		static public List<string> GetIncludeDirectories(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfig, IPathResolver pathResolver)
+		static private List<string> CleanIncludeDirectories(IVCProjectWrapper project, IPathResolver pathResolver, List<string> includeDirectories)
+		{
+			return includeDirectories
+					.Select(x => x.Replace("\\\"", ""))
+					.Select(x => pathResolver.GetAsAbsoluteCanonicalPath(x, project))
+					.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
+					.Where(x => !string.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
+		}
+
+		static public List<string> GetProjectIncludeDirectories(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfig, IPathResolver pathResolver)
 		{
 			// get additional include directories
 			// source: http://www.mztools.com/articles/2014/MZ2014005.aspx
 
-			Logging.Logging.LogInfo("Attempting to retrieve Include Directories for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
+			Logging.Logging.LogInfo("Attempting to retrieve project Include Directories for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
 			List<string> includeDirectories = new List<string>();
 
 			if (vcProjectConfig != null && vcProjectConfig.isValid())
 			{
+				if (vcProjectConfig.GetCLCompilerTool() != null && vcProjectConfig.GetCLCompilerTool().isValid())
 				{
-					if (vcProjectConfig.GetCLCompilerTool() != null && vcProjectConfig.GetCLCompilerTool().isValid())
-					{
-						includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()));
-					}
-					else if (vcProjectConfig.GetNMakeTool() != null && vcProjectConfig.GetNMakeTool().isValid())
-					{
-						includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetNMakeTool()));
-					}
+					includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetCLCompilerTool()));
 				}
-
-				try
+				else if (vcProjectConfig.GetNMakeTool() != null && vcProjectConfig.GetNMakeTool().isValid())
 				{
-					IVCPlatformWrapper platform = vcProjectConfig.GetPlatform();
-					if (platform != null && platform.isValid())
-					{
-						foreach (string directory in platform.GetIncludeDirectories())
-						{
-							includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					Logging.Logging.LogError("Failed to retrieve platform include directories: " + e.Message);
-					return new List<string>();
+					includeDirectories.AddRange(GetIncludeDirectories(vcProjectConfig.GetNMakeTool()));
 				}
 			}
 			else
 			{
-				Logging.Logging.LogWarning("Could not retrieve Project Configuration. No include directories could be retreived.");
+				Logging.Logging.LogWarning("Could not retrieve Project Configuration. No include directories could be retrieved.");
 				return new List<string>();
 			}
 
 			Logging.Logging.LogInfo("Attempting to clean up.");
+			includeDirectories = CleanIncludeDirectories(project, pathResolver, includeDirectories);
 
-			includeDirectories = includeDirectories
-				.Select(x => x.Replace("\\\"", ""))
-				.Select(x => pathResolver.GetAsAbsoluteCanonicalPath(x, project))
-				.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
-				.Where(x => !string.IsNullOrWhiteSpace(x))
-				.Distinct()
-				.ToList();
+			Logging.Logging.LogInfo("Found " + includeDirectories.Count.ToString() + " distinct project include directories.");
+			return includeDirectories;
+		}
 
-			Logging.Logging.LogInfo("Found " + includeDirectories.Count.ToString() + " distinct include directories.");
+		static public List<string> GetSystemIncludeDirectories(IVCProjectWrapper project, IVCConfigurationWrapper vcProjectConfig, IPathResolver pathResolver)
+		{
+			Logging.Logging.LogInfo("Attempting to retrieve system Include Directories for project '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.GetName()) + "'");
 
+			List<string> includeDirectories = new List<string>();
+
+			try
+			{
+				IVCPlatformWrapper platform = vcProjectConfig.GetPlatform();
+				if (platform != null && platform.isValid())
+				{
+					foreach (string directory in platform.GetIncludeDirectories())
+					{
+						includeDirectories.AddRange(pathResolver.ResolveVsMacroInPath(directory, vcProjectConfig));
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.Logging.LogError("Failed to retrieve platform include directories: " + e.Message);
+				return new List<string>();
+			}
+
+			Logging.Logging.LogInfo("Attempting to clean up.");
+			includeDirectories = CleanIncludeDirectories(project, pathResolver, includeDirectories);
+
+			Logging.Logging.LogInfo("Found " + includeDirectories.Count.ToString() + " distinct system include directories.");
 			return includeDirectories;
 		}
 

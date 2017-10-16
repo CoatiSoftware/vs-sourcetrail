@@ -42,12 +42,14 @@
 			this.labelCStandard = new System.Windows.Forms.Label();
 			this.treeViewProjects = new System.Windows.Forms.TreeView();
 			this.labelAdditionalClangOptions = new System.Windows.Forms.Label();
+			this.checkBoxNonSystemIncludesUseAngleBrackets = new System.Windows.Forms.CheckBox();
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp = new System.Windows.Forms.Button();
 			this.SuspendLayout();
-			// 
+			//
 			// buttonCancel
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.buttonCancel, "Abort creation of the Compilation Database");
-			this.buttonCancel.Location = new System.Drawing.Point(12, 441);
+			this.buttonCancel.Location = new System.Drawing.Point(12, 465);
 			this.buttonCancel.Name = "buttonCancel";
 			this.helpProvider1.SetShowHelp(this.buttonCancel, true);
 			this.buttonCancel.Size = new System.Drawing.Size(92, 23);
@@ -56,11 +58,11 @@
 			this.toolTip1.SetToolTip(this.buttonCancel, "Abort creation of the Compilation Database");
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-			// 
+			//
 			// buttonCreate
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.buttonCreate, "Start creation of the Compilation Database");
-			this.buttonCreate.Location = new System.Drawing.Point(178, 441);
+			this.buttonCreate.Location = new System.Drawing.Point(178, 465);
 			this.buttonCreate.Name = "buttonCreate";
 			this.helpProvider1.SetShowHelp(this.buttonCreate, true);
 			this.buttonCreate.Size = new System.Drawing.Size(92, 23);
@@ -69,9 +71,9 @@
 			this.toolTip1.SetToolTip(this.buttonCreate, "Start creation of the Compilation Database");
 			this.buttonCreate.UseVisualStyleBackColor = true;
 			this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
-			// 
+			//
 			// comboBoxConfiguration
-			// 
+			//
 			this.comboBoxConfiguration.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxConfiguration.FormattingEnabled = true;
 			this.helpProvider1.SetHelpKeyword(this.comboBoxConfiguration, "Build configuration for Compilation Database");
@@ -84,9 +86,9 @@
 			this.comboBoxConfiguration.TabIndex = 3;
 			this.toolTip1.SetToolTip(this.comboBoxConfiguration, "The selected build configuration determines the compile flags for the Compilation" +
 		" Database");
-			// 
+			//
 			// comboBoxPlatform
-			// 
+			//
 			this.comboBoxPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxPlatform.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxPlatform, "The target platform determines some compiler flags included in the Compilation Da" +
@@ -98,27 +100,27 @@
 			this.comboBoxPlatform.TabIndex = 4;
 			this.toolTip1.SetToolTip(this.comboBoxPlatform, "The target platform determines some compiler flags included in the Compilation Da" +
 		"tabase");
-			// 
+			//
 			// labelConfiguration
-			// 
+			//
 			this.labelConfiguration.AutoSize = true;
 			this.labelConfiguration.Location = new System.Drawing.Point(12, 280);
 			this.labelConfiguration.Name = "labelConfiguration";
 			this.labelConfiguration.Size = new System.Drawing.Size(69, 13);
 			this.labelConfiguration.TabIndex = 6;
 			this.labelConfiguration.Text = "Configuration";
-			// 
+			//
 			// labelPlatform
-			// 
+			//
 			this.labelPlatform.AutoSize = true;
 			this.labelPlatform.Location = new System.Drawing.Point(12, 307);
 			this.labelPlatform.Name = "labelPlatform";
 			this.labelPlatform.Size = new System.Drawing.Size(45, 13);
 			this.labelPlatform.TabIndex = 7;
 			this.labelPlatform.Text = "Platform";
-			// 
+			//
 			// buttonSelectAll
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.buttonSelectAll, "Select all projects if not all are ticked. Deselect all otherwise");
 			this.buttonSelectAll.Location = new System.Drawing.Point(178, 248);
 			this.buttonSelectAll.Name = "buttonSelectAll";
@@ -129,9 +131,9 @@
 			this.toolTip1.SetToolTip(this.buttonSelectAll, "Select all projects if not all are ticked. Deselect all otherwise");
 			this.buttonSelectAll.UseVisualStyleBackColor = true;
 			this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
-			// 
+			//
 			// labelSelectProject
-			// 
+			//
 			this.labelSelectProject.AutoSize = true;
 			this.labelSelectProject.Location = new System.Drawing.Point(9, 9);
 			this.labelSelectProject.Name = "labelSelectProject";
@@ -139,9 +141,9 @@
 			this.labelSelectProject.TabIndex = 9;
 			this.labelSelectProject.Text = "Select Projects";
 			this.labelSelectProject.Click += new System.EventHandler(this.label1_Click);
-			// 
+			//
 			// textBoxTargetDirectory
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.textBoxTargetDirectory, "Target directory where the Compilation Database will be stored");
 			this.textBoxTargetDirectory.Location = new System.Drawing.Point(12, 333);
 			this.textBoxTargetDirectory.Name = "textBoxTargetDirectory";
@@ -149,9 +151,9 @@
 			this.textBoxTargetDirectory.Size = new System.Drawing.Size(177, 20);
 			this.textBoxTargetDirectory.TabIndex = 10;
 			this.toolTip1.SetToolTip(this.textBoxTargetDirectory, "Target directory where the Compilation Database will be stored");
-			// 
+			//
 			// buttonSelect
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.buttonSelect, "Pick a target directory via folder browser");
 			this.buttonSelect.Location = new System.Drawing.Point(195, 331);
 			this.buttonSelect.Name = "buttonSelect";
@@ -162,36 +164,36 @@
 			this.toolTip1.SetToolTip(this.buttonSelect, "Pick a target directory via folder browser");
 			this.buttonSelect.UseVisualStyleBackColor = true;
 			this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
-			// 
+			//
 			// textBoxFileName
-			// 
+			//
 			this.textBoxFileName.Location = new System.Drawing.Point(87, 360);
 			this.textBoxFileName.Name = "textBoxFileName";
 			this.textBoxFileName.Size = new System.Drawing.Size(148, 20);
 			this.textBoxFileName.TabIndex = 6;
 			this.textBoxFileName.TextChanged += new System.EventHandler(this.textBoxFileName_TextChanged);
 			this.textBoxFileName.Leave += new System.EventHandler(this.textBoxFileName_Leave);
-			// 
+			//
 			// labelFileName
-			// 
+			//
 			this.labelFileName.AutoSize = true;
 			this.labelFileName.Location = new System.Drawing.Point(12, 363);
 			this.labelFileName.Name = "labelFileName";
 			this.labelFileName.Size = new System.Drawing.Size(49, 13);
 			this.labelFileName.TabIndex = 13;
 			this.labelFileName.Text = "Filename";
-			// 
+			//
 			// labelFileNameExtension
-			// 
+			//
 			this.labelFileNameExtension.AutoSize = true;
 			this.labelFileNameExtension.Location = new System.Drawing.Point(241, 363);
 			this.labelFileNameExtension.Name = "labelFileNameExtension";
 			this.labelFileNameExtension.Size = new System.Drawing.Size(29, 13);
 			this.labelFileNameExtension.TabIndex = 14;
 			this.labelFileNameExtension.Text = ".json";
-			// 
+			//
 			// comboBoxCStandard
-			// 
+			//
 			this.comboBoxCStandard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxCStandard.FormattingEnabled = true;
 			this.helpProvider1.SetHelpString(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
@@ -203,9 +205,39 @@
 			this.comboBoxCStandard.TabIndex = 7;
 			this.toolTip1.SetToolTip(this.comboBoxCStandard, "In case your solution contains C files, please specify which C standard is to be " +
 		"used for building.");
-			// 
+			//
+			// labelCStandard
+			//
+			this.labelCStandard.AutoSize = true;
+			this.labelCStandard.Location = new System.Drawing.Point(12, 389);
+			this.labelCStandard.Name = "labelCStandard";
+			this.labelCStandard.Size = new System.Drawing.Size(60, 13);
+			this.labelCStandard.TabIndex = 16;
+			this.labelCStandard.Text = "C Standard";
+			//
+			// treeViewProjects
+			//
+			this.treeViewProjects.CheckBoxes = true;
+			this.treeViewProjects.Location = new System.Drawing.Point(12, 26);
+			this.treeViewProjects.Name = "treeViewProjects";
+			this.treeViewProjects.Size = new System.Drawing.Size(258, 216);
+			this.treeViewProjects.TabIndex = 17;
+			this.treeViewProjects.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProjects_NodeCheckChanged);
+			this.treeViewProjects.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProjectCheckList_MouseUp);
+			//
+			// labelAdditionalClangOptions
+			//
+			this.helpProvider1.SetHelpString(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
+			this.labelAdditionalClangOptions.AutoSize = true;
+			this.labelAdditionalClangOptions.Location = new System.Drawing.Point(12, 416);
+			this.labelAdditionalClangOptions.Name = "labelAdditionalClangOptions";
+			this.labelAdditionalClangOptions.Size = new System.Drawing.Size(73, 13);
+			this.labelAdditionalClangOptions.TabIndex = 18;
+			this.toolTip1.SetToolTip(this.labelAdditionalClangOptions, "Options that will be added to each compile command");
+			this.labelAdditionalClangOptions.Text = "Clang Options";
+			//
 			// textBoxAdditionalClangOptions
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
 			this.textBoxAdditionalClangOptions.Location = new System.Drawing.Point(87, 413);
 			this.textBoxAdditionalClangOptions.Name = "textBoxAdditionalClangOptions";
@@ -214,9 +246,9 @@
 			this.textBoxAdditionalClangOptions.TabIndex = 19;
 			this.toolTip1.SetToolTip(this.textBoxAdditionalClangOptions, "Options that will be added to each compile command");
 			this.textBoxAdditionalClangOptions.WordWrap = false;
-			// 
+			//
 			// buttonClangOptionsHelp
-			// 
+			//
 			this.helpProvider1.SetHelpString(this.buttonClangOptionsHelp, "");
 			this.buttonClangOptionsHelp.Location = new System.Drawing.Point(241, 411);
 			this.buttonClangOptionsHelp.Name = "buttonClangOptionsHelp";
@@ -226,41 +258,39 @@
 			this.buttonClangOptionsHelp.Text = "?";
 			this.buttonClangOptionsHelp.UseVisualStyleBackColor = true;
 			this.buttonClangOptionsHelp.Click += new System.EventHandler(this.buttonClangOptionsHelp_Click);
-			// 
-			// labelCStandard
-			// 
-			this.labelCStandard.AutoSize = true;
-			this.labelCStandard.Location = new System.Drawing.Point(12, 389);
-			this.labelCStandard.Name = "labelCStandard";
-			this.labelCStandard.Size = new System.Drawing.Size(60, 13);
-			this.labelCStandard.TabIndex = 16;
-			this.labelCStandard.Text = "C Standard";
-			// 
-			// treeViewProjects
-			// 
-			this.treeViewProjects.CheckBoxes = true;
-			this.treeViewProjects.Location = new System.Drawing.Point(12, 26);
-			this.treeViewProjects.Name = "treeViewProjects";
-			this.treeViewProjects.Size = new System.Drawing.Size(258, 216);
-			this.treeViewProjects.TabIndex = 17;
-			this.treeViewProjects.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewProjects_NodeCheckChanged);
-			this.treeViewProjects.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ProjectCheckList_MouseUp);
-			// 
-			// labelAdditionalClangOptions
-			// 
-			this.labelAdditionalClangOptions.AutoSize = true;
-			this.labelAdditionalClangOptions.Location = new System.Drawing.Point(12, 416);
-			this.labelAdditionalClangOptions.Name = "labelAdditionalClangOptions";
-			this.labelAdditionalClangOptions.Size = new System.Drawing.Size(73, 13);
-			this.labelAdditionalClangOptions.TabIndex = 18;
-			this.labelAdditionalClangOptions.Text = "Clang Options";
-			// 
+			//
+			// checkBoxNonSystemIncludesUseAngleBrackets
+			//
+			this.helpProvider1.SetHelpString(this.textBoxAdditionalClangOptions, "Treat project additional include directories as system include directories");
+			this.checkBoxNonSystemIncludesUseAngleBrackets.AutoSize = true;
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Location = new System.Drawing.Point(15, 441);
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Name = "checkBoxNonSystemIncludesUseAngleBrackets";
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Size = new System.Drawing.Size(221, 17);
+			this.checkBoxNonSystemIncludesUseAngleBrackets.TabIndex = 21;
+			this.checkBoxNonSystemIncludesUseAngleBrackets.Text = "Non-system Includes Use Angle Brackets";
+			this.toolTip1.SetToolTip(this.checkBoxNonSystemIncludesUseAngleBrackets, "Treat project additional include directories as system include directories");
+			this.checkBoxNonSystemIncludesUseAngleBrackets.UseVisualStyleBackColor = true;
+			//
+			// buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp
+			//
+			this.helpProvider1.SetHelpString(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp, "");
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Location = new System.Drawing.Point(241, 437);
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Name = "buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp";
+			this.helpProvider1.SetShowHelp(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp, false);
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Size = new System.Drawing.Size(29, 23);
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.TabIndex = 22;
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Text = "?";
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.UseVisualStyleBackColor = true;
+			this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp.Click += new System.EventHandler(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp_Click);
+			//
 			// ProjectSetupWindow
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(282, 475);
+			this.ClientSize = new System.Drawing.Size(282, 498);
+			this.Controls.Add(this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp);
+			this.Controls.Add(this.checkBoxNonSystemIncludesUseAngleBrackets);
 			this.Controls.Add(this.buttonClangOptionsHelp);
 			this.Controls.Add(this.textBoxAdditionalClangOptions);
 			this.Controls.Add(this.labelAdditionalClangOptions);
@@ -318,5 +348,7 @@
 		private System.Windows.Forms.Label labelAdditionalClangOptions;
 		private System.Windows.Forms.TextBox textBoxAdditionalClangOptions;
 		private System.Windows.Forms.Button buttonClangOptionsHelp;
+		private System.Windows.Forms.CheckBox checkBoxNonSystemIncludesUseAngleBrackets;
+		private System.Windows.Forms.Button buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp;
 	}
 }

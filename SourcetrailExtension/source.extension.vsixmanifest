@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="acf15780-03b5-440e-a41e-db79b7043fc2" Version="1.0.7" Language="en-US" Publisher="Coati Software" />
+        <Identity Id="acf15780-03b5-440e-a41e-db79b7043fc2" Version="1.0.8" Language="en-US" Publisher="Coati Software" />
         <DisplayName>Sourcetrail Extension</DisplayName>
         <Description xml:space="preserve">This extension allows Visual Studio to communicate with Sourcetrail, a Clang based source code exploration tool. Additionally it can generate a Clang Compilation Database for any Visual Studio solution which can be used to run various Clang based tools.</Description>
         <MoreInfo>https://www.sourcetrail.com/</MoreInfo>

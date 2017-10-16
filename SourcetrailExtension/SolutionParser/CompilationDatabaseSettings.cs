@@ -33,6 +33,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		private string _platformName = "";
 
 		private string _additionalClangOptions = "";
+		private bool _nonSystemIncludesUseAngleBrackets = false;
 
 		public string Name
 		{
@@ -80,6 +81,12 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		{
 			get { return _additionalClangOptions; }
 			set { _additionalClangOptions = value; }
+		}
+
+		public bool NonSystemIncludesUseAngleBrackets
+		{
+			get { return _nonSystemIncludesUseAngleBrackets; }
+			set { _nonSystemIncludesUseAngleBrackets = value; }
 		}
 
 		public bool CheckCdbExists()
@@ -140,6 +147,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			XmlElement additionalClangOptions = doc.CreateElement("additionalClangOptions");
 			additionalClangOptions.InnerText = _additionalClangOptions;
 
+			XmlElement nonSystemIncludesUseAngleBrackets = doc.CreateElement("nonSystemIncludesUseAngleBrackets");
+			nonSystemIncludesUseAngleBrackets.InnerText = _nonSystemIncludesUseAngleBrackets.ToString();
+
 			root.AppendChild(name);
 			root.AppendChild(sourceProject);
 			root.AppendChild(directory);
@@ -148,6 +158,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			root.AppendChild(configuration);
 			root.AppendChild(platform);
 			root.AppendChild(additionalClangOptions);
+			root.AppendChild(nonSystemIncludesUseAngleBrackets);
 
 			return root;
 		}
@@ -224,6 +235,10 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			XmlNode additionalClangOptionsNode = node.SelectSingleNode("additionalClangOptions");
 			string additionalClangOptions = additionalClangOptionsNode.InnerText;
 
+			XmlNode nonSystemIncludesUseAngleBracketsNode = node.SelectSingleNode("nonSystemIncludesUseAngleBrackets");
+			bool nonSystemIncludesUseAngleBrackets = false;
+			System.Boolean.TryParse(nonSystemIncludesUseAngleBracketsNode.InnerText, out nonSystemIncludesUseAngleBrackets);
+
 			// if cdb file is not there anymore, set the modified date back so that a full update will be performed
 			if (System.IO.File.Exists(directory + "\\" + name + ".json") == false)
 			{
@@ -238,6 +253,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			cdb.ConfigurationName = configuration;
 			cdb.PlatformName = platform;
 			cdb.AdditionalClangOptions = additionalClangOptions;
+			cdb.NonSystemIncludesUseAngleBrackets = nonSystemIncludesUseAngleBrackets;
 
 			return cdb;
 		}

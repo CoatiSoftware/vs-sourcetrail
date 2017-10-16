@@ -47,6 +47,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private string _cStandard = "";
 		private string _solutionDir = "";
 		private string _additionalClangOptions = "";
+		private bool _nonSystemIncludesUseAngleBrackets = false;
 
 		private SolutionParser.CompilationDatabaseSettings _cdb = null;
 
@@ -117,6 +118,12 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			set { _additionalClangOptions = value; }
 		}
 
+		public bool NonSystemIncludesUseAngleBrackets
+		{
+			get { return _nonSystemIncludesUseAngleBrackets; }
+			set { _nonSystemIncludesUseAngleBrackets = value; }
+		}
+
 		public SolutionParser.CompilationDatabaseSettings Cdb
 		{
 			get { return _cdb; }
@@ -168,6 +175,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				cdbSettings.ConfigurationName = _configurationName;
 				cdbSettings.PlatformName = _platformName;
 				cdbSettings.AdditionalClangOptions = _additionalClangOptions;
+				cdbSettings.NonSystemIncludesUseAngleBrackets = _nonSystemIncludesUseAngleBrackets;
 
 				cdbSettings.IncludedProjects = new List<string>();
 				foreach (EnvDTE.Project p in _projects)
@@ -196,7 +204,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
 
 				solutionParser.CreateCompileCommands(
-					project, _configurationName, _platformName, _cStandard, _additionalClangOptions,
+					project, _configurationName, _platformName, _cStandard, _additionalClangOptions, _nonSystemIncludesUseAngleBrackets,
 					(CompileCommand command, bool lastFile) => {
 						string serializedCommand = "";
 						foreach (string line in command.SerializeToJson().Split('\n'))
