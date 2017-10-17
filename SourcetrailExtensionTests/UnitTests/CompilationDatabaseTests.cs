@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,12 @@
 using CoatiSoftware.SourcetrailExtension.SolutionParser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.UnitTests
+namespace CoatiSoftware.SourcetrailExtension.Tests
 {
 	[TestClass]
 	public class CompilationDatabaseTests
 	{
-		[TestMethod]
+		[TestCategory("UnitTest"), TestMethod]
 		public void TestComparingCompileCommandWithSelfByValueWorks()
 		{
 			CompileCommand command1 = new CompileCommand();
@@ -38,7 +38,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.UnitTests
 			Assert.IsTrue(command1 == command2);
 		}
 
-		[TestMethod]
+		[TestCategory("UnitTest"), TestMethod]
 		public void TestComparingCompilationDatabaseWithSelfByValueWorks()
 		{
 			CompileCommand command = new CompileCommand();
@@ -55,7 +55,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests.UnitTests
 			Assert.IsTrue(cdb1 == cdb2);
 		}
 
-		[TestMethod]
+		[TestCategory("UnitTest"), TestMethod]
 		public void TestCompilationDatabaseRetainsEscapedQuotesWhenDeserializedAfterSerialization()
 		{
 			CompileCommand command = new CompileCommand();

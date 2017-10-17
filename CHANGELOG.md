@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.8
+## 1.1
 
-**2017-10-07**
+**2017-10-17**
 
 * Features
 	* New option to allow compilation database generation to use `-isystem` for platform include diretories and `-I` for project additional include directories. A checkbox was added to optionally enable using `-isystem` for all include directories.

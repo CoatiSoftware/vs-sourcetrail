@@ -1,6 +1,8 @@
 # Sourcetrail Extension for Visual Studio
 Currently supports VS2012, VS2013, VS2015 and VS2017.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/jlathk3h7nw6a57k?svg=true)](https://ci.appveyor.com/project/mlangkabel/vs-sourcetrail)
+
 ## Links
 * Project Home, News: [www.sourcetrail.com](https://www.sourcetrail.com/) 
 * Documentation: [www.sourcetrail.com/documentation](https://www.sourcetrail.com/documentation/#VisualStudio) 
