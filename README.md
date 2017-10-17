@@ -10,17 +10,17 @@ Currently supports VS2012, VS2013, VS2015 and VS2017.
 ## Features
 
 ### Set your Visual Studio cursor
-![](https://github.com/CoatiSoftware/vs-sourcetrail/blob/master/images/vs_extension_use_in_sourcetrail.png)
+![](https://raw.githubusercontent.com/CoatiSoftware/vs-sourcetrail/master/images/vs_extension_use_in_sourcetrail.png)
 
 This extension allows you to set your Visual Studio text cursor to the source code location currently viewed in Sourcetrail. If the viewed file is not open in Visual Studio, the extension will open and display it automatically.
 
 ### Acticate a Symbol in Sourcetrail
-![](https://github.com/CoatiSoftware/vs-sourcetrail/blob/master/images/vs_extension_use_in_visual_studio.png)
+![](https://raw.githubusercontent.com/CoatiSoftware/vs-sourcetrail/master/images/vs_extension_use_in_visual_studio.png)
 
 Whenever you read some source code inside Visual Studio that you actually want to explore in Sourcetrail you can use this extension to activate the right-clicked symbol in Sourcetrail. 
 
 ### Create a Clang Compilation Database from a VS Solution
-![](https://github.com/CoatiSoftware/vs-sourcetrail/blob/master/images/vs_extension_dialog.png)
+![](https://raw.githubusercontent.com/CoatiSoftware/vs-sourcetrail/master/images/vs_extension_dialog.png)
 
 As a Clang based tool Sourcetrail supports the [JSON Compilation Database](https://clang.llvm.org/docs/JSONCompilationDatabase.html) format for simplified project setup. This extension enables you to generate a JSON Compilation Database from your Visual Studio projects and solutions. 
 
