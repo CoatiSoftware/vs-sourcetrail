@@ -1,0 +1,29 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+
+install:
+  - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+before_build:
+  - nuget restore
+  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+
+build_script:
+  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+
+before_test:
+  - cmd: START /WAIT "" "%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Community\Common7\IDE\VSIXInstaller.exe" /q "C:\projects\vs-sourcetrail\SourcetrailExtension\bin\Release\vs-sourcetrail.vsix"
+
+test_script:
+  - ps: VSTest.Console.exe C:\projects\vs-sourcetrail\SourcetrailExtensionTests\bin\Release\SourcetrailExtension.Tests.dll
+      
+after_test:
+  - ps: if ($env:APPVEYOR_REPO_BRANCH -eq 'master') { Vsix-PushArtifacts | Vsix-PublishToGallery }
+  - ps: if ($env:APPVEYOR_REPO_BRANCH -ne 'master') { Vsix-PushArtifacts }

@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-using CoatiSoftware.SourcetrailExtension.IntegrationTests.Helpers;
+using CoatiSoftware.SourcetrailExtension.Tests.Helpers;
 using CoatiSoftware.SourcetrailExtension.SolutionParser;
 using EnvDTE;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,17 +24,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
+namespace CoatiSoftware.SourcetrailExtension.Tests
 {
 	[TestClass]
 	public class CreateCdbTests
 	{
 		private bool _updateExpectedOutput = false;
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestSourcetrailExtensionPackageGetsLoaded()
 		{
+			UIThreadInvoker.Initialize();
 			UIThreadInvoker.Invoke(new Action(() =>
 			{
 				// Load the package into the shell.
@@ -54,7 +55,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForAllFilesInSameFolder()
 		{
@@ -65,7 +66,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForCinderSolution_NonSystemIncludes()
 		{
@@ -76,7 +77,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForCinderSolution()
 		{
@@ -87,7 +88,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForNMakeProjectWithForcedInclude()
 		{
@@ -98,7 +99,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForNMakeProjectWithIncludeSearchPath()
 		{
@@ -109,7 +110,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForNMakeProjectWithPreprocessorDefinition()
 		{
@@ -120,7 +121,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForProjectWithCompileAsDefaultOption()
 		{
@@ -131,7 +132,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForProjectWithForcedInclude()
 		{
@@ -142,7 +143,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForProjectWithPropertySheetUsage()
 		{
@@ -153,7 +154,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForProjectWithDifferentItemTypes()
 		{
@@ -164,7 +165,7 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 			}));
 		}
 
-		[TestMethod]
+		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForSolutionWithCustomNamedProjectConfiguration()
 		{
@@ -242,7 +243,8 @@ namespace CoatiSoftware.SourcetrailExtension.IntegrationTests
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new TestPathResolver());
 				solutionParser.CreateCompileCommands(
 					project, configurationNames[0], platformNames[0], "c11", null, nonSystemIncludesUseAngleBrackets,
-					(CompileCommand command, bool lastFile) => {
+					(CompileCommand command, bool lastFile) =>
+					{
 						cdb.AddCompileCommand(command);
 					}
 				);
