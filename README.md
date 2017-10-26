@@ -44,7 +44,7 @@ Thanks to [Dakota Hawkins](https://github.com/dakotahawkins) for contributions.
 
 ## Troubleshooting
 
-The first step to troubleshooting is to enable logging for the extension. This can be found in the settings for SourceTrail in `Tools` -> `Options` -> `Sourcetrail`
+The first step to troubleshooting is to enable logging for the extension. This can be found in the settings for Sourcetrail in `Tools` -> `Options` -> `Sourcetrail`
 
 ### `Create Compilation Database` is greyed out
 Check that the loaded solution contains at least one C/C++ project in it. 
