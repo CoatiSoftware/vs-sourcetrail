@@ -42,6 +42,18 @@ We really appreciate every possible kind of contributions. Pull-requests are gre
 
 Thanks to [Dakota Hawkins](https://github.com/dakotahawkins) for contributions.
 
+## Troubleshooting
+
+The first step to troubleshooting is to enable logging for the extension. This can be found in the settings for Sourcetrail in `Tools` -> `Options` -> `Sourcetrail`
+
+### `Create Compilation Database` is greyed out
+Check that the loaded solution contains at least one C/C++ project in it. 
+If logging is enabled for Sourcetrail, there may be messages in the output window resembling this one:
+
+`Error: Exception: The solution's source code database may not have been opened. Please make sure the solution is not open in another copy of Visual Studio, and that its database file is not read only.`
+
+This indicates that Intellisense or the browse database is disabled. Sourcetrail requires the browse database. It can be enabled in `Tools` -> `Options` -> `Text Editor` -> `C/C++` -> `Advanced`.
+
 ## Project Structure
 The `SourcetrailExtension` solution contains several different projects. This section should explain their purpose.
 
