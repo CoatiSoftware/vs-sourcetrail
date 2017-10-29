@@ -386,7 +386,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				IVCPlatformWrapper platform = vcProjectConfig.GetPlatform();
 
 				List<string> finalDirectories = new List<string>();
-				foreach (string directory in platform.GetExecutableDirectories().Split(';'))
+				foreach (string directory in platform.GetExecutableDirectories().SplitPaths())
 				{
 					IPathResolver resolver = new VsPathResolver("");
 					finalDirectories.AddRange(resolver.ResolveVsMacroInPath(directory, vcProjectConfig));

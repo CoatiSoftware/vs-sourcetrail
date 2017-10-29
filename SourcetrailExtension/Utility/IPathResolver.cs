@@ -56,7 +56,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			}
 
 			List<string> pathList = new List<string>();
-			foreach (string resolvedPath in resolvedPaths.Split(';'))
+			foreach (string resolvedPath in resolvedPaths.SplitPaths())
 			{
 				pathList.Add(resolvedPath);
 			}

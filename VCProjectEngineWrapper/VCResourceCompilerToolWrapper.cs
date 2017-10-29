@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using CoatiSoftware.SourcetrailExtension;
 using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace VCProjectEngineWrapper 
@@ -61,12 +62,12 @@ namespace VCProjectEngineWrapper
 
 		public string[] GetAdditionalIncludeDirectories()
 		{
-			return _wrappedRules.GetEvaluatedPropertyValue("AdditionalIncludeDirectories").Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("AdditionalIncludeDirectories").SplitPaths();
 		}
 
 		public string[] GetPreprocessorDefinitions()
 		{
-			return _wrappedRules.GetEvaluatedPropertyValue("PreprocessorDefinitions").Split(';');
+			return _wrappedRules.GetEvaluatedPropertyValue("PreprocessorDefinitions").SplitPaths();
 		}
 	}
 }
