@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2
+
+**2017-10-31**
+
+* Fixes
+	* Fixes exceptions raised due to CR/LF characters appearing in extracted header search paths (which can be introduced when project properties are provided via .props file) by stripping whitespace from each item after splitting on semicolon.
+
+
 ## 1.1
 
 **2017-10-17**
