@@ -423,9 +423,12 @@ namespace CoatiSoftware.SourcetrailExtension
 
 			if(messageType == Utility.NetworkProtocolUtility.MESSAGE_TYPE.MOVE_CURSOR)
 			{
+				Logging.Logging.LogInfo("Received request to set the IDE cursor.");
 				Utility.NetworkProtocolUtility.CursorPosition cursorPosition = Utility.NetworkProtocolUtility.ParseSetCursorMessage(message);
 				if (cursorPosition.Valid)
 				{
+					Logging.Logging.LogInfo("Trying to set cursor position to line " + cursorPosition.LineNumber + ", column " + cursorPosition.ColumnNumber + " in file \"" + cursorPosition.FilePath + "\"");
+
 					cursorPosition.ColumnNumber += 1; // VS counts columns starting at 1, sourcetrail starts at 0
 					DTE dte = (DTE)GetService(typeof(DTE));
 					if (Utility.FileUtility.OpenSourceFile(dte, cursorPosition.FilePath))
@@ -438,6 +441,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			}
 			else if(messageType == Utility.NetworkProtocolUtility.MESSAGE_TYPE.CREATE_CDB)
 			{
+				Logging.Logging.LogInfo("Received request to create a compilation database.");
 				if(_validSolutionLoaded)
 				{
 					DTE dte = (DTE)GetService(typeof(DTE));
