@@ -25,5 +25,5 @@ test_script:
   - ps: VSTest.Console.exe C:\projects\vs-sourcetrail\SourcetrailExtensionTests\bin\Release\SourcetrailExtension.Tests.dll
 
 after_test:
-  - ps: if ($env:APPVEYOR_REPO_BRANCH -eq 'master' -and $env:APPVEYOR_REPO_TAG -eq 'true') { Vsix-PushArtifacts | Vsix-PublishToGallery }
-  - ps: if ($env:APPVEYOR_REPO_BRANCH -ne 'master' -or $env:APPVEYOR_REPO_TAG -ne 'true') { Vsix-PushArtifacts }
+  - ps: if ($env:APPVEYOR_REPO_BRANCH -eq 'master' -and $env:APPVEYOR_REPO_TAG -eq 'true') { Vsix-PublishToGallery }
+  - ps: Vsix-PushArtifacts
