@@ -45,7 +45,15 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets, Action<CompileCommand, bool> lambda)
+		public void CreateCompileCommands(
+			Project project, 
+			string solutionConfigurationName, 
+			string solutionPlatformName, 
+			string cStandard, 
+			string additionalClangOptions,
+			bool nonSystemIncludesUseAngleBrackets,
+			bool useEnvForIncludes,
+			Action<CompileCommand, bool> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -88,6 +96,12 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				projectPlatformName = solutionPlatformName;
 			}
 
+			List<string> environmentIncludeDirectories = new List<string>();
+			if (useEnvForIncludes)
+			{
+				environmentIncludeDirectories.AddRange(Environment.GetEnvironmentVariable("INCLUDE").SplitPaths());
+			}
+
 			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(projectConfigurationName, projectPlatformName);
 
 			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
@@ -118,6 +132,13 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					{
 						systemIncludeDirectories.InsertRange(0, projectIncludeDirectories);
 						projectIncludeDirectories.Clear();
+						systemIncludeDirectories.InsertRange(0, environmentIncludeDirectories);
+						environmentIncludeDirectories.Clear();
+					}
+
+					foreach (string dir in environmentIncludeDirectories)
+					{
+						commandFlags += " -I \"" + dir + "\" ";
 					}
 
 					foreach (string dir in projectIncludeDirectories)

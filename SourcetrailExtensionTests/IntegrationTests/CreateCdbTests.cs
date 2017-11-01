@@ -68,6 +68,26 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 
 		[TestCategory("IntegrationTest"), TestMethod]
 		[HostType("VS IDE")]
+		public void TestCompilationDatabaseCreationForAllFilesInSameFolder2()
+		{
+			UIThreadInvoker.Initialize();
+			UIThreadInvoker.Invoke(new Action(() =>
+			{
+				String oldIncludeValue = Environment.GetEnvironmentVariable("include");
+				try
+				{
+					Environment.SetEnvironmentVariable("include", "some/directory");
+					TestCompilationDatabaseForSolution("../../../SourcetrailExtensionTests/data/all_in_same_folder/test.sln", true, true);
+				}
+				finally
+				{
+					Environment.SetEnvironmentVariable("include", oldIncludeValue);
+				}
+			}));
+		}
+
+		[TestCategory("IntegrationTest"), TestMethod]
+		[HostType("VS IDE")]
 		public void TestCompilationDatabaseCreationForCinderSolution_NonSystemIncludes()
 		{
 			UIThreadInvoker.Initialize();
@@ -176,7 +196,7 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 			}));
 		}
 
-		private void TestCompilationDatabaseForSolution(string solutionPath, bool nonSystemIncludesUseAngleBrackets = true)
+		private void TestCompilationDatabaseForSolution(string solutionPath, bool nonSystemIncludesUseAngleBrackets = true, bool useEnvForIncludes = false)
 		{
 			Assert.IsTrue(File.Exists(solutionPath), "solution path does not exist");
 
@@ -188,7 +208,7 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 			CompilationDatabase output = null;
 			try
 			{
-				output = CreateCompilationDatabaseForCurrentSolution(nonSystemIncludesUseAngleBrackets);
+				output = CreateCompilationDatabaseForCurrentSolution(nonSystemIncludesUseAngleBrackets, useEnvForIncludes);
 			}
 			catch (Exception e)
 			{
@@ -203,6 +223,11 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 			if (!nonSystemIncludesUseAngleBrackets)
 			{
 				cdbPath = Path.GetDirectoryName(cdbPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(cdbPath) + "_non-system_includes.json";
+			}
+
+			if (useEnvForIncludes)
+			{
+				cdbPath = Path.GetDirectoryName(cdbPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(cdbPath) + "_use_env.json";
 			}
 
 			if (_updateExpectedOutput)
@@ -226,7 +251,7 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 			Helpers.TestUtility.CloseCurrentSolution();
 		}
 
-		private static CompilationDatabase CreateCompilationDatabaseForCurrentSolution(bool nonSystemIncludesUseAngleBrackets)
+		private static CompilationDatabase CreateCompilationDatabaseForCurrentSolution(bool nonSystemIncludesUseAngleBrackets, bool useEnvForIncludes)
 		{
 			DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
 			Assert.IsNotNull(dte);
@@ -242,7 +267,13 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new TestPathResolver());
 				solutionParser.CreateCompileCommands(
-					project, configurationNames[0], platformNames[0], "c11", null, nonSystemIncludesUseAngleBrackets,
+					project, 
+					configurationNames[0], 
+					platformNames[0], 
+					"c11", 
+					null, 
+					nonSystemIncludesUseAngleBrackets,
+					useEnvForIncludes,
 					(CompileCommand command, bool lastFile) =>
 					{
 						cdb.AddCompileCommand(command);

@@ -343,7 +343,16 @@ namespace CoatiSoftware.SourcetrailExtension
 			Utility.AsynchronousClient.Send(message);
 		}
 
-		private void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets)
+		private void OnCreateProject(
+			List<EnvDTE.Project> projects, 
+			string configurationName, 
+			string platformName, 
+			string targetDir, 
+			string fileName, 
+			string cStandard, 
+			string additionalClangOptions, 
+			bool nonSystemIncludesUseAngleBrackets,
+			bool useEnvForIncludes)
 		{
 			DTE dte = (DTE)GetService(typeof(DTE));
 
@@ -358,6 +367,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			createCdbWindow.SolutionDir = Utility.SolutionUtility.GetSolutionPath(dte);
 			createCdbWindow.AdditionalClangOptions = additionalClangOptions;
 			createCdbWindow.NonSystemIncludesUseAngleBrackets = nonSystemIncludesUseAngleBrackets;
+			createCdbWindow.UseEnvForIncludes = useEnvForIncludes;
 
 			createCdbWindow.Cdb = _recentSettingsList.GetCdbForSolution(createCdbWindow.SolutionDir, targetDir + "\\" + fileName + ".json");
 
@@ -541,6 +551,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			window._platforms = Utility.SolutionUtility.GetPlatformNames(dte);
 			window._solutionDirectory = Path.GetDirectoryName(dte.Solution.FullName);
 			window._solutionFileName = Path.GetFileNameWithoutExtension(dte.Solution.FullName);
+			window._useEnvForIncludes = dte.CommandLineArguments.Contains("/useenv") || dte.CommandLineArguments.Contains("-useenv");
 
 			bool containsCFiles = true; // Utility.SolutionUtility.ContainsCFiles(dte); // takes ridiculously long, I'd rather just display the option by default
 			window._containsCFiles = containsCFiles;

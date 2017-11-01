@@ -36,7 +36,16 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 		}
 
-		public delegate void OnCreateProject(List<EnvDTE.Project> projects, string configurationName, string platformName, string targetDir, string fileName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets);
+		public delegate void OnCreateProject(
+			List<EnvDTE.Project> projects, 
+			string configurationName, 
+			string platformName, 
+			string targetDir, 
+			string fileName, 
+			string cStandard, 
+			string additionalClangOptions, 
+			bool nonSystemIncludesUseAngleBrackets, 
+			bool useEnvForIncludes);
 
 		// public List<SolutionProject> m_projects = new List<SolutionProject>();
 		public Utility.SolutionUtility.SolutionStructure _projectStructure = new Utility.SolutionUtility.SolutionStructure();
@@ -48,6 +57,8 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 		public string _solutionDirectory = "";
 		public string _solutionFileName = "foo";
+
+		public bool _useEnvForIncludes = false;
 
 		public bool _containsCFiles = false;
 
@@ -331,7 +342,18 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 					Logging.Logging.LogInfo("Non-system Includes Use Angle Brackets: " + nonSystemIncludesUseAngleBrackets.ToString());
 
-					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions, nonSystemIncludesUseAngleBrackets);
+					_onCreateProject(
+						GetTreeViewProjectItems(), 
+						configurationName, 
+						platformName, 
+						targetDir, 
+						textBoxFileName.Text, 
+						cStandard, 
+						additionalClangOptions, 
+						nonSystemIncludesUseAngleBrackets,
+						_useEnvForIncludes
+					);
+
 					Close();
 				}
 				else
