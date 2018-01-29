@@ -99,6 +99,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			List<string> environmentIncludeDirectories = new List<string>();
 			if (useEnvForIncludes)
 			{
+				// environment variables are case insensitive
 				environmentIncludeDirectories.AddRange(Environment.GetEnvironmentVariable("INCLUDE").SplitPaths());
 			}
 

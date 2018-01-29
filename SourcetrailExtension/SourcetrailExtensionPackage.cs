@@ -551,7 +551,13 @@ namespace CoatiSoftware.SourcetrailExtension
 			window._platforms = Utility.SolutionUtility.GetPlatformNames(dte);
 			window._solutionDirectory = Path.GetDirectoryName(dte.Solution.FullName);
 			window._solutionFileName = Path.GetFileNameWithoutExtension(dte.Solution.FullName);
-			window._useEnvForIncludes = dte.CommandLineArguments.Contains("/useenv") || dte.CommandLineArguments.Contains("-useenv");
+
+			window._useEnvForIncludes = false;
+			if (dte.CommandLineArguments.Contains("/useenv") || dte.CommandLineArguments.Contains("-useenv"))
+			{
+				Logging.Logging.LogInfo("/useenv switch detected on startup, adding \"INCLUDE\" environment variable to header search path.");
+				window._useEnvForIncludes = true;
+			}
 
 			bool containsCFiles = true; // Utility.SolutionUtility.ContainsCFiles(dte); // takes ridiculously long, I'd rather just display the option by default
 			window._containsCFiles = containsCFiles;
