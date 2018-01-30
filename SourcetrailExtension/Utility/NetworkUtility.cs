@@ -56,8 +56,6 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 		{
 			const string ipAddressString = "127.0.0.1";
 
-			byte[] bytes = new Byte[1024];
-
 			IPAddress ipAddress = IPAddress.Parse(ipAddressString);
 			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, (int)_port);
 
@@ -135,39 +133,6 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 				Logging.Logging.LogError("Excpetion: " + e.Message);
 			}
 		}
-
-		private static void Send(Socket handler, String data)
-		{
-			try
-			{
-				byte[] byteData = Encoding.ASCII.GetBytes(data);
-				handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
-			}
-			catch(Exception e)
-			{
-				Logging.Logging.LogError("Excpetion: " + e.Message);
-			}
-		}
-
-		private static void SendCallback(IAsyncResult ar)
-		{
-			try
-			{
-				Socket handler = (Socket)ar.AsyncState;
-
-				int bytesSent = handler.EndSend(ar);
-				Logging.Logging.LogInfo("Sent " + bytesSent.ToString() + " bytes to client.");
-			}
-			catch (Exception e)
-			{
-				Logging.Logging.LogError("Excpetion: " + e.Message);
-
-				if (_onErrorCallback != null)
-				{
-					_onErrorCallback(e.ToString());
-				}
-			}
-		}
 	}
 
 	public class AsynchronousClient
@@ -243,13 +208,12 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 			}
 		}
 
-		private static void Send(Socket client, String data)
+		private static void Send(Socket client, String message)
 		{
 			try
 			{
-				byte[] byteData = Encoding.ASCII.GetBytes(data);
-
-				client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), client);
+				byte[] bytes = Encoding.UTF8.GetBytes(message);
+				client.BeginSend(bytes, 0, bytes.Length, 0, new AsyncCallback(SendCallback), client);
 			}
 			catch(Exception e)
 			{
