@@ -112,7 +112,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 
 				if (bytesRead > 0)
 				{
-					state._stringBuilder.Append(Encoding.ASCII.GetString(state._buffer, 0, bytesRead));
+					state._stringBuilder.Append(Encoding.UTF8.GetString(state._buffer, 0, bytesRead));
 
 					content = state._stringBuilder.ToString();
 					if (content.IndexOf(_endOfMessageToken) > -1)
