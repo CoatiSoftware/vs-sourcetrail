@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3
+
+**2018-02-16**
+
+* Fixes
+	* Fixes text encoding used in messages that synchronize Visual Studio and Sourcetrail.
+	
+
 ## 1.2
 
 **2017-10-31**
