@@ -18,8 +18,9 @@ before_build:
 build_script:
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
-before_test:
-  - cmd: START /WAIT "" "%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Community\Common7\IDE\VSIXInstaller.exe" /q "C:\projects\vs-sourcetrail\SourcetrailExtension\bin\Release\vs-sourcetrail.vsix"
+# This command installes the extension to Visual Studio 2017 (requied for running the integration tests)
+#before_test:
+#  - cmd: START /WAIT "" "%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Community\Common7\IDE\VSIXInstaller.exe" /q "C:\projects\vs-sourcetrail\SourcetrailExtension\bin\Release\vs-sourcetrail.vsix"
 
 test_script:
   - ps: VSTest.Console.exe C:\projects\vs-sourcetrail\SourcetrailExtensionTests\bin\Release\SourcetrailExtension.Tests.dll
