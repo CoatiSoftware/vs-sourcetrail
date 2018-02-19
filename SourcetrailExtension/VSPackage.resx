@@ -121,6 +121,6 @@
     <value>Sourcetrail Extension</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>This extension allows Visual Studio to communicate with Sourcetrail, a Clang based source code exploration tool. Additionally it can generate a Clang Compilation Database for any Visual Studio solution which can be used to run various Clang based tools.</value>
+    <value>This extension allows you to synchronize Visual Studio with Sourcetrail, a Clang based source code exploration tool. Additionally it lets you generate a Clang Compilation Database for any Visual Studio solution, which can also be used to run other Clang based tools.</value>
   </data>
 </root>

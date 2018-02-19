@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="acf15780-03b5-440e-a41e-db79b7043fc2" Version="1.3" Language="en-US" Publisher="Coati Software" />
         <DisplayName>Sourcetrail Extension</DisplayName>
-        <Description xml:space="preserve">This extension allows Visual Studio to communicate with Sourcetrail, a Clang based source code exploration tool. Additionally it can generate a Clang Compilation Database for any Visual Studio solution which can be used to run various Clang based tools.</Description>
+        <Description xml:space="preserve">This extension allows you to synchronize Visual Studio with Sourcetrail, a Clang based source code exploration tool. Additionally it lets you generate a Clang Compilation Database for any Visual Studio solution, which can also be used to run other Clang based tools.</Description>
         <MoreInfo>https://www.sourcetrail.com/</MoreInfo>
         <License>LICENSE.txt</License>
         <GettingStartedGuide>https://www.sourcetrail.com/documentation/#VisualStudio</GettingStartedGuide>
