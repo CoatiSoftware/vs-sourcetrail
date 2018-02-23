@@ -23,6 +23,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Reflection;
+using System.Xml;
+using System.Linq;
 
 namespace CoatiSoftware.SourcetrailExtension
 {
@@ -305,6 +308,20 @@ namespace CoatiSoftware.SourcetrailExtension
 			_validSolutionLoaded = false;
 		}
 
+		public string GetPackageVersion()
+		{
+			string assemblyPath = Assembly.GetExecutingAssembly().Location;
+			assemblyPath = assemblyPath.Substring(0, assemblyPath.LastIndexOf('\\'));
+			string manifestPath = Path.Combine(assemblyPath, "extension.vsixmanifest");
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(manifestPath);
+			XmlElement metaData = doc.DocumentElement.ChildNodes.Cast<XmlElement>().First(x => x.Name == "Metadata");
+			XmlElement identity = metaData.ChildNodes.Cast<XmlElement>().First(x => x.Name == "Identity");
+
+			return identity.GetAttribute("Version");
+		}
+
 		private void InitNetwork()
 		{
 			Logging.Logging.LogInfo("Initializing Network with Server Port " + ServerPort.ToString() + " and Client Port " + ClientPort.ToString());
@@ -333,7 +350,7 @@ namespace CoatiSoftware.SourcetrailExtension
 
 			Logging.Obfuscation.NameObfuscator.Enabled(LogObfuscationEnabled);
 
-			Logging.Logging.LogInfo("Logging initialized");
+			Logging.Logging.LogInfo("Logging initialized for Sourcetrail Extension " + GetPackageVersion());
 		}
 
 		private void SendPing()
@@ -492,7 +509,7 @@ namespace CoatiSoftware.SourcetrailExtension
 
 			if(LoggingEnabled)
 			{
-				Logging.Logging.LogInfo("Logging enabled");
+				Logging.Logging.LogInfo("Logging enabled for Sourcetrail Extension " + GetPackageVersion());
 			}
 		}
 
