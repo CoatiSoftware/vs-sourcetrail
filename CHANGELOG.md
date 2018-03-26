@@ -1,12 +1,23 @@
 # Changelog
 
+## 1.4
+
+**2018-03-26**
+
+* Features
+	* New buttons that allow to auto-select all projects that reference/are referenced by the currently selected ones.
+* Fixes
+	* Fixes extension icon incompatibility with new Visual Studio Marketplace by removing largest icon layer size.
+	* Fixes exception that caused exported Compilation Database to be empty by using an older version of referenced Newtonsoft.Json package.
+
+
 ## 1.3
 
 **2018-02-16**
 
 * Fixes
 	* Fixes text encoding used in messages that synchronize Visual Studio and Sourcetrail.
-	
+
 
 ## 1.2
 
