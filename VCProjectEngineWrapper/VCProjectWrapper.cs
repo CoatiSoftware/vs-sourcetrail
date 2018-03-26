@@ -18,6 +18,7 @@ using CoatiSoftware.SourcetrailExtension.Logging;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace VCProjectEngineWrapper
 {
@@ -119,6 +120,27 @@ namespace VCProjectEngineWrapper
 		public string GetProjectFile()
 		{
 			return _wrapped.ProjectFile;
+		}
+
+		public List<string> GetReferencedProjectNames()
+		{
+			List<string> referencedProjectNames = new List<string>();
+			foreach (Object o in _wrapped.VCReferences)
+			{
+				VCProjectReference projectReference = o as VCProjectReference;
+				if (projectReference != null)
+				{
+					try
+					{
+						referencedProjectNames.Add(projectReference.Name);
+					}
+					catch (Exception)
+					{
+						// just ignore this reference
+					}
+				} 
+			}
+			return referencedProjectNames;
 		}
 	}
 }

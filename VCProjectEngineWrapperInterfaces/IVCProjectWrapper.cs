@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
+
 namespace VCProjectEngineWrapper
 {
     public interface IVCProjectWrapper
@@ -25,5 +27,6 @@ namespace VCProjectEngineWrapper
 		string GetProjectDirectory();
 		string GetName();
 		string GetProjectFile();
+		List<string> GetReferencedProjectNames();
 	}
 }
