@@ -40,13 +40,13 @@
             this.buttonClangOptionsHelp = new System.Windows.Forms.Button();
             this.buttoncheckBoxNonSystemIncludesUseAngleBracketsHelp = new System.Windows.Forms.Button();
             this.buttonSelectReferenced = new System.Windows.Forms.Button();
+            this.buttonSelectReferencing = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxNonSystemIncludesUseAngleBrackets = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.labelCStandard = new System.Windows.Forms.Label();
             this.treeViewProjects = new System.Windows.Forms.TreeView();
             this.labelDirectory = new System.Windows.Forms.Label();
-            this.buttonSelectReferencing = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonCancel
@@ -258,7 +258,7 @@
             // buttonSelectReferenced
             // 
             this.helpProvider1.SetHelpString(this.buttonSelectReferenced, "Recursively select all projects that are referenced by the selected entries");
-            this.buttonSelectReferenced.Location = new System.Drawing.Point(127, 251);
+            this.buttonSelectReferenced.Location = new System.Drawing.Point(15, 251);
             this.buttonSelectReferenced.Name = "buttonSelectReferenced";
             this.helpProvider1.SetShowHelp(this.buttonSelectReferenced, true);
             this.buttonSelectReferenced.Size = new System.Drawing.Size(106, 23);
@@ -267,6 +267,19 @@
             this.toolTip1.SetToolTip(this.buttonSelectReferenced, "Recursively select all projects that are referenced by the selected entries");
             this.buttonSelectReferenced.UseVisualStyleBackColor = true;
             this.buttonSelectReferenced.Click += new System.EventHandler(this.buttonSelectReferenced_Click);
+            // 
+            // buttonSelectReferencing
+            // 
+            this.helpProvider1.SetHelpString(this.buttonSelectReferencing, "Recursively select all projects that are referencing the selected entries");
+            this.buttonSelectReferencing.Location = new System.Drawing.Point(127, 251);
+            this.buttonSelectReferencing.Name = "buttonSelectReferencing";
+            this.helpProvider1.SetShowHelp(this.buttonSelectReferencing, true);
+            this.buttonSelectReferencing.Size = new System.Drawing.Size(106, 23);
+            this.buttonSelectReferencing.TabIndex = 25;
+            this.buttonSelectReferencing.Text = "Select Referencing";
+            this.toolTip1.SetToolTip(this.buttonSelectReferencing, "Recursively select all projects that are referencing the selected entries");
+            this.buttonSelectReferencing.UseVisualStyleBackColor = true;
+            this.buttonSelectReferencing.Click += new System.EventHandler(this.buttonSelectReferencing_Click);
             // 
             // checkBoxNonSystemIncludesUseAngleBrackets
             // 
@@ -306,19 +319,6 @@
             this.labelDirectory.Size = new System.Drawing.Size(49, 13);
             this.labelDirectory.TabIndex = 23;
             this.labelDirectory.Text = "Directory";
-            // 
-            // buttonSelectReferencing
-            // 
-            this.helpProvider1.SetHelpString(this.buttonSelectReferencing, "Recursively select all projects that are referencing the selected entries");
-            this.buttonSelectReferencing.Location = new System.Drawing.Point(15, 251);
-            this.buttonSelectReferencing.Name = "buttonSelectReferencing";
-            this.helpProvider1.SetShowHelp(this.buttonSelectReferencing, true);
-            this.buttonSelectReferencing.Size = new System.Drawing.Size(106, 23);
-            this.buttonSelectReferencing.TabIndex = 25;
-            this.buttonSelectReferencing.Text = "Select Referencing";
-            this.toolTip1.SetToolTip(this.buttonSelectReferencing, "Recursively select all projects that are referencing the selected entries");
-            this.buttonSelectReferencing.UseVisualStyleBackColor = true;
-            this.buttonSelectReferencing.Click += new System.EventHandler(this.buttonSelectReferencing_Click);
             // 
             // ProjectSetupWindow
             // 
