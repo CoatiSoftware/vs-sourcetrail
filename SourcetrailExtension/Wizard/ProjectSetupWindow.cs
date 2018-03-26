@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using VCProjectEngineWrapper;
 
 namespace CoatiSoftware.SourcetrailExtension.Wizard
 {
@@ -132,12 +133,6 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 		private void InitProjectCheckList()
 		{
-			// way to slow for large projects
-			//if(_cdb != null)
-			//{
-			//	_cdb.TryLoadData();
-			//}
-
 			foreach(Utility.SolutionUtility.SolutionStructure.Node node in _projectStructure.Nodes)
 			{
 				if(node.GetNodeType() == Utility.SolutionUtility.SolutionStructure.Node.NodeType.PROJECT)
@@ -331,7 +326,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 					Logging.Logging.LogInfo("Non-system Includes Use Angle Brackets: " + nonSystemIncludesUseAngleBrackets.ToString());
 
-					_onCreateProject(GetTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions, nonSystemIncludesUseAngleBrackets);
+					_onCreateProject(GetSelectedTreeViewProjectItems(), configurationName, platformName, targetDir, textBoxFileName.Text, cStandard, additionalClangOptions, nonSystemIncludesUseAngleBrackets);
 					Close();
 				}
 				else
@@ -375,46 +370,130 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			return File.Exists(path + "\\" + fileName + extension);
 		}
 
-		private List<EnvDTE.Project> GetTreeViewProjectItems()
+		private List<Utility.SolutionUtility.SolutionStructure.Node> getTreeViewProjectNodes()
 		{
-			List<EnvDTE.Project> solutionProjects = new List<EnvDTE.Project>();
+			List<Utility.SolutionUtility.SolutionStructure.Node> projectNodes = new List<Utility.SolutionUtility.SolutionStructure.Node>();
 
 			// Stack<TreeNode> treeNodes = new Stack<TreeNode>();
 			Stack<Utility.SolutionUtility.SolutionStructure.Node> nodeStack = new Stack<Utility.SolutionUtility.SolutionStructure.Node>();
-			foreach(Utility.SolutionUtility.SolutionStructure.Node node in _projectStructure.Nodes)
+			foreach (Utility.SolutionUtility.SolutionStructure.Node node in _projectStructure.Nodes)
 			{
 				nodeStack.Push(node);
 			}
 
-			while(nodeStack.Count > 0)
+			while (nodeStack.Count > 0)
 			{
 				Utility.SolutionUtility.SolutionStructure.Node node = nodeStack.Pop();
 
-				bool include = (node.UserData as TreeNode).Checked;
-
-				string name = node.Name;
-
-				if(node.GetNodeType() == Utility.SolutionUtility.SolutionStructure.Node.NodeType.PROJECT
-					&& (node.UserData as TreeNode).Checked == true)
+				if (node.GetNodeType() == Utility.SolutionUtility.SolutionStructure.Node.NodeType.PROJECT)
 				{
-					solutionProjects.Add(node.Project);
+					projectNodes.Add(node);
 				}
-				else if(node.GetNodeType() == Utility.SolutionUtility.SolutionStructure.Node.NodeType.FOLDER)
+				else if (node.GetNodeType() == Utility.SolutionUtility.SolutionStructure.Node.NodeType.FOLDER)
 				{
 					Utility.SolutionUtility.SolutionStructure.FolderNode folderNode = node as Utility.SolutionUtility.SolutionStructure.FolderNode;
-					foreach(Utility.SolutionUtility.SolutionStructure.Node subNode in folderNode.SubNodes)
+					foreach (Utility.SolutionUtility.SolutionStructure.Node subNode in folderNode.SubNodes)
 					{
 						nodeStack.Push(subNode);
 					}
 				}
 			}
 
-			return solutionProjects;
+			return projectNodes;
 		}
 
-		private void ProjectCheckList_SelectedIndexChanged(object sender, EventArgs e)
+		private List<EnvDTE.Project> GetSelectedTreeViewProjectItems()
 		{
+			List<EnvDTE.Project> solutionProjects = new List<EnvDTE.Project>();
 
+			foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in getTreeViewProjectNodes())
+			{
+				if ((projectNode.UserData as TreeNode).Checked)
+				{
+					solutionProjects.Add(projectNode.Project);
+				}
+			}
+
+			return solutionProjects;
+		}
+		
+		private void buttonSelectReferencing_Click(object sender, EventArgs e)
+		{
+			List<Utility.SolutionUtility.SolutionStructure.Node> projectNodes = getTreeViewProjectNodes();
+
+			List<string> selectedProjects = new List<string>();
+			foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in projectNodes)
+			{
+				if ((projectNode.UserData as TreeNode).Checked)
+				{
+					selectedProjects.Add(projectNode.Name);
+				}
+			}
+
+			bool stateChanged = true;
+			while (stateChanged)
+			{
+				stateChanged = false;
+
+				foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in projectNodes)
+				{
+					if (!(projectNode.UserData as TreeNode).Checked)
+					{
+						IVCProjectWrapper vcProject = VCProjectWrapperFactory.create(projectNode.Project.Object);
+						if (vcProject != null && vcProject.isValid())
+						{
+							foreach (string referencedProjectName in vcProject.GetReferencedProjectNames())
+							{
+								if (selectedProjects.Contains(referencedProjectName))
+								{
+									(projectNode.UserData as TreeNode).Checked = true;
+									selectedProjects.Add(projectNode.Name);
+									stateChanged = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private void buttonSelectReferenced_Click(object sender, EventArgs e)
+		{
+			List<Utility.SolutionUtility.SolutionStructure.Node> projectNodes = getTreeViewProjectNodes();
+			
+			List<string> projectsToSelect = new List<string>();
+			foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in projectNodes)
+			{
+				if ((projectNode.UserData as TreeNode).Checked)
+				{
+					IVCProjectWrapper vcProject = VCProjectWrapperFactory.create(projectNode.Project.Object);
+					if (vcProject != null && vcProject.isValid())
+					{
+						projectsToSelect.AddRange(vcProject.GetReferencedProjectNames());
+					}
+				}
+			}
+
+			bool stateChanged = true;
+			while (stateChanged)
+			{
+				stateChanged = false;
+
+				foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in projectNodes)
+				{
+					if (projectsToSelect.Contains(projectNode.Name) && !(projectNode.UserData as TreeNode).Checked)
+					{
+						(projectNode.UserData as TreeNode).Checked = true;
+
+						IVCProjectWrapper vcProject = VCProjectWrapperFactory.create(projectNode.Project.Object);
+						if (vcProject != null && vcProject.isValid())
+						{
+							projectsToSelect.AddRange(vcProject.GetReferencedProjectNames());
+							stateChanged = true;
+						}
+					}
+				}
+			}
 		}
 
 		private void buttonSelectAll_Click(object sender, EventArgs e)
@@ -437,11 +516,6 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			}
 
 			UpdateCreateButtonEnabled();
-		}
-
-		private void label1_Click(object sender, EventArgs e)
-		{
-
 		}
 
 		private void buttonSelect_Click(object sender, EventArgs e)
