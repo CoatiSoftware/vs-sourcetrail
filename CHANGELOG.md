@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5
+
+**2018-05-04**
+
+* Fixes
+	* Sourcetrail Extension will now consider the file level option "Excluded From Build" and prevent the respective files from being added to the generated compilation database.
+
+
 ## 1.4
 
 **2018-03-26**
