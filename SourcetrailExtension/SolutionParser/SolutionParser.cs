@@ -192,6 +192,12 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					{
 						if (vcFileConfiguration != null && vcFileConfiguration.isValid())
 						{
+							if (vcFileConfiguration.GetExcludedFromBuild())
+							{
+								Logging.Logging.LogInfo("Discarding item because it is excluded from build.");
+								return null;
+							}
+
 							compilerTool = vcFileConfiguration.GetCLCompilerTool();
 							if (compilerTool != null && compilerTool.isValid())
 							{
@@ -278,7 +284,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 		static private bool CheckIsSourceFile(ProjectItem item)
 		{
 			try
-			{
+			{				
 				string itemType = "";
 				if (ProjectUtility.HasProperty(item.Properties, "ItemType"))
 				{

@@ -58,6 +58,11 @@ namespace VCProjectEngineWrapper
 			return Utility.GetWrappedVersion();
 		}
 
+		public bool GetExcludedFromBuild()
+		{
+			return _wrapped.ExcludedFromBuild;
+		}
+
 		public IVCCLCompilerToolWrapper GetCLCompilerTool()
 		{
 			object tool;

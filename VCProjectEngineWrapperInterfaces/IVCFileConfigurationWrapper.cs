@@ -21,6 +21,7 @@ namespace VCProjectEngineWrapper
 		string GetWrappedVersion();
 		bool isValid();
 
+		bool GetExcludedFromBuild();
 		IVCCLCompilerToolWrapper GetCLCompilerTool();
 	}
 }
