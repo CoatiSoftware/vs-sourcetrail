@@ -16,6 +16,7 @@
 
 using CoatiSoftware.SourcetrailExtension.Utility;
 using System;
+using System.IO;
 using VCProjectEngineWrapper;
 
 namespace CoatiSoftware.SourcetrailExtension.SolutionParser
@@ -36,10 +37,18 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 		public override string GetAsAbsoluteCanonicalPath(string path, IVCProjectWrapper project)
 		{
-			if (path.Length > 0 && !System.IO.Path.IsPathRooted(path))
+			if (!string.IsNullOrEmpty(path))
 			{
-				path = project.GetProjectDirectory() + path;
-				path = new Uri(path).LocalPath;
+				if (path.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+				{
+					Logging.Logging.LogError("Path \"" + path + "\" contains invalid characters.");
+				}
+
+				if (!Path.IsPathRooted(path))
+				{
+					path = project.GetProjectDirectory() + path;
+					path = new Uri(path).LocalPath;
+				}
 			}
 			return path;
 		}
