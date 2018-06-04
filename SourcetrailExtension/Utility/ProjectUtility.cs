@@ -129,6 +129,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 		{
 			return includeDirectories
 					.Select(x => x.Replace("\\\"", ""))
+					.Select(x => x.Replace("\"", ""))
 					.Select(x => pathResolver.GetAsAbsoluteCanonicalPath(x, project))
 					.Select(x => x.Replace("\\", "/")) // backslashes would cause some string-escaping hassles...
 					.Where(x => !string.IsNullOrWhiteSpace(x))

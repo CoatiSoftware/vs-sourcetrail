@@ -255,6 +255,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					CompileCommand command = new CompileCommand();
 
 					string relativeFilePath = item.Properties.Item("RelativePath").Value.ToString();
+
+					relativeFilePath = relativeFilePath.Replace("\\\"", "");
+					relativeFilePath = relativeFilePath.Replace("\"", "");
 					command.File = _pathResolver.GetAsAbsoluteCanonicalPath(relativeFilePath, vcFile.GetProject());
 					command.File = command.File.Replace('\\', '/');
 
