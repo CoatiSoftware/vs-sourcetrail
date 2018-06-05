@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6
+
+**2018-06-05**
+
+* Fixes
+	* Fixes an exception that was thrown if the detected include paths were surrounded by quotes, which caused the generated compilation database to be empty.
+
+
 ## 1.5
 
 **2018-05-04**
