@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7
+
+**2018-06-26**
+
+* Fixes
+	* Handles an exception that was thrown if the loaded project uses a legacy configuration type
+	* Improves log information
+
+
 ## 1.6
 
 **2018-06-05**
