@@ -276,10 +276,8 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			}
 			catch (Exception e)
 			{
-				Logging.Logging.LogError("Exception: " + e.Message);
+				Logging.Logging.LogError("Exception occurred while creating command object: " + e.Message);
 			}
-
-			Logging.Logging.LogError("Failed to create command object.");
 
 			return null;
 		}
