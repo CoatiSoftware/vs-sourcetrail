@@ -262,7 +262,7 @@ namespace CoatiSoftware.SourcetrailExtension
 
 				if(_recentSettingsList.CheckCdbForSolutionExists(solutionPath))
 				{
-					Logging.Logging.LogInfo("A Cdb for the loaded solution already exists.");
+					Logging.Logging.LogInfo("A Compilation Database for the loaded solution already exists.");
 				}
 
 				bool enable = false;
@@ -271,14 +271,15 @@ namespace CoatiSoftware.SourcetrailExtension
 					if (language == CodeModelLanguageConstants.vsCMLanguageVC
 						|| language == CodeModelLanguageConstants.vsCMLanguageMC)
 					{
-						Logging.Logging.LogInfo("C/C++ project was detected");
+						Logging.Logging.LogInfo("C/C++ project was detected.");
 						enable = true;
+						break;
 					}
 				}
 
 				if (enable)
 				{
-					Logging.Logging.LogInfo("Enabling extension UI");
+					Logging.Logging.LogInfo("Enabling extension UI.");
 					_menuItemSetActiveToken.Enabled = true;
 					_menuItemCreateCdb.Enabled = true;
 
@@ -288,7 +289,11 @@ namespace CoatiSoftware.SourcetrailExtension
 				{
 					_validSolutionLoaded = false;
 
-					Logging.Logging.LogInfo("No C/C++ project was detected");
+					Logging.Logging.LogInfo(
+						"No C/C++ project was detected. To use the Sourcetrail Extension, please make " +
+						"sure that the loaded Visual Studio Solution contains at least one C/C++ project " +
+						"and Visual Studio is configured to generate a symbol database " +
+						"(Tools->Options->Text Editor->C/C++->Advanced->Browsing/Navigation->Disable Database = False).");
 				}
 			}
 			catch(Exception e)
