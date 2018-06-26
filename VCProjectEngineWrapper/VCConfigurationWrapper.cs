@@ -64,15 +64,22 @@ namespace VCProjectEngineWrapper
 
 		public bool isMakefileConfiguration()
 		{
-			ConfigurationTypes configurationType = _wrapped.ConfigurationType;
-			if (configurationType == ConfigurationTypes.typeGeneric)
+			try
 			{
-				return true;
-			}
+				ConfigurationTypes configurationType = _wrapped.ConfigurationType;
+				if (configurationType == ConfigurationTypes.typeGeneric)
+				{
+					return true;
+				}
 
-			if (configurationType == ConfigurationTypes.typeUnknown && GetNMakeTool() != null && GetNMakeTool().isValid())
+				if (configurationType == ConfigurationTypes.typeUnknown && GetNMakeTool() != null && GetNMakeTool().isValid())
+				{
+					return true;
+				}
+			}
+			catch
 			{
-				return true;
+				Logging.LogWarning("Unable to determine if a makefile configuration is used, falling back to default behavior.");
 			}
 
 			return false;
