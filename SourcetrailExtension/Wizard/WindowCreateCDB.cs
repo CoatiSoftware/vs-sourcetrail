@@ -205,7 +205,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 				solutionParser.CreateCompileCommands(
 					project, _configurationName, _platformName, _cStandard, _additionalClangOptions, _nonSystemIncludesUseAngleBrackets,
-					(CompileCommand command, bool lastFile) => {
+					(CompileCommand command) => {
 						string serializedCommand = "";
 						foreach (string line in command.SerializeToJson().Split('\n'))
 						{
@@ -213,9 +213,14 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 						}
 						serializedCommand = serializedCommand.TrimEnd('\n');
 
-						fileWriter.PushMessage(serializedCommand + (lastProject && lastFile ? "\n" : ",\n"));
+						fileWriter.PushMessage(serializedCommand + ",\n");
 					}
 				);
+
+				if (lastProject)
+				{
+					fileWriter.PushMessage("\n");
+				}
 
 				lock (_lockObject)
 				{
