@@ -244,7 +244,7 @@ namespace CoatiSoftware.SourcetrailExtension.Tests
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new TestPathResolver());
 				solutionParser.CreateCompileCommands(
 					project, configurationNames[0], platformNames[0], "c11", null, nonSystemIncludesUseAngleBrackets,
-					(CompileCommand command, bool lastFile) =>
+					(CompileCommand command) =>
 					{
 						cdb.AddCompileCommand(command);
 					}
