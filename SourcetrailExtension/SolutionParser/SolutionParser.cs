@@ -45,7 +45,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 			_pathResolver = pathResolver;
 		}
 
-		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets, Action<CompileCommand, bool> lambda)
+		public void CreateCompileCommands(Project project, string solutionConfigurationName, string solutionPlatformName, string cStandard, string additionalClangOptions, bool nonSystemIncludesUseAngleBrackets, Action<CompileCommand> lambda)
 		{
 			Logging.Logging.LogInfo("Creating command objects for project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\".");
 
@@ -148,14 +148,14 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 
 				// create command objects for all applicable project items
 				{
-					List<CompileCommand> compileCommands = Utility.ProjectUtility.GetProjectItems(project).Select(item =>
+					foreach (ProjectItem item in Utility.ProjectUtility.GetProjectItems(project))
 					{
-						return CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
-					}).Where(command => command != null).ToList();
-
-					for (int i = 0; i < compileCommands.Count; i++)
-					{
-						lambda(compileCommands[i], i == compileCommands.Count - 1);
+						CompileCommand command = CreateCompileCommand(item, commandFlags, cppStandard, cStandard, isMakefileProject);
+						if (command == null)
+						{
+							continue;
+						}
+						lambda(command);
 					}
 				}
 
