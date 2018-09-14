@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -74,7 +74,7 @@ namespace VCProjectEngineWrapper
 						vcProjectConfig.ConfigurationName == configurationName &&
 						vcProjectConfig.Platform.Name == platformName)
 					{
-						return new 
+						return new
 #if (VS2012)
 						VCConfigurationWrapperVs2012
 #elif (VS2013)
@@ -94,7 +94,7 @@ namespace VCProjectEngineWrapper
 			}
 			Logging.LogError("Failed to find project config matching with \"" + configurationName + "\"");
 
-			return new 
+			return new
 #if (VS2012)
 			VCConfigurationWrapperVs2012
 #elif (VS2013)
@@ -138,7 +138,7 @@ namespace VCProjectEngineWrapper
 					{
 						// just ignore this reference
 					}
-				} 
+				}
 			}
 			return referencedProjectNames;
 		}

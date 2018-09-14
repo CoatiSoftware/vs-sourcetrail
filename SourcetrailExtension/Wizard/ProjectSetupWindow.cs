@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			"c89", "gnu89" };
 
 		public SolutionParser.CompilationDatabaseSettings _cdb = new SolutionParser.CompilationDatabaseSettings();
-		
+
 		public ProjectSetupWindow()
 		{
 			InitializeComponent();
@@ -293,7 +293,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				Logging.Logging.LogInfo("Configuration " + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(configurationName) + "|" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(platformName) + " was selected.");
 
 				string targetDir = textBoxTargetDirectory.Text;
-				
+
 				if(Directory.Exists(targetDir) && CheckFileNameIsValid(textBoxFileName.Text))
 				{
 					if (CheckFileExists())
@@ -317,7 +317,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 					}
 
 					Logging.Logging.LogInfo("Setting C standard flag to " + cStandard);
-					
+
 					string additionalClangOptions = textBoxAdditionalClangOptions.Text.Trim();
 
 					Logging.Logging.LogInfo("Additional clang options: " + additionalClangOptions);
@@ -416,7 +416,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 			return solutionProjects;
 		}
-		
+
 		private void buttonSelectReferencing_Click(object sender, EventArgs e)
 		{
 			List<Utility.SolutionUtility.SolutionStructure.Node> projectNodes = getTreeViewProjectNodes();
@@ -460,7 +460,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		private void buttonSelectReferenced_Click(object sender, EventArgs e)
 		{
 			List<Utility.SolutionUtility.SolutionStructure.Node> projectNodes = getTreeViewProjectNodes();
-			
+
 			List<string> projectsToSelect = new List<string>();
 			foreach (Utility.SolutionUtility.SolutionStructure.Node projectNode in projectNodes)
 			{
@@ -562,7 +562,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 		private void textBoxFileName_TextChanged(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void textBoxFileName_Leave(object sender, EventArgs e)
@@ -584,12 +584,12 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 		private void ProjectCheckList_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
-			
+
 		}
 
 		private void ProjectCheckList_Click(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		private void ProjectCheckList_MouseUp(object sender, MouseEventArgs e)
@@ -629,7 +629,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		{
 			MessageBox.Show(
 				"Optional: Specify clang options that will be added to each compile command in your compilation database.\n\n" +
-				"For example add \"-ferror-limit=0\" to disable clang's error limit for emitting diagnostics.", 
+				"For example add \"-ferror-limit=0\" to disable clang's error limit for emitting diagnostics.",
 				"Help: Clang Options"
 			);
 		}

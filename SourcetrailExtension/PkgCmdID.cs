@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,6 @@ namespace CoatiSoftware.SourcetrailExtension
 	{
 		public const uint cmdidSourcetrailSetActiveToken = 0x104;
 		public const uint cmdidSourcetrailCreateCdb = 0x106;
-		public const uint cmdidSourcetrailOpenLogFolder = 0x107;	
+		public const uint cmdidSourcetrailOpenLogFolder = 0x107;
 	};
 }
