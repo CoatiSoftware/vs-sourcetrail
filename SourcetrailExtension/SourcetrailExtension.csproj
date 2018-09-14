@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="Multitasking\LimitedThreadsTaskScheduler.cs" />
     <Compile Include="SolutionParser\CompilationDatabase.cs" />
+    <Compile Include="Utility\CompileCommandFileWriter.cs" />
     <Compile Include="Utility\IPathResolver.cs" />
     <Compile Include="SolutionParser\VsPathResolver.cs" />
     <Compile Include="Utility\CompilationDatabaseSettingsList.cs" />

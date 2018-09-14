@@ -197,7 +197,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			return result;
 		}
 
-		private void CreateCompilationCommands(Utility.QueuedFileWriter fileWriter, EnvDTE.Project project, ref int projectsProcessed, bool lastProject = false)
+		private void CreateCompilationCommands(Utility.CompileCommandFileWriter fileWriter, EnvDTE.Project project, ref int projectsProcessed)
 		{
 			try
 			{
@@ -205,22 +205,8 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 
 				solutionParser.CreateCompileCommands(
 					project, _configurationName, _platformName, _cStandard, _additionalClangOptions, _nonSystemIncludesUseAngleBrackets,
-					(CompileCommand command) => {
-						string serializedCommand = "";
-						foreach (string line in command.SerializeToJson().Split('\n'))
-						{
-							serializedCommand += "  " + line + "\n";
-						}
-						serializedCommand = serializedCommand.TrimEnd('\n');
-
-						fileWriter.PushMessage(serializedCommand + ",\n");
-					}
+					(CompileCommand command) => { fileWriter.PushCommand(command); }
 				);
-
-				if (lastProject)
-				{
-					fileWriter.PushMessage("\n");
-				}
 
 				lock (_lockObject)
 				{
@@ -244,7 +230,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			File.WriteAllText(_targetDir + "\\" + _fileName + ".json", "");
 			File.AppendAllText(_targetDir + "\\" + _fileName + ".json", "[\n");
 
-			Utility.QueuedFileWriter fileWriter = new Utility.QueuedFileWriter(_fileName + ".json", _targetDir);
+			Utility.CompileCommandFileWriter fileWriter = new Utility.CompileCommandFileWriter(_fileName + ".json", _targetDir);
 			fileWriter.StartWorking();
 
 			try
@@ -254,7 +240,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 				List<Task> tasks = new List<Task>();
 
 				int projectsProcessed = 0;
-				foreach (EnvDTE.Project project in _projects.GetRange(0, _projects.Count - 1))
+				foreach (EnvDTE.Project project in _projects.GetRange(0, _projects.Count))
 				{
 					Logging.Logging.LogInfo("Scheduling project \"" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(project.Name) + "\" for parsing.");
 
@@ -266,11 +252,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 					tasks.Add(task);
 				}
 
-				int threadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
-
 				Task.WaitAll(tasks.ToArray());
-
-				CreateCompilationCommands(fileWriter, _projects[_projects.Count - 1], ref projectsProcessed, true);
 
 				fileWriter.StopWorking();
 

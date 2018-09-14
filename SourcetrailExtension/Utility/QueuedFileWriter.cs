@@ -164,7 +164,7 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					while (messageQueue.Count > 0)
 					{
 						_messageWrittenCount++;
-						writer.WriteLine(messageQueue.Dequeue());
+						writer.Write(messageQueue.Dequeue());
 					}
 
 					writer.Close();
