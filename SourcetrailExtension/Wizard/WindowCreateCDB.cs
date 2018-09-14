@@ -230,7 +230,8 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 					}
 				);
 
-				if (!lastProject)
+				if (!lastProject &&		// do not append a trailing comma after the last indexer command
+					!isFirstCommand)	// do not append a comma if the project is empty
 				{
 					fileWriter.PushMessage(",\n");
 				}
