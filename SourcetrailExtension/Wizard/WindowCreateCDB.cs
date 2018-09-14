@@ -201,25 +201,38 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 		{
 			try
 			{
+				bool isFirstCommand = true;
+
 				SolutionParser.SolutionParser solutionParser = new SolutionParser.SolutionParser(new VsPathResolver(_targetDir));
 
 				solutionParser.CreateCompileCommands(
 					project, _configurationName, _platformName, _cStandard, _additionalClangOptions, _nonSystemIncludesUseAngleBrackets,
 					(CompileCommand command) => {
 						string serializedCommand = "";
+
+						if (!isFirstCommand)
+						{
+							serializedCommand += ",\n";
+						}
+						else
+						{
+							isFirstCommand = false;
+						}
+
 						foreach (string line in command.SerializeToJson().Split('\n'))
 						{
 							serializedCommand += "  " + line + "\n";
 						}
+
 						serializedCommand = serializedCommand.TrimEnd('\n');
 
-						fileWriter.PushMessage(serializedCommand + ",\n");
+						fileWriter.PushMessage(serializedCommand);
 					}
 				);
 
-				if (lastProject)
+				if (!lastProject)
 				{
-					fileWriter.PushMessage("\n");
+					fileWriter.PushMessage(",\n");
 				}
 
 				lock (_lockObject)
