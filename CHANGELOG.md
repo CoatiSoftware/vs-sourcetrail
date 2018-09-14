@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8
+
+**2018-09-14**
+
+* Fixes
+	* Fixes out of memory issue for large Visual Studio projects
+	* Fixes trailing comma appended to generated compile commands
+
+
 ## 1.7
 
 **2018-06-26**
