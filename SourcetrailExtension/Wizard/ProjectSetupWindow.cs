@@ -204,7 +204,7 @@ namespace CoatiSoftware.SourcetrailExtension.Wizard
 			if(_cdb == null)
 			{
 				Logging.Logging.LogInfo("Setting file name to default: '" + Logging.Obfuscation.NameObfuscator.GetObfuscatedName(_solutionFileName) + "'");
-				textBoxFileName.Text = _solutionFileName;
+				textBoxFileName.Text = "compile_commands";
 			}
 			else
 			{
