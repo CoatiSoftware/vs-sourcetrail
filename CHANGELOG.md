@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.0
+
+**2019-02-19**
+
+* Fixes
+	* Added Newtonsoft.Json.dll to released VSIX package because this dependency is missing on some systems.
+	
+
 ## 1.8
 
 **2018-09-14**

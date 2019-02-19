@@ -1,4 +1,4 @@
-version: 1.8.{build}
+version: 1.9.0.{build}
 image: Visual Studio 2017
 
 install:
@@ -13,7 +13,7 @@ assembly_info:
 
 before_build:
   - nuget restore
-  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+  - ps: Vsix-IncrementVsixVersion -versionType "revision" | Vsix-UpdateBuildVersion
 
 build_script:
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
