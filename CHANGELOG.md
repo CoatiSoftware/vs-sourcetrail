@@ -6,6 +6,7 @@
 
 * Fixes
 	* Added Newtonsoft.Json.dll to released VSIX package because this dependency is missing on some systems.
+	* Set suggested name of exported compilation database to "compile_commands.json" because this is the standard name for this file which is expected by other clang based tools (e.g. clang-tidy)
 	
 
 ## 1.8
