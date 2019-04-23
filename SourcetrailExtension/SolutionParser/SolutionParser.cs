@@ -214,10 +214,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					{
 						additionalOptions = compilerTool.GetAdditionalOptions();
 
-						if (additionalOptions == "$(NOINHERIT)")
-						{
-							additionalOptions = "";
-						}
+						additionalOptions = additionalOptions.Replace("$(NOINHERIT)", "");
+						additionalOptions = additionalOptions.Replace("$(INHERIT)", "");
+						additionalOptions = additionalOptions.Trim();
 					}
 
 					string languageStandardOption;
