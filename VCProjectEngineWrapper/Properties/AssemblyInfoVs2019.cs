@@ -20,11 +20,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VCProjectEngineWrapperVs2017")]
+[assembly: AssemblyTitle("VCProjectEngineWrapperVs2019")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Coati Software")]
-[assembly: AssemblyProduct("VCProjectEngineWrapperVs2017")]
+[assembly: AssemblyProduct("VCProjectEngineWrapperVs2019")]
 [assembly: AssemblyCopyright("Copyright © Coati Software 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b49207f9-89a3-42d8-bc04-8bf77ed2e295")]
+[assembly: Guid("1C982E5A-BF66-49DE-A1BC-EEA849BE58E8")]
 
 // Version information for an assembly consists of the following four values:
 //
