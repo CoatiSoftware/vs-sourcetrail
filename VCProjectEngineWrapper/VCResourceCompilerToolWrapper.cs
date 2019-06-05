@@ -28,6 +28,8 @@ namespace VCProjectEngineWrapper
 		VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 		VCResourceCompilerToolWrapperVs2017
+#elif (VS2019)
+		VCResourceCompilerToolWrapperVs2019
 #endif
 		: IVCResourceCompilerToolWrapper
 	{
@@ -43,6 +45,8 @@ namespace VCProjectEngineWrapper
 			VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 			VCResourceCompilerToolWrapperVs2017
+#elif (VS2019)
+			VCResourceCompilerToolWrapperVs2019
 #endif
 			(object wrapped)
 		{

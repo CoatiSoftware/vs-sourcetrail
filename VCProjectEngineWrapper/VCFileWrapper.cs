@@ -29,6 +29,8 @@ namespace VCProjectEngineWrapper
 	VCFileWrapperVs2015
 #elif (VS2017)
 	VCFileWrapperVs2017
+#elif (VS2019)
+	VCFileWrapperVs2019
 #endif
 		: IVCFileWrapper
 	{
@@ -43,6 +45,8 @@ namespace VCProjectEngineWrapper
 			VCFileWrapperVs2015
 #elif (VS2017)
 			VCFileWrapperVs2017
+#elif (VS2019)
+			VCFileWrapperVs2019
 #endif
 			(object wrapped)
 		{
@@ -75,6 +79,8 @@ namespace VCProjectEngineWrapper
 			VCProjectWrapperVs2015
 #elif (VS2017)
 			VCProjectWrapperVs2017
+#elif (VS2019)
+			VCProjectWrapperVs2019
 #endif
 			(_wrapped.project);
 		}
@@ -93,6 +99,8 @@ namespace VCProjectEngineWrapper
 					VCFileConfigurationWrapperVs2015
 #elif (VS2017)
 					VCFileConfigurationWrapperVs2017
+#elif (VS2019)
+					VCFileConfigurationWrapperVs2019
 #endif
 					(configuration);
 				if (vcFileConfig.isValid())
