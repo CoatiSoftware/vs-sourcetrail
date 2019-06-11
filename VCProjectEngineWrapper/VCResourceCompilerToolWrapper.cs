@@ -20,11 +20,7 @@ using Microsoft.VisualStudio.VCProjectEngine;
 namespace VCProjectEngineWrapper
 {
 	public class
-#if (VS2012)
-		VCResourceCompilerToolWrapperVs2012
-#elif (VS2013)
-		VCResourceCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 		VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 		VCResourceCompilerToolWrapperVs2017
@@ -37,11 +33,7 @@ namespace VCProjectEngineWrapper
 		private IVCRulePropertyStorage _wrappedRules = null;
 
 		public
-#if (VS2012)
-			VCResourceCompilerToolWrapperVs2012
-#elif (VS2013)
-			VCResourceCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 			VCResourceCompilerToolWrapperVs2017

@@ -24,11 +24,7 @@ using System.Runtime.Remoting;
 namespace VCProjectEngineWrapper
 {
 	public class
-#if (VS2012)
-		VCConfigurationWrapperVs2012
-#elif (VS2013)
-		VCConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 		VCConfigurationWrapperVs2015
 #elif (VS2017)
 		VCConfigurationWrapperVs2017
@@ -40,11 +36,7 @@ namespace VCProjectEngineWrapper
 		private VCConfiguration _wrapped = null;
 
 		public
-#if (VS2012)
-			VCConfigurationWrapperVs2012
-#elif (VS2013)
-			VCConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCConfigurationWrapperVs2015
 #elif (VS2017)
 			VCConfigurationWrapperVs2017
@@ -105,11 +97,7 @@ namespace VCProjectEngineWrapper
 					if (compilerTool != null)
 					{
 						return new
-#if (VS2012)
-							VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-							VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 							VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 							VCCLCompilerToolWrapperVs2017
@@ -125,11 +113,7 @@ namespace VCProjectEngineWrapper
 				Logging.LogError("Configuration failed to retreive cl compiler tool: " + e.Message);
 			}
 			return new
-#if (VS2012)
-				VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-				VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCCLCompilerToolWrapperVs2017
@@ -151,11 +135,7 @@ namespace VCProjectEngineWrapper
 					if (compilerTool != null)
 					{
 						return new
-#if (VS2012)
-							VCNMakeToolWrapperVs2012
-#elif (VS2013)
-                            VCNMakeToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 							VCNMakeToolWrapperVs2015
 #elif (VS2017)
 							VCNMakeToolWrapperVs2017
@@ -171,11 +151,7 @@ namespace VCProjectEngineWrapper
 				Logging.LogError("Configuration failed to retreive nmake tool: " + e.Message);
 			}
 			return new
-#if (VS2012)
-				VCNMakeToolWrapperVs2012
-#elif (VS2013)
-                VCNMakeToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCNMakeToolWrapperVs2015
 #elif (VS2017)
 				VCNMakeToolWrapperVs2017
@@ -197,11 +173,7 @@ namespace VCProjectEngineWrapper
 					if (vcPropertySheet != null)
 					{
 						IVCPropertySheetWrapper wrapper = new
-#if (VS2012)
-							VCPropertySheetWrapperVs2012
-#elif (VS2013)
-							VCPropertySheetWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 							VCPropertySheetWrapperVs2015
 #elif (VS2017)
 							VCPropertySheetWrapperVs2017
@@ -228,11 +200,7 @@ namespace VCProjectEngineWrapper
 		public IVCPlatformWrapper GetPlatform()
 		{
 			return new
-#if (VS2012)
-				VCPlatformWrapperVs2012
-#elif (VS2013)
-				VCPlatformWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCPlatformWrapperVs2015
 #elif (VS2017)
 				VCPlatformWrapperVs2017
