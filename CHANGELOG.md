@@ -1,5 +1,16 @@
 # Changelog
 
+
+## 1.9.1
+
+**2019-06-11**
+
+* Features
+	* Added support for Visual Studio 2019
+* Fixes
+	* Fixed options generator to remove all occurrences of "$(NOINHERIT)" and "$(INHERIT)" placeholders from the tool's additional options
+	
+
 ## 1.9.0
 
 **2019-02-19**
