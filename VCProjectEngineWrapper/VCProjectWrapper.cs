@@ -23,11 +23,7 @@ using System.Collections.Generic;
 namespace VCProjectEngineWrapper
 {
 	public class
-#if (VS2012)
-		VCProjectWrapperVs2012
-#elif (VS2013)
-		VCProjectWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 		VCProjectWrapperVs2015
 #elif (VS2017)
 		VCProjectWrapperVs2017
@@ -39,11 +35,7 @@ namespace VCProjectEngineWrapper
 		private VCProject _wrapped = null;
 
 		public
-#if (VS2012)
-			VCProjectWrapperVs2012
-#elif (VS2013)
-			VCProjectWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCProjectWrapperVs2015
 #elif (VS2017)
 			VCProjectWrapperVs2017
@@ -79,11 +71,7 @@ namespace VCProjectEngineWrapper
 						vcProjectConfig.Platform.Name == platformName)
 					{
 						return new
-#if (VS2012)
-						VCConfigurationWrapperVs2012
-#elif (VS2013)
-						VCConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 						VCConfigurationWrapperVs2015
 #elif (VS2017)
 						VCConfigurationWrapperVs2017
@@ -101,11 +89,7 @@ namespace VCProjectEngineWrapper
 			Logging.LogError("Failed to find project config matching with \"" + configurationName + "\"");
 
 			return new
-#if (VS2012)
-			VCConfigurationWrapperVs2012
-#elif (VS2013)
-			VCConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCConfigurationWrapperVs2015
 #elif (VS2017)
 			VCConfigurationWrapperVs2017

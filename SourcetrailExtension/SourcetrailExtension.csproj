@@ -270,14 +270,6 @@
       <Project>{f592db46-0c77-470b-aaf8-80c51f44380e}</Project>
       <Name>VCProjectEngineWrapperInterfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VCProjectEngineWrapper\VCProjectEngineWrapperVs2012.csproj">
-      <Project>{c5439b90-42e7-414d-8c3f-bdcabb0592e2}</Project>
-      <Name>VCProjectEngineWrapperVs2012</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VCProjectEngineWrapper\VCProjectEngineWrapperVs2013.csproj">
-      <Project>{8718929c-5270-4e5a-8998-48ac7ce19dc2}</Project>
-      <Name>VCProjectEngineWrapperVs2013</Name>
-    </ProjectReference>
     <ProjectReference Include="..\VCProjectEngineWrapper\VCProjectEngineWrapperVs2015.csproj">
       <Project>{1c139999-9592-4891-aa62-2c8a16430d0a}</Project>
       <Name>VCProjectEngineWrapperVs2015</Name>

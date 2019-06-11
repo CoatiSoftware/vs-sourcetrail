@@ -20,11 +20,7 @@ using System;
 namespace VCProjectEngineWrapper
 {
 	public class
-#if (VS2012)
-		VCFileConfigurationWrapperVs2012
-#elif (VS2013)
-		VCFileConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 		VCFileConfigurationWrapperVs2015
 #elif (VS2017)
 		VCFileConfigurationWrapperVs2017
@@ -36,11 +32,7 @@ namespace VCProjectEngineWrapper
 		private VCFileConfiguration _wrapped = null;
 
 		public
-#if (VS2012)
-			VCFileConfigurationWrapperVs2012
-#elif (VS2013)
-			VCFileConfigurationWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCFileConfigurationWrapperVs2015
 #elif (VS2017)
 			VCFileConfigurationWrapperVs2017
@@ -80,11 +72,7 @@ namespace VCProjectEngineWrapper
 			}
 
 			return new
-#if (VS2012)
-				VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-				VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCCLCompilerToolWrapperVs2017

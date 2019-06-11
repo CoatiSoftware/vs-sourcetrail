@@ -22,11 +22,7 @@ using System.Collections;
 namespace VCProjectEngineWrapper
 {
 	public class
-#if (VS2012)
-		VCPropertySheetWrapperVs2012
-#elif (VS2013)
-		VCPropertySheetWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 		VCPropertySheetWrapperVs2015
 #elif (VS2017)
 		VCPropertySheetWrapperVs2017
@@ -38,11 +34,7 @@ namespace VCProjectEngineWrapper
 		private VCPropertySheet _wrapped = null;
 
 		public
-#if (VS2012)
-			VCPropertySheetWrapperVs2012
-#elif (VS2013)
-			VCPropertySheetWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 			VCPropertySheetWrapperVs2015
 #elif (VS2017)
 			VCPropertySheetWrapperVs2017
@@ -80,11 +72,7 @@ namespace VCProjectEngineWrapper
 					if (compilerTool != null)
 					{
 						return new
-#if (VS2012)
-							VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-							VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 							VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 							VCCLCompilerToolWrapperVs2017
@@ -100,11 +88,7 @@ namespace VCProjectEngineWrapper
 				Logging.LogError("Property Sheet failed to retreive cl compiler tool: " + e.Message);
 			}
 			return new
-#if (VS2012)
-				VCCLCompilerToolWrapperVs2012
-#elif (VS2013)
-				VCCLCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCCLCompilerToolWrapperVs2017
@@ -125,11 +109,7 @@ namespace VCProjectEngineWrapper
 					if (compilerTool != null)
 					{
 						return new
-#if (VS2012)
-							VCResourceCompilerToolWrapperVs2012
-#elif (VS2013)
-							VCResourceCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 							VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 							VCResourceCompilerToolWrapperVs2017
@@ -145,11 +125,7 @@ namespace VCProjectEngineWrapper
 				Logging.LogError("Property Sheet failed to retreive resource compiler tool: " + e.Message);
 			}
 			return new
-#if (VS2012)
-				VCResourceCompilerToolWrapperVs2012
-#elif (VS2013)
-				VCResourceCompilerToolWrapperVs2013
-#elif (VS2015)
+#if (VS2015)
 				VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCResourceCompilerToolWrapperVs2017

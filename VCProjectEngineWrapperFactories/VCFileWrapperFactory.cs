@@ -51,22 +51,6 @@ namespace VCProjectEngineWrapper
 			}
 		}
 
-		private class FactoryModule2013 : IFactoryModule
-		{
-			public IVCFileWrapper Create(object wrapped)
-			{
-				return new VCFileWrapperVs2013(wrapped);
-			}
-		}
-
-		private class FactoryModule2012 : IFactoryModule
-		{
-			public IVCFileWrapper Create(object wrapped)
-			{
-				return new VCFileWrapperVs2012(wrapped);
-			}
-		}
-
 		private static Queue<IFactoryModule> modules = null;
 
 		public static IVCFileWrapper create(object wrapped)
@@ -79,8 +63,6 @@ namespace VCProjectEngineWrapper
 				modules.Enqueue(new FactoryModule2019());
 				modules.Enqueue(new FactoryModule2017());
 				modules.Enqueue(new FactoryModule2015());
-				modules.Enqueue(new FactoryModule2013());
-				modules.Enqueue(new FactoryModule2012());
 			}
 
 			IVCFileWrapper wrapper = null;
