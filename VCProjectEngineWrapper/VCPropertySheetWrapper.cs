@@ -30,6 +30,8 @@ namespace VCProjectEngineWrapper
 		VCPropertySheetWrapperVs2015
 #elif (VS2017)
 		VCPropertySheetWrapperVs2017
+#elif (VS2019)
+		VCPropertySheetWrapperVs2019
 #endif
 		: IVCPropertySheetWrapper
 	{
@@ -44,6 +46,8 @@ namespace VCProjectEngineWrapper
 			VCPropertySheetWrapperVs2015
 #elif (VS2017)
 			VCPropertySheetWrapperVs2017
+#elif (VS2019)
+			VCPropertySheetWrapperVs2019
 #endif
 			(object wrapped)
 		{
@@ -84,6 +88,8 @@ namespace VCProjectEngineWrapper
 							VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 							VCCLCompilerToolWrapperVs2017
+#elif (VS2019)
+							VCCLCompilerToolWrapperVs2019
 #endif
 							(compilerTool);
 					}
@@ -102,6 +108,8 @@ namespace VCProjectEngineWrapper
 				VCCLCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCCLCompilerToolWrapperVs2017
+#elif (VS2019)
+				VCCLCompilerToolWrapperVs2019
 #endif
 				(null);
 		}
@@ -125,6 +133,8 @@ namespace VCProjectEngineWrapper
 							VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 							VCResourceCompilerToolWrapperVs2017
+#elif (VS2019)
+							VCResourceCompilerToolWrapperVs2019
 #endif
 							(compilerTool);
 					}
@@ -143,6 +153,8 @@ namespace VCProjectEngineWrapper
 				VCResourceCompilerToolWrapperVs2015
 #elif (VS2017)
 				VCResourceCompilerToolWrapperVs2017
+#elif (VS2019)
+				VCResourceCompilerToolWrapperVs2019
 #endif
 				(null);
 		}

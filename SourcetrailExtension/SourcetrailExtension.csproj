@@ -125,15 +125,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.VisualStudio.CommandBars">
-      <Guid>{1CBA492E-7263-47BB-87FE-639000619B15}</Guid>
-      <VersionMajor>8</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -288,6 +279,10 @@
     <ProjectReference Include="..\VCProjectEngineWrapper\VCProjectEngineWrapperVs2017.csproj">
       <Project>{b49207f9-89a3-42d8-bc04-8bf77ed2e295}</Project>
       <Name>VCProjectEngineWrapperVs2017</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VCProjectEngineWrapper\VCProjectEngineWrapperVs2019.csproj">
+      <Project>{1c982e5a-bf66-49de-a1bc-eea849be58e8}</Project>
+      <Name>VCProjectEngineWrapperVs2019</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
