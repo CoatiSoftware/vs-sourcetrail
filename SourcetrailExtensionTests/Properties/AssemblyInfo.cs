@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Coati Software")]
 [assembly: AssemblyProduct("SourcetrailExtension.IntegrationTests")]
-[assembly: AssemblyCopyright("Copyright © Coati Software 2017")]
+[assembly: AssemblyCopyright("Copyright © Coati Software 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

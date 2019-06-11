@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Coati Software")]
 [assembly: AssemblyProduct("SourcetrailExtension")]
-[assembly: AssemblyCopyright("Copyright © Coati Software 2017")]
+[assembly: AssemblyCopyright("Copyright © Coati Software 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]	 
