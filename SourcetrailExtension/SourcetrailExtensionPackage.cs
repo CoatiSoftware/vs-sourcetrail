@@ -15,17 +15,18 @@
  */
 
 using EnvDTE;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Reflection;
-using System.Xml;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Xml;
 
 namespace CoatiSoftware.SourcetrailExtension
 {
@@ -129,14 +130,14 @@ namespace CoatiSoftware.SourcetrailExtension
 		}
 	}
 
-	[PackageRegistration(UseManagedResourcesOnly = true)]
+	[PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[Guid(GuidList.guidSourcetrailExtensionPkgString)]
-	[ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids80.NoSolution)]
+	[ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
 	[ProvideOptionPage(typeof(OptionPageGrid), "Sourcetrail", "Sourcetrail Settings", 0, 0, true)]
 
-	public sealed class SourcetrailExtensionPackage : Package
+	public sealed class SourcetrailExtensionPackage : AsyncPackage
 	{
 		private MenuCommand _menuItemSetActiveToken = null;
 		private MenuCommand _menuItemCreateCdb = null;
@@ -200,9 +201,13 @@ namespace CoatiSoftware.SourcetrailExtension
 		public SourcetrailExtensionPackage()
 		{}
 
-		protected override void Initialize()
+
+		protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
-			base.Initialize();
+			await base.InitializeAsync(cancellationToken, progress);
+
+			// Switches to the UI thread in order to consume some services used in command initialization
+			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
 			InitLogging();
 			InitNetwork();
