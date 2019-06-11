@@ -1,5 +1,5 @@
 # Sourcetrail Extension for Visual Studio
-All-in-one extension with support for VS2012, VS2013, VS2015, VS2017 and VS2019.
+All-in-one extension with support for VS 2015, VS 2017 and VS 2019.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/jlathk3h7nw6a57k?svg=true)](https://ci.appveyor.com/project/mlangkabel/vs-sourcetrail)
 
