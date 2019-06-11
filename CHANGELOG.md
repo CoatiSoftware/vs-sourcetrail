@@ -1,6 +1,13 @@
 # Changelog
 
+## 2.0.0
 
+**2019-06-11**
+
+* Fixes
+	* Switched to asynchronous initialization, which is required by the VS marketplace but forces dropping support for VS 2012 and VS 2013.
+	
+	
 ## 1.9.1
 
 **2019-06-11**
