@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -231,7 +231,7 @@ namespace CoatiSoftware.SourcetrailExtension
 				_menuItemSetActiveToken = new MenuCommand(MenuItemCallback, setActiveTokenCommandID);
 				_menuItemCreateCdb = new MenuCommand(MenuItemCallback, createCdbID);
 				_menuItemOpenLogDir = new MenuCommand(MenuItemCallback, openLogDirID);
-				
+
 				_menuItemSetActiveToken.Enabled = false;
 				_menuItemCreateCdb.Enabled = false;
 				_menuItemOpenLogDir.Enabled = true;
@@ -457,13 +457,22 @@ namespace CoatiSoftware.SourcetrailExtension
 					Logging.Logging.LogInfo("Trying to set cursor position to line " + cursorPosition.LineNumber + ", column " + cursorPosition.ColumnNumber + " in file \"" + cursorPosition.FilePath + "\"");
 
 					cursorPosition.ColumnNumber += 1; // VS counts columns starting at 1, sourcetrail starts at 0
-					DTE dte = (DTE)GetService(typeof(DTE));
-					if (Utility.FileUtility.OpenSourceFile(dte, cursorPosition.FilePath))
-					{
-						Utility.FileUtility.GoToLine(dte, cursorPosition.LineNumber, cursorPosition.ColumnNumber);
 
-						Utility.SystemUtility.GetWindowFocus();
-					}
+					ThreadHelper.JoinableTaskFactory.Run(
+						async delegate
+						{
+							// Switch to main thread
+							await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+							DTE dte = (DTE)GetService(typeof(DTE));
+							if (Utility.FileUtility.OpenSourceFile(dte, cursorPosition.FilePath))
+							{
+								Utility.FileUtility.GoToLine(dte, cursorPosition.LineNumber, cursorPosition.ColumnNumber);
+
+								Utility.SystemUtility.GetWindowFocus();
+							}
+						}
+					);
 				}
 			}
 			else if(messageType == Utility.NetworkProtocolUtility.MESSAGE_TYPE.CREATE_CDB)
@@ -576,7 +585,7 @@ namespace CoatiSoftware.SourcetrailExtension
 
 			window.UpdateGUI();
 			window._onCreateProject = OnCreateProject;
-			
+
 			window.ShowDialog();
 		}
 	}
