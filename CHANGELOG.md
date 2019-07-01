@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1
+
+**2019-07-01**
+
+* Fixes
+	* The synchronization event sent by Sourcetrail was handled on the background thread which was unable to trigger UI changes.
+	
+	
 ## 2.0.0
 
 **2019-06-11**
