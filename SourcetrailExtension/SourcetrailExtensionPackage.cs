@@ -478,11 +478,26 @@ namespace CoatiSoftware.SourcetrailExtension
 			else if(messageType == Utility.NetworkProtocolUtility.MESSAGE_TYPE.CREATE_CDB)
 			{
 				Logging.Logging.LogInfo("Received request to create a compilation database.");
-				if(_validSolutionLoaded)
+				if (_validSolutionLoaded)
 				{
-					DTE dte = (DTE)GetService(typeof(DTE));
+					ThreadHelper.JoinableTaskFactory.Run(
+						async delegate
+						{
+							// Switch to main thread
+							await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+							DTE dte = (DTE)GetService(typeof(DTE));
 
-					CreateCompilationDatabase(dte);
+							CreateCompilationDatabase(dte);
+						}
+					);
+				}
+				else
+				{
+					Logging.Logging.LogInfo(
+						"No C/C++ project was detected. To use the Sourcetrail Extension, please make " +
+						"sure that the loaded Visual Studio Solution contains at least one C/C++ project " +
+						"and Visual Studio is configured to generate a symbol database " +
+						"(Tools->Options->Text Editor->C/C++->Advanced->Browsing/Navigation->Disable Database = False).");
 				}
 			}
 			else if(messageType == Utility.NetworkProtocolUtility.MESSAGE_TYPE.PING)
