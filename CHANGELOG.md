@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.2
+
+**2019-07-02**
+
+* Fixes
+	* The create-compilation-database event sent by Sourcetrail was handled on the background thread which was unable to trigger UI changes.
+	
+	
 ## 2.0.1
 
 **2019-07-01**
