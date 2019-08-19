@@ -1,5 +1,14 @@
 # Changelog
 
+
+## 2.0.3
+
+**2019-08-19**
+
+* Fixes
+	* The create-compilation-database menu option stayed disabled if a solution was loaded directly on startup of VS
+
+
 ## 2.0.2
 
 **2019-07-02**
