@@ -248,6 +248,11 @@ namespace CoatiSoftware.SourcetrailExtension
 			_solutionEvents.Opened += OnSolutionOpened;
 			_solutionEvents.AfterClosing += OnSolutionClosed;
 
+			if (dte.Solution.IsOpen)
+			{
+				OnSolutionOpened();
+			}
+
 			SendPing();
 
 			Logging.Logging.LogInfo("Initialization done");
