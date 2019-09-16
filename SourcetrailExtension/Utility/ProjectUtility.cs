@@ -361,25 +361,33 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 		{
 			string result = "";
 
-			string toolset = project.GetWrappedVersion();
-			string justNumbers = new String(toolset.Where(Char.IsDigit).ToArray());
+			string vsVersion = project.GetWrappedVersion();
+			string justNumbers = new String(vsVersion.Where(Char.IsDigit).ToArray());
 			int versionNumber = int.Parse(justNumbers);
 
-			if (versionNumber < 120) // version 11 (2012)
+			if (versionNumber < 120)		// version 11 (2012)
 			{
 				result = "c++11";
 			}
-			else if (versionNumber < 130) // version 12 (2013)
+			else if (versionNumber < 130)	// version 12 (2013)
 			{
 				result = "c++14";
 			}
-			else if (versionNumber < 150) // version 14 (2015)
+			else if (versionNumber < 150)	// version 14 (2015)
 			{
 				result = "c++14";
 			}
-			else if (versionNumber < 160) // version 15 (2017)
+			else if (versionNumber < 160)	// version 15 (2017)
 			{
 				result = "c++14";
+			}
+			else if (versionNumber < 170)	// version 16 (2019)
+			{
+				result = "c++17";
+			}
+			else							// fallback
+			{
+				result = "c++17";
 			}
 
 			return result;

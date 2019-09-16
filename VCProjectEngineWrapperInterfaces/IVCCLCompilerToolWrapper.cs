@@ -25,6 +25,7 @@ namespace VCProjectEngineWrapper
 		bool GetCompilesAsC();
 		bool GetCompilesAsCPlusPlus();
 		string GetToolPath();
+		string GetLanguageStandard();
 		string[] GetAdditionalIncludeDirectories();
 		string[] GetPreprocessorDefinitions();
 		string[] GetForcedIncludeFiles();

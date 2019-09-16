@@ -76,6 +76,16 @@ namespace VCProjectEngineWrapper
 			return _wrapped.ToolPath;
 		}
 
+		public string GetLanguageStandard()
+		{
+			string rawStandardString = _wrappedRules.GetEvaluatedPropertyValue("LanguageStandard");
+			if (rawStandardString != "stdcpplatest" && rawStandardString.IndexOf("stdcpp") == 0)
+			{
+				return rawStandardString.Replace("stdcpp", "c++");
+			}
+			return "";
+		}
+
 		public string[] GetAdditionalIncludeDirectories()
 		{
 			return _wrappedRules.GetEvaluatedPropertyValue("AdditionalIncludeDirectories").SplitPaths();
