@@ -15,7 +15,9 @@
  */
 
 using CoatiSoftware.SourcetrailExtension;
+using CoatiSoftware.SourcetrailExtension.Logging;
 using Microsoft.VisualStudio.VCProjectEngine;
+using System;
 
 namespace VCProjectEngineWrapper
 {
@@ -74,6 +76,23 @@ namespace VCProjectEngineWrapper
 		public string GetToolPath()
 		{
 			return _wrapped.ToolPath;
+		}
+
+		public string GetLanguageStandard()
+		{
+			try
+			{
+				string rawStandardString = _wrappedRules.GetEvaluatedPropertyValue("LanguageStandard");
+				if (rawStandardString != "stdcpplatest" && rawStandardString.IndexOf("stdcpp") == 0)
+				{
+					return rawStandardString.Replace("stdcpp", "c++");
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.LogInfo("Unable to fetch language standard from project configuration, using default standard instead.");
+			}
+			return "";
 		}
 
 		public string[] GetAdditionalIncludeDirectories()

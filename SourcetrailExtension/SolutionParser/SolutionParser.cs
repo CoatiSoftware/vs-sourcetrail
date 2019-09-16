@@ -88,8 +88,9 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 				projectPlatformName = solutionPlatformName;
 			}
 
-			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(projectConfigurationName, projectPlatformName);
+			string cppStandard = "";
 
+			IVCConfigurationWrapper vcProjectConfiguration = vcProject.getConfiguration(projectConfigurationName, projectPlatformName);
 			if (vcProjectConfiguration != null && vcProjectConfiguration.isValid())
 			{
 				SetCompatibilityVersionFlag(vcProject, vcProjectConfiguration);
@@ -139,10 +140,17 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 					{
 						commandFlags += " -include \"" + file + "\" ";
 					}
-				}
 
-				string cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
-				Logging.Logging.LogInfo("Found C++ standard " + cppStandard + ".");
+					if (vcProjectConfiguration.GetCLCompilerTool() != null && vcProjectConfiguration.GetCLCompilerTool().isValid())
+					{
+						cppStandard = vcProjectConfiguration.GetCLCompilerTool().GetLanguageStandard();
+					}
+				}
+				if (cppStandard.Length == 0)
+				{
+					cppStandard = Utility.ProjectUtility.GetCppStandardForProject(vcProject);
+				}
+				Logging.Logging.LogInfo("Found C++ standard \"" + cppStandard + "\".");
 
 				bool isMakefileProject = vcProjectConfiguration.isMakefileConfiguration();
 
@@ -218,6 +226,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						additionalOptions = additionalOptions.Replace("$(INHERIT)", "");
 						additionalOptions = additionalOptions.Trim();
 					}
+					additionalOptions = additionalOptions.Replace("-std:", "-std=");
 
 					string languageStandardOption;
 					if (additionalOptions.Contains("-std="))
