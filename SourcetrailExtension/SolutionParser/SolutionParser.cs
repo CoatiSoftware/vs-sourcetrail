@@ -226,6 +226,7 @@ namespace CoatiSoftware.SourcetrailExtension.SolutionParser
 						additionalOptions = additionalOptions.Replace("$(INHERIT)", "");
 						additionalOptions = additionalOptions.Trim();
 					}
+					additionalOptions = additionalOptions.Replace("-std:", "-std=");
 
 					string languageStandardOption;
 					if (additionalOptions.Contains("-std="))
