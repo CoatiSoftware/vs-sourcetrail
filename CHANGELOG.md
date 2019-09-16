@@ -1,6 +1,17 @@
 # Changelog
 
 
+## 2.1.0
+
+**2019-09-16**
+
+* Features
+	* Apply language standard that is defined in the VS project properties settings at C/C++ > Language > C++ Language Standard
+* Fixes
+	* Removed duplicate definition of language standard from generated compilation database
+	* Added Microsoft.VisualStudio.Utilities.dll to make extension build on some systems
+
+
 ## 2.0.3
 
 **2019-08-19**
