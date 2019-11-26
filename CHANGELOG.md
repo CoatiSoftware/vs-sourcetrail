@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 2.1.1
+
+**2019-11-26**
+* Fixes
+	* Showing a source location in VS via Sourcetrail was not working because VS 2019 was unable to reuse a socket once it was closed for the first time.
+
+
 ## 2.1.0
 
 **2019-09-16**
