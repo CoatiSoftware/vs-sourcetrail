@@ -53,10 +53,13 @@ namespace CoatiSoftware.SourcetrailExtension
 			get { return _serverPort; }
 			set
 			{
-				_serverPort = value;
-				if (_serverPortChangeCallback != null)
+				if (_serverPort != value)
 				{
-					_serverPortChangeCallback();
+					_serverPort = value;
+					if (_serverPortChangeCallback != null)
+					{
+						_serverPortChangeCallback();
+					}
 				}
 			}
 		}
@@ -69,10 +72,13 @@ namespace CoatiSoftware.SourcetrailExtension
 			get { return _clientPort; }
 			set
 			{
-				_clientPort = value;
-				if (_clientPortChangeCallback != null)
+				if (_clientPort != value)
 				{
-					_clientPortChangeCallback();
+					_clientPort = value;
+					if (_clientPortChangeCallback != null)
+					{
+						_clientPortChangeCallback();
+					}
 				}
 			}
 		}
@@ -530,6 +536,7 @@ namespace CoatiSoftware.SourcetrailExtension
 			Utility.AsynchronousSocketListener._port = ServerPort;
 
 			_serverThread.Abort();
+			_serverThread.Join();
 			Utility.AsynchronousSocketListener server = new Utility.AsynchronousSocketListener();
 			_serverThread = new System.Threading.Thread(server.DoWork);
 			_serverThread.Start();

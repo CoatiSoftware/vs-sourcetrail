@@ -55,16 +55,19 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 		public static void StartListening()
 		{
 			const string ipAddressString = "127.0.0.1";
+			int ownPort = (int)_port;
 
 			IPAddress ipAddress = IPAddress.Parse(ipAddressString);
-			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, (int)_port);
+			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, ownPort);
 
 			Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 
 			try
 			{
 				listener.Bind(localEndPoint);
 				listener.Listen(100);
+				Logging.Logging.LogInfo("Socket listener was started for port " + ownPort.ToString() + ".");
 
 				while (true)
 				{
@@ -74,10 +77,15 @@ namespace CoatiSoftware.SourcetrailExtension.Utility
 					_allDone.WaitOne();
 				}
 			}
+			catch (ThreadAbortException e)
+			{
+				Logging.Logging.LogInfo("Socket listener was stopped for port " + ownPort.ToString() + ".");
+			}
 			catch (Exception e)
 			{
 				Logging.Logging.LogError("Exception: " + e.Message);
 			}
+			Logging.Logging.LogInfo("I am some code that's running after the exception!");
 		}
 
 		public static void AcceptCallback(IAsyncResult ar)
